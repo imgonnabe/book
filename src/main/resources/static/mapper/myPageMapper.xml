@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.book.web.dao.MyPageDAO">
+	
+	<select id="booklist" resultType="Map">
+		select bkname, bkimg, bkwrite, bkprice
+		from books
+	</select>
+	
+	<select id="zzimlist" resultType="Map">
+		select z.zno, b.bkname, b.bkimg, b.bkwrite,
+			(select count(*) from zzim z where z.mid = 1) as count
+		from zzim z left join books b
+		on z.bkno = b.bkno
+		where z.mid = 1
+	</select>
+	
+	<delete id="delete" parameterType="String">
+		delete from zzim
+		where zno = #{string} and mid=1
+	</delete>
+	
+	<select id="buylist" resultType="Map">
+		select t.tno b.bkimg, b.bkname, b.bkprice
+		from trade t, books b
+		where t.mno = 1 and t.bkno = b.bkno
+	</select>
+	
+</mapper>
