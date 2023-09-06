@@ -17,7 +17,7 @@ $(document).ready(function() {
 </script>
 </head>
 <body>
-	<%@ include file="menu.jsp" %>
+	<%@ include file="../menu.jsp" %>
 	<h1>주문 목록</h1>
 	<div class="recommend">
 	${list[0].count }

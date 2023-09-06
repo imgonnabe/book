@@ -30,7 +30,7 @@ function colorModePreview(event) {
 </script>
 </head>
 <body>
-	<%@ include file="menu.jsp" %>
+	<%@ include file="../menu.jsp" %>
 	<div class="toggle">
 	  <div class="btn-container">
 	      <label class="switch toggle-switch">

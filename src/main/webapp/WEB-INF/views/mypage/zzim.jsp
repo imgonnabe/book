@@ -70,7 +70,7 @@
 </script>
 </head>
 <body>
-	<%@ include file="menu.jsp"%>
+	<%@ include file="../menu.jsp"%>
 	mid를 파라미터로 보내야한다.
 	<form action="">
 		<div class="recommend">
