@@ -25,7 +25,11 @@ public class MyPageService {
 		return myPageDAO.delete(del);
 	}
 
-	public List<Map<String, Object>> buylist() {
-		return myPageDAO.buylist();
+	public List<Map<String, Object>> buylist(Map<String, Object> map) {
+		return myPageDAO.buylist(map);
+	}
+
+	public List<Map<String, Object>> rentlist() {
+		return myPageDAO.rentlist();
 	}
 }

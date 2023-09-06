@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>mypage || buy</title>
+<title>mypage || rent</title>
 <link rel="stylesheet" href="../css/mypage/menu.css">
 <link rel="stylesheet" href="../css/mypage/main.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -18,28 +18,17 @@ $(document).ready(function() {
 </head>
 <body>
 	<%@ include file="menu.jsp" %>
-	<h1>주문 목록</h1>
+	<h1>대여 목록</h1>
 	<div class="recommend">
 	${list[0].count }
-	<div class="search">
-		<button class="btn" onclick="location.href='./buy'">전체보기</button>
-		<form action="./buy" method="get">
-			<select name="searchN">
-				<option value="no">주문번호</option>
-				<option value="title">책제목</option>
-				<option value="writer">글쓴이</option>
-			</select>
-			<input type="text" name="searchV" required="required">
-			<button type="submit">검색</button>
-		</form>
-	</div>
 		<table border="1">
 			<c:forEach items="${list }" var="row">
 				<tr class="list">
 					<td>${row.tno}</td>
 					<td><img src="${row.bkimg}"></td>
 					<td>${row.bkname}</td>
-					<td>${row.bkprice}원</td>
+					<td>${row.rsdate}</td>
+					<td>${row.rddate}</td>
 				</tr>
 			</c:forEach>
 		</table>	

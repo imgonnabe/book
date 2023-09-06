@@ -14,6 +14,8 @@ public interface MyPageDAO {
 
 	int delete(String del);
 
-	List<Map<String, Object>> buylist();
+	List<Map<String, Object>> buylist(Map<String, Object> map);
+
+	List<Map<String, Object>> rentlist();
 
 }

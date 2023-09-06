@@ -45,9 +45,17 @@ public class MyPageController {
 	}
 	
 	@GetMapping("/buy")
-	public String buy(Model model) {
-		List<Map<String, Object>> list = myPageService.buylist();
+	public String buy(Model model, @RequestParam Map<String, Object> map) {
+		System.out.println(map);
+		List<Map<String, Object>> list = myPageService.buylist(map);
 		model.addAttribute("list", list);
 		return "/mypage/buy";
+	}
+	
+	@GetMapping("/rent")
+	public String rent(Model model) {
+		List<Map<String, Object>> list = myPageService.rentlist();
+		model.addAttribute("list", list);
+		return "/mypage/rent";
 	}
 }

@@ -20,10 +20,29 @@
 		where zno = #{string} and mid=1
 	</delete>
 	
-	<select id="buylist" resultType="Map">
-		select t.tno b.bkimg, b.bkname, b.bkprice
-		from trade t, books b
-		where t.mno = 1 and t.bkno = b.bkno
+	<select id="buylist" parameterType="Map" resultType="Map">
+		select t.tno, b.bkimg, b.bkname, b.bkprice
+		from trade t left join books b
+		on t.bkno = b.bkno
+		<where>
+		t.mno = 1 and t.tbuy >= 1
+			<choose>
+				<when test="searchN == 'no'">and t.tno like concat('%', #{searchV},'%')</when>
+				<when test="searchN == 'title'">and b.bkname like concat('%', #{searchV},'%')</when>
+				<when test="searchN == 'writer'">and b.bkwrite like concat('%', #{searchV},'%')</when>
+			</choose>
+		</where>
+		group by t.tno
+		order by t.tno desc
+	</select>
+	
+	<select id="rentlist" resultType="Map">
+		select t.tno, b.bkimg, b.bkname, b.rsdate, b.rddate
+		from trade t left join books b
+		on t.bkno = b.bkno
+		where t.mno = 1 and b.rsdate is not null
+		group by t.tno
+		order by t.tno desc
 	</select>
 	
 </mapper>
