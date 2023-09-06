@@ -21,8 +21,8 @@ public class MyPageService {
 		return myPageDAO.zzimlist();
 	}
 
-	public int delete(String del) {
-		return myPageDAO.delete(del);
+	public int zdelete(String del) {
+		return myPageDAO.zdelete(del);
 	}
 
 	public List<Map<String, Object>> buylist(Map<String, Object> map) {
@@ -31,5 +31,17 @@ public class MyPageService {
 
 	public List<Map<String, Object>> rentlist() {
 		return myPageDAO.rentlist();
+	}
+
+	public List<Map<String, Object>> boardlist(Map<String, Object> map) {
+		return myPageDAO.boardlist(map);
+	}
+
+	public void bdelete(Map<String, Object> map) {
+		myPageDAO.bdelete(map);
+	}
+
+	public Map<String, Object> bdetail(int bno) {
+		return myPageDAO.bdetail(bno);
 	}
 }

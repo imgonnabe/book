@@ -12,10 +12,16 @@ public interface MyPageDAO {
 
 	List<Map<String, Object>> zzimlist();
 
-	int delete(String del);
+	int zdelete(String del);
 
 	List<Map<String, Object>> buylist(Map<String, Object> map);
 
 	List<Map<String, Object>> rentlist();
+
+	List<Map<String, Object>> boardlist(Map<String, Object> map);
+
+	void bdelete(Map<String, Object> map);
+
+	Map<String, Object> bdetail(int bno);
 
 }

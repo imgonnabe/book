@@ -36,10 +36,12 @@ $(document).ready(function() {
 		<table border="1">
 			<c:forEach items="${list }" var="row">
 				<tr class="list">
-					<td>${row.tno}</td>
+					<td>${row.tgroup}</td>
 					<td><img src="${row.bkimg}"></td>
 					<td>${row.bkname}</td>
 					<td>${row.bkprice}원</td>
+					<td>${row.tamount}</td>
+					<td>${row.tdate}</td>
 				</tr>
 			</c:forEach>
 		</table>	
