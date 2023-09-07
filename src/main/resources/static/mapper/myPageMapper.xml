@@ -3,12 +3,13 @@
 <mapper namespace="com.book.web.dao.MyPageDAO">
 	
 	<select id="booklist" resultType="Map">
-		select bkname, bkimg, bkwrite, bkprice
-		from books
+		select bkno, bkname, bkimg, bkwrite, bkprice, bkcate
+		FROM books
+		WHERE bkcate IN (SELECT b.bkcate FROM books b, trade t WHERE t.mid=1 AND b.bkno = t.bkno)
 	</select>
 	
 	<select id="zzimlist" resultType="Map">
-		select z.zno, b.bkname, b.bkimg, b.bkwrite,
+		select z.zno, b.bkname, b.bkimg, b.bkwrite, z.bkno,
 			(select count(*) from zzim z where z.mid = 1) as count
 		from zzim z left join books b
 		on z.bkno = b.bkno
@@ -21,13 +22,17 @@
 	</delete>
 	
 	<select id="buylist" parameterType="Map" resultType="Map">
-		select t.tno, b.bkimg, b.bkname, b.bkprice, t.tamount, t.tdate, t.tgroup
+		select t.tno, b.bkimg, b.bkname, b.bkprice, t.tamount, t.tdate, t.tgroup, t.ttotal,
+		(SELECT COUNT(DISTINCT t.tgroup)
+		FROM books b
+		JOIN trade t ON b.bkno = t.bkno
+		WHERE t.mid = 1) as count
 		from trade t left join books b
 		on t.bkno = b.bkno
 		<where>
 		t.mid = 1
 			<choose>
-				<when test="searchN == 'no'">and t.tno like concat('%', #{searchV},'%')</when>
+				<when test="searchN == 'no'">and t.tgroup like concat('%', #{searchV},'%')</when>
 				<when test="searchN == 'title'">and b.bkname like concat('%', #{searchV},'%')</when>
 				<when test="searchN == 'writer'">and b.bkwrite like concat('%', #{searchV},'%')</when>
 			</choose>
@@ -37,12 +42,12 @@
 	</select>
 	
 	<select id="rentlist" resultType="Map">
-		select t.tno, b.bkimg, b.bkname, b.rsdate, b.rddate
-		from trade t left join books b
-		on t.bkno = b.bkno
-		where t.mno = 1 and b.rsdate is not null
-		group by t.tno
-		order by t.tno desc
+		select r.rno, b.bkimg, b.bkname, b.rsdate, b.rddate
+		from rental r left join books b
+		on r.bkno = b.bkno
+		where r.mid = 1 and b.rsdate is not null
+		group by r.rno
+		order by r.rno desc
 	</select>
 	
 	<select id="boardlist" parameterType="Map" resultType="Map">
