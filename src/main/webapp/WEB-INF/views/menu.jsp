@@ -189,15 +189,15 @@
               </li>
 
               <li class="dropdown"><a href="./mypage/main">관리자 페이지</a></li>
-              <li class="dropdown"><a class="dropdown-toggle" href="./mypage/main" data-toggle="dropdown">마이페이지</a>
+              <li class="dropdown"><a class="dropdown-toggle" href="mypage/main" data-toggle="dropdown">마이페이지</a>
                 <ul class="dropdown-menu" role="menu">
-                  <li><a href="./mypage/zzim">찜목록</a></li>
-                  <li><a href="./mypage/buy">구매목록</a></li>
-                  <li><a href="./mypage/rent">대여목록</a></li>
-                  <li><a href="./mypage/board">게시물 관리</a></li>
-                  <li><a href="./mypage/comment">댓글 관리</a></li>
-                  <li><a href="./mypage/question">문의 내역</a></li>
-                  <li><a href="./mypage/info">회원정보관리</a></li>
+                  <li><a href="./zzim">찜목록</a></li>
+                  <li><a href="./buy">구매목록</a></li>
+                  <li><a href="./rent">대여목록</a></li>
+                  <li><a href="./board">게시물 관리</a></li>
+                  <li><a href="./comment">댓글 관리</a></li>
+                  <li><a href="./question">문의 내역</a></li>
+                  <li><a href="./info">회원정보관리</a></li>
                 </ul>
               </li>
               <li class="dropdown"><a href="documentation.html">로그인</a></li>

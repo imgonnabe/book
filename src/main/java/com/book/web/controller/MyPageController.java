@@ -104,9 +104,19 @@ public class MyPageController {
 		}
 		System.out.println(cate);
 		System.out.println(map);
-		List<Map<String, Object>> list = myPageService.boardlist(map);
+		List<Map<String, Object>> list = myPageService.commentlist(map);
 		model.addAttribute("list", list);
 		return "/mypage/comment";
+	}
+	
+	@ResponseBody
+	@PostMapping("/cdetail")
+	public String cdetail(@RequestParam(value = "cno", required = true, defaultValue = "0") int cno) throws JsonProcessingException {
+		Map<String, Object> map = myPageService.cdetail(cno);
+		
+		ObjectMapper mapp = new ObjectMapper();
+		String json = mapp.writeValueAsString(map);
+		return json;
 	}
 	
 }

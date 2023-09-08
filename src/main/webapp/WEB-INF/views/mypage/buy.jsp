@@ -124,26 +124,26 @@
 			</form>
 		</div>
 	</section>
-	
 	<div class="container">
 	<div class="module-subtitle font-alt">${list[0].count }</div>
 		<div class="row multi-columns-row">
 			<div class="col-sm-6">
-				<div class="menu">
-					<c:forEach items="${list }" var="row">
-						<div class="col-sm-8">
-							<div class="menu-detail font-serif">${row.tgroup}</div>
-						</div>
-						<div class="col-sm-4 menu-price-detail">
-							<div class="menu-price font-alt"><fmt:formatNumber value="${row.bkprice}" pattern="#,###"/>원</div>
-						</div>
-						<div class="post-thumbnail"><a href="../bookdetail?bkno=${row.bkno}"><img src="${row.bkimg }" alt="Blog-post Thumbnail"/></a></div>
-						<div class="post-title"><a href="../bookdetail?bkno=${row.bkno}">${row.bkname}</a></div>
-						<div class="post-entry">${row.tamount}</div>
+				<div class="widget-posts">
+					<c:forEach items="${list }" var="row"  varStatus="loop">
+						<c:if test="${loop.first || row.tgroup ne list[loop.index - 1].tgroup}">
+							<div class="col-sm-8">
+									<h3 class="widget-posts-title font-serif">${row.tgroup} <br> <fmt:formatNumber value="${row.total}" pattern="#,###"/>원</h3>
+							</div>
+						</c:if>
+						<div class="widget-posts">
+							<h4 class="widget-posts-title font-serif"><a href="../bookdetail?bkno=${row.bkno}">${row.bkname}</a></h4>
+							<div class="gallery-image"><a href="../bookdetail?bkno=${row.bkno}"><img src="${row.bkimg }" alt="Blog-post Thumbnail"/></a></div>
+							<div class="widget-posts-title font-alt"><fmt:formatNumber value="${row.bkprice}" pattern="#,###"/>원</div>
+							<div class="widget-posts-title font-serif">${row.tamount}개</div>
+						</div>	
 					</c:forEach>
 				</div>
 			</div>
-		</div>
 	</div>
 	</div>
 	</main>

@@ -24,4 +24,8 @@ public interface MyPageDAO {
 
 	Map<String, Object> bdetail(int bno);
 
+	List<Map<String, Object>> commentlist(Map<String, Object> map);
+
+	Map<String, Object> cdetail(int cno);
+
 }

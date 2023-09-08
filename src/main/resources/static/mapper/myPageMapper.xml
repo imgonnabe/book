@@ -22,13 +22,11 @@
 	</delete>
 	
 	<select id="buylist" parameterType="Map" resultType="Map">
-		select t.tno, b.bkimg, b.bkname, b.bkprice, t.tamount, t.tdate, t.tgroup, t.ttotal,
-		(SELECT COUNT(DISTINCT t.tgroup)
-		FROM books b
-		JOIN trade t ON b.bkno = t.bkno
-		WHERE t.mid = 1) as count
-		from trade t left join books b
-		on t.bkno = b.bkno
+		SELECT t.tno, t.bkno, b.bkimg, b.bkname, b.bkprice, t.tamount, t.tdate, t.tgroup,
+			SUM(t.ttotal) OVER (PARTITION BY t.tgroup) AS total,
+			(SELECT COUNT(DISTINCT tgroup) FROM trade WHERE mid = 1) AS count
+			FROM trade t
+			LEFT JOIN books b ON t.bkno = b.bkno
 		<where>
 		t.mid = 1
 			<choose>
@@ -37,7 +35,6 @@
 				<when test="searchN == 'writer'">and b.bkwrite like concat('%', #{searchV},'%')</when>
 			</choose>
 		</where>
-		group by t.tno
 		order by t.tno desc
 	</select>
 	
@@ -58,16 +55,15 @@
 		m.mid = 1 and b.bdel = 1
 			<if test="cate gt 0">and b.bcate = #{cate}</if>
 			<choose>
-				<when test="searchN == 'no'">and b.bno like concat('%', #{searchV},'%')</when>
 				<when test="searchN == 'title'">and b.btitle like concat('%', #{searchV},'%')</when>
-				<when test="searchN == 'writer'">and b.bcontent like concat('%', #{searchV},'%')</when>
+				<when test="searchN == 'content'">and b.bcontent like concat('%', #{searchV},'%')</when>
 			</choose>
 		</where>
 		order by b.bno desc
 	</select>
 	
 	<select id="bdetail" parameterType="Integer" resultType="Map">
-		select btitle, bcontent
+		select btitle, bcontent, bdate, bread
 		from board
 		where bno = #{bno}
 	</select>
@@ -77,5 +73,26 @@
 		where bno=#{bno}
 		and mno=(select mno from members where mid=#{mid})
 	</update>
+	
+	<select id="commentlist" parameterType="Map" resultType="Map">
+		select c.cno, c.comment, c.cdate, b.bdate, b.bcate, b.btitle
+		from comments c join members m join board b
+		on c.mno = m.mno and c.bno = b.bno
+		<where>
+		m.mid = 1 and c.cdel = 1
+			<if test="cate gt 0">and b.bcate = #{cate}</if>
+			<choose>
+				<when test="searchN == 'btitle'">and b.btitle like concat('%', #{searchV},'%')</when>
+				<when test="searchN == 'ccontent'">and c.comment like concat('%', #{searchV},'%')</when>
+			</choose>
+		</where>
+		order by c.cno desc
+	</select>
+	
+	<select id="cdetail" parameterType="Integer" resultType="Map">
+		select b.btitle, b.bcontent, b.bdate, b.bread, m.mname
+		from board b join comments c join members m
+		where c.cno = #{cno} and c.bno = b.bno and b.mno = m.mno
+	</select>
 	
 </mapper>

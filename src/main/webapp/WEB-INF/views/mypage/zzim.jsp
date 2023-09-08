@@ -101,15 +101,14 @@
               <div class="col-sm-6 col-sm-offset-3">
                 <div class="module-subtitle font-alt">
                 	<input name="allCheck" type="checkbox"> 찜한 상품 
-					<div class="zzim"> ? / ${list[0].count }</div>
-					<button type="button" onclick="deleteValue()">삭제</button>
+					<div class="zzim-total"> <span class="zzim"></span> / ${list[0].count }</div>
+					<button class="delbtn" type="button" onclick="deleteValue()">삭제</button>
 				</div>
               </div>
             </div>
             <div class="row multi-columns-row post-columns">
                 <c:forEach items="${list }" var="row">
-              <div class="col-sm-6 col-md-4 col-lg-4">
-                <div class="post mb-20">
+                <div class="gallery-item">
 					<div class="col-sm-6 col-md-3 col-lg-3">
 						<div><input name="rowCheck" type="checkbox" value="${row.zno }"></div>
 							<div class="gallery-image"><a href="../bookdetail?bkno=${row.bkno}"><img src="${row.bkimg }" alt="Blog-post Thumbnail"/></a></div>
@@ -117,7 +116,6 @@
 						<div class="post-entry">${row.bkwrite}</div>
 					</div>
 					</div>
-                </div>
 				</c:forEach>
               </div>
             </div>
@@ -151,6 +149,7 @@
 	$(function() {
 		var check = document.getElementsByName("rowCheck");
 		var checkCnt = check.length;
+		$('.zzim').text('0');
 		
 		$('input[name="allCheck"]').click(function(){
 			var checkList = $('input[name="rowCheck"]');
@@ -167,7 +166,52 @@
 			}
 		});
 		
-		$('button[type="button"]').click(function() {
+		// 모든 체크박스 요소를 가져오기
+	    var allCheckCb = document.querySelector('input[name="allCheck"]');
+	    var rowCheckCb = document.querySelectorAll('input[name="rowCheck"]');
+
+	    // "찜한 상품" 옆 체크박스의 변경 이벤트 처리
+	    allCheckCb.addEventListener('change', function () {
+	        var checkedCount = 0;
+	        if (allCheckCb.checked) {
+	            // "찜한 상품" 체크박스가 체크되면 모든 상품 체크박스도 체크
+	            rowCheckCb.forEach(function (checkbox) {
+	                checkbox.checked = true;
+	                checkedCount++;
+	            });
+	        } else {
+	            // "찜한 상품" 체크박스가 해제되면 모든 상품 체크박스도 해제
+	            rowCheckCb.forEach(function (checkbox) {
+	                checkbox.checked = false;
+	            });
+	        }
+
+	        // 총 선택된 상품 개수를 업데이트
+	        updateTotalCount(checkedCount);
+	    });
+
+	    // 각 상품 옆 체크박스의 변경 이벤트 처리
+	    rowCheckCb.forEach(function (checkbox) {
+	        checkbox.addEventListener('change', function () {
+	            var checkedCount = 0;
+	            rowCheckCb.forEach(function (checkbox) {
+	                if (checkbox.checked) {
+	                    checkedCount++;
+	                }
+	            });
+
+	            // 총 선택된 상품 개수를 업데이트
+	            updateTotalCount(checkedCount);
+	        });
+	    });
+
+	    // 총 선택된 상품 개수를 업데이트하는 함수
+	    function updateTotalCount(count) {
+	        var zzimTotalElement = document.querySelector('.zzim-total .zzim');
+	        zzimTotalElement.textContent = count;
+	    }
+		
+		$('.delbtn').click(function() {
 		    deleteValue();
 		});
 		

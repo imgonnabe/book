@@ -11,7 +11,7 @@
     Document Title
     =============================================
     -->
-<title>Titan | Multipurpose HTML5 Template</title>
+<title>댓글관리</title>
 <!--  
     Favicons
     =============================================
@@ -97,16 +97,16 @@
 			<div class="container">
 				<div class="row">
 					<div class="col-sm-6 col-sm-offset-3">
-						<h1 class="module-title font-alt">글관리</h1>
+						<h1 class="module-title font-alt">댓글관리</h1>
 					</div>
 				</div>
 			</div>
 
 			<section class="module-small">
 				<div class="container">
-				<button class="btn" onclick="location.href='./board?cate=0'">전체보기</button>
+				<button class="btn" onclick="location.href='./comment?cate=0'">전체보기</button>
 				<br>
-					<form action="./board" method="get" class="row">
+					<form action="./comment" method="get" class="row">
 						<div class="mb-sm-20">
 							<select class="form-control" name="cate" id="cate"
 								onclick="cateChange()">
@@ -120,8 +120,8 @@
 						</div>
 						<div class="mb-sm-20">
 							<select class="form-control" name="searchN">
-								<option value="title">글제목</option>
-								<option value="content">글내용</option>
+								<option value="ccontent">댓글내용</option>
+								<option value="btitle">글제목</option>
 							</select>
 						</div>
 						<div class="search-box">
@@ -139,15 +139,16 @@
 					<div class="col-sm-6">
 						<div class="menu">
 								<c:forEach items="${list }" var="row">
-							<div class="row" onclick="detail(${row.bno})">
+							<div class="row"  onclick="cdetail(${row.cno})">
 									<div class="col-sm-8">
-										<div class="menu-detail font-serif">${row.bno}</div>
-										<div class="menu-title font-alt">${row.btitle}</div>
+										<div class="menu-detail font-serif">${row.cno}</div>
+										<div class="menu-detail font-serif">글제목 : ${row.btitle}</div>
+										<div class="menu-title font-alt">${row.comment}</div>
 									</div>
 									<div class="col-sm-4 menu-price-detail">
-										<div class="menu-price font-alt">${row.bdate}</div>
-										<button onclick="edit(${row.bno})">수정</button>
-										<button onclick="del(${row.bno})">삭제</button>
+										<div class="menu-price font-alt">${row.cdate}</div>
+										<button onclick="edit(${row.cno})">수정</button>
+										<button onclick="del(${row.cno})">삭제</button>
 									</div>
 							</div>
 								</c:forEach>
@@ -163,17 +164,18 @@
 		<div class="modal-dialog modal-lg">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLabel">본문제목</h5>
+					<h5 class="modal-title font-alt" id="exampleModalLabel">본문제목</h5>
 					<button type="button" class="btn-close" data-bs-dismiss="modal"
 						aria-label="Close">닫기</button>
 				</div>
 				<div class="modal-body">
 					<div class="detail">
+						<div class="detail-name font-serif">이름</div> 
 						<div class="detail-date-read">    		
-							<div class="detail-date">날짜</div>     		
-							<div class="detail-read">조회수</div>	      		
-						</div> 
-						<div style="font-weight: bold; font-size: larger;" class="detail-content">본문내용</div>
+							<div class="detail-date font-serif">날짜</div>     		
+							<div class="detail-read font-serif">조회수</div>	      		
+						</div>  
+						<div style="font-weight: bold; font-size: larger;" class="detail-content font-alt">본문내용</div>
 					</div>
 				</div>
 			</div>
@@ -202,28 +204,31 @@
 	<script type="text/javascript">
 	
 	// 수정
-    function edit(bno){
+    function edit(cno){
     	if(confirm("수정하시겠습니까?")){
-    		location.href = "./edit?bno=" + bno;
+    		location.href = "./cedit?cno=" + cno;
     	}
     }
     
  	// 삭제
-    function del(bno){
- 		// alert(bno);
+    function del(cno){
+ 		// alert(cno);
     	if(confirm("삭제하시겠습니까?")){
-    		location.href = "./delete?bno=" + bno;
+    		location.href = "./cdelete?cno=" + cno;
     	}
     }
  	
- 	function detail(bno){
+    function cdetail(cno){
  		$.ajax({
- 			url:'./detail',
+ 			url:'./cdetail',
  			type:'post',
- 			data:{bno:bno},
+ 			data:{cno:cno},
  			dataType:'json',
  			success:function(data){
- 				$(".modal-title").text(data.btitle);
+ 				$(".modal-title").text("제목 : " + data.btitle);
+ 				$(".detail-name").text("이름 : " + data.mname);
+ 				$(".detail-date").text("날짜 : "+data.bdate);
+ 				$(".detail-read").text("조회수:"+data.bread);
  				$(".detail-content").html(data.bcontent);
  				$("#exampleModal").modal("show");
  			},
@@ -232,6 +237,7 @@
  			}
  		});
  	}
+ 	
  	$(function() {
  	// URL에서 cate 매개변수를 가져와서 기본값으로 설정
     var defaultCate = getParameterByName('cate');
@@ -241,11 +247,11 @@
 		var cate = $('#cate').val();
 		// alert(cate);
 		$.ajax({
-			url:'./board',
+			url:'./comment',
 			type:'get',
 			data:{cate:cate},
 			success:function(data){
-				location.href="./board?cate=" + cate;
+				location.href="./comment?cate=" + cate;
 				
 			},
 			error:function(error){

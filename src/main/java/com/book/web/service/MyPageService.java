@@ -44,4 +44,12 @@ public class MyPageService {
 	public Map<String, Object> bdetail(int bno) {
 		return myPageDAO.bdetail(bno);
 	}
+
+	public List<Map<String, Object>> commentlist(Map<String, Object> map) {
+		return myPageDAO.commentlist(map);
+	}
+
+	public Map<String, Object> cdetail(int cno) {
+		return myPageDAO.cdetail(cno);
+	}
 }
