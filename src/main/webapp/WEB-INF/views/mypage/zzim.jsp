@@ -94,16 +94,16 @@
 			<div class="loader">Loading...</div>
 		</div>
 		<div class="main">
-		<section class="module" id="news">
           <form action="">
           <div class="container">
             <div class="row">
               <div class="col-sm-6 col-sm-offset-3">
-                <div class="module-subtitle font-alt">
-                	<input name="allCheck" type="checkbox"> 찜한 상품 
-					<div class="zzim-total"> <span class="zzim"></span> / ${list[0].count }</div>
-					<button class="delbtn" type="button" onclick="deleteValue()">삭제</button>
-				</div>
+              	<h1 class="module-title font-alt">찜목록</h1>
+                	<div class="font-alt">
+	                	<input name="allCheck" type="checkbox">&nbsp;찜한 상품
+						<span class="zzim"></span> / ${list[0].count }
+						<button class="delbtn" type="button" onclick="deleteValue()">삭제</button>
+					</div>
               </div>
             </div>
             <div class="row multi-columns-row post-columns">
@@ -120,7 +120,6 @@
               </div>
             </div>
 			</form>
-           </section>
 		
 	</div>
 	</main>
@@ -207,7 +206,7 @@
 
 	    // 총 선택된 상품 개수를 업데이트하는 함수
 	    function updateTotalCount(count) {
-	        var zzimTotalElement = document.querySelector('.zzim-total .zzim');
+	        var zzimTotalElement = document.querySelector('.zzim');
 	        zzimTotalElement.textContent = count;
 	    }
 		

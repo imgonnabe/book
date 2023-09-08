@@ -56,8 +56,9 @@ public class MyPageController {
 	}
 	
 	@GetMapping("/rent")
-	public String rent(Model model) {
-		List<Map<String, Object>> list = myPageService.rentlist();
+	public String rent(Model model, @RequestParam Map<String, Object> map) {
+		System.out.println(map);
+		List<Map<String, Object>> list = myPageService.rentlist(map);
 		model.addAttribute("list", list);
 		return "/mypage/rent";
 	}
@@ -117,6 +118,14 @@ public class MyPageController {
 		ObjectMapper mapp = new ObjectMapper();
 		String json = mapp.writeValueAsString(map);
 		return json;
+	}
+	
+	@GetMapping("/info")
+	public String info(Model model, @RequestParam Map<String, Object> map) {
+		map.put("mid", 1);
+		Map<String, Object> info = myPageService.info(map);
+		model.addAttribute("info", info);
+		return "/mypage/info";
 	}
 	
 }

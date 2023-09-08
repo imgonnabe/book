@@ -52,4 +52,12 @@ public class MyPageService {
 	public Map<String, Object> cdetail(int cno) {
 		return myPageDAO.cdetail(cno);
 	}
+
+	public List<Map<String, Object>> rentlist(Map<String, Object> map) {
+		return myPageDAO.rentlist(map);
+	}
+
+	public Map<String, Object> info(Map<String, Object> map) {
+		return myPageDAO.info(map);
+	}
 }

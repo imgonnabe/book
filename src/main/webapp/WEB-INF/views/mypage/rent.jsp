@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%> 
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,7 +12,7 @@
     Document Title
     =============================================
     -->
-<title>주문목록</title>
+<title>대여목록</title>
 <!--  
     Favicons
     =============================================
@@ -93,21 +94,88 @@
 		<div class="page-loader">
 			<div class="loader">Loading...</div>
 		</div>
-	<div class="recommend">
-	${list[0].count }
-		<table border="1">
-			<c:forEach items="${list }" var="row">
-				<tr class="list">
-					<td>${row.rno}</td>
-					<td><img src="${row.bkimg}"></td>
-					<td>${row.bkname}</td>
-					<td>${row.rsdate}</td>
-					<td>${row.rddate}</td>
-				</tr>
-			</c:forEach>
-		</table>	
+		<div class="main">
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-6 col-sm-offset-3">
+				<h1 class="module-title font-alt">대여목록</h1>
+			</div>
+		</div>
+	</div>
+	
+	<section class="module-small">
+		<div class="container">
+		<button class="btn" onclick="location.href='./rent'">전체보기</button>
+		<button class="btn" onclick="rsearch()">상세조회</button>
+			<form action="./rent" method="get" class="row">
+				<div class="mb-sm-20">
+					<select class="form-control" name="searchN">
+						<option value="title">책제목</option>
+						<option value="writer">저자</option>
+					</select>
+				</div>
+				<div class="search-box">
+					<input class="form-control" type="text" name="searchV"
+						required="required" placeholder="Search..">
+					<button class="search-btn" type="submit">
+						<i class="fa fa-search"></i>
+					</button>
+				</div>
+			</form>
+		</div>
+	</section>
+	<div class="container">
+	<div class="module-subtitle font-alt">${list[0].count }</div>
+		<div class="row multi-columns-row">
+			<div class="col-sm-6">
+				<div class="widget-posts">
+					<c:forEach items="${list }" var="row">
+						<h4 class="widget-posts-title font-serif"><a href="../bookdetail?bkno=${row.bkno}">${row.bkname}</a></h4>
+						<div class="widget-posts-image"><a href="../bookdetail?bkno=${row.bkno}"><img src="${row.bkimg }" alt="Blog-post Thumbnail"/></a></div>
+						<div class="widget-posts-title font-alt">${row.bkwrite}</div>
+						<div class="widget-posts-title font-serif">${row.rsdate}</div>
+						<div class="widget-posts-title font-serif">${row.rddate}</div>
+						<c:choose>
+							<c:when test="${row.rdel eq 1}">
+								<div class="widget-posts-title font-alt">대출중</div>
+							</c:when>
+							<c:otherwise>
+							<div class="widget-posts-title font-alt">반납</div>
+							</c:otherwise>
+						</c:choose>
+						<hr>
+					</c:forEach>
+				</div>
+			</div>
+			</div>
+	</div>
 	</div>
 	</main>
+	<!-- Modal -->
+	<div class="modal fade" id="exampleModal" tabindex="-1"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">기간조회</h5>
+				</div>
+				<div class="modal-body">
+					<div class="detail">
+						<div class="mb-sm-20">
+							<select class="form-control" name="searchN">
+								<option value="1">최근 1개월</option>
+								<option value="3">최근 3개월</option>
+								<option value="6">최근 6개월</option>
+							</select>
+						</div>
+						<div class="search-box">
+							<input class="datepicker" id="start"> ~ <input class="datepicker" id="end">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 	<!--  
     JavaScripts
     =============================================
@@ -128,5 +196,74 @@
 		src="../assets/lib/simple-text-rotator/jquery.simple-text-rotator.min.js"></script>
 	<script src="../assets/js/plugins.js"></script>
 	<script src="../assets/js/main.js"></script>
+	
+	<script type="text/javascript">
+		$(function(){
+			$('.datepicker').datepicker({dateFormat: 'yy-mm-dd'});
+		});
+	
+		dateFormatter = function(newDay, today){
+			let year = newDay.getFullYear();
+			let month = newDay.getMonth() + 1;
+			let date = newDay.getDate();
+		
+			// 기존 날짜와 새로운 날짜가 다른 경우
+			if(today){
+				let todayDate = today.getDate();
+				if(date != todayDate){
+					if(month == 0){
+						year = 1;
+						month = (month + 11) % 12;
+						date = new Date(year, month, 0).getDate();// 달의 마지막 날짜
+					}
+				}
+			}
+		
+			month = ("0" + month).slice(-2);
+			date = ("0" + date).slice(-2);
+			return year + "-" + month + "-" + date;
+			}
+		
+		document.getElementsByName("filterDate").forEach(e => {
+			e.addEventListener('click', function(){
+				let endDate = new Date($('#end').val());
+				let newDate = new Date($('#end').val());
+				
+				switch(this.value){
+				case '1' :
+					console.log('1개월');
+					newDate.setDate(newDate.getMonth() - 1);
+					newDate = dateFormatter(newDate);
+					break;
+				case '2' :
+					console.log('3개월');
+					newDate.setDate(newDate.getMonth() - 3);
+					newDate = dateFormatter(newDate);
+					break;
+				case '3' :
+					console.log('6개월');
+					newDate.setDate(newDate.getMonth() - 6);
+					newDate = dateFormatter(newDate);
+					break;
+				}
+				$('#start').val(newDate);
+			})
+		})
+		
+		function rsearch(){
+	 		$.ajax({
+	 			url:'./rent',
+	 			type:'get',
+	 			success:function(data){
+	 				$("#exampleModal").modal("show");
+	 			},
+	 			error:function(error){
+	 				alert('에러');
+	 			}
+	 		});
+			
+		}
+		
+</script>
 </body>
 </html>

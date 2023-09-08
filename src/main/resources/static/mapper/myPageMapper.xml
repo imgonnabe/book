@@ -38,17 +38,8 @@
 		order by t.tno desc
 	</select>
 	
-	<select id="rentlist" resultType="Map">
-		select r.rno, b.bkimg, b.bkname, b.rsdate, b.rddate
-		from rental r left join books b
-		on r.bkno = b.bkno
-		where r.mid = 1 and b.rsdate is not null
-		group by r.rno
-		order by r.rno desc
-	</select>
-	
 	<select id="boardlist" parameterType="Map" resultType="Map">
-		select b.bno, b.btitle, b.bcontent, b.bdate, b.bcate
+		select b.bno, b.btitle, b.bcontent, DATE_FORMAT(b.bdate, '%y-%m-%d %h:%m') AS bdate, b.bcate
 		from board b join members m
 		on b.mno = m.mno
 		<where>
@@ -75,7 +66,7 @@
 	</update>
 	
 	<select id="commentlist" parameterType="Map" resultType="Map">
-		select c.cno, c.comment, c.cdate, b.bdate, b.bcate, b.btitle
+		select c.cno, c.comment, c.cdate, DATE_FORMAT(b.bdate, '%y-%m-%d %h:%m') AS bdate, b.bcate, b.btitle
 		from comments c join members m join board b
 		on c.mno = m.mno and c.bno = b.bno
 		<where>
@@ -93,6 +84,26 @@
 		select b.btitle, b.bcontent, b.bdate, b.bread, m.mname
 		from board b join comments c join members m
 		where c.cno = #{cno} and c.bno = b.bno and b.mno = m.mno
+	</select>
+	
+	<select id="rentlist" parameterType="Map" resultType="Map">
+		SELECT r.rno, r.bkno, b.bkwrite, b.bkimg, b.bkname, r.rsdate, r.rddate
+			FROM rental r
+			LEFT JOIN books b ON r.bkno = b.bkno
+		<where>
+		r.mid = 1
+			<choose>
+				<when test="searchN == 'title'">and b.bkname like concat('%', #{searchV},'%')</when>
+				<when test="searchN == 'writer'">and b.bkwrite like concat('%', #{searchV},'%')</when>
+			</choose>
+		</where>
+		order by r.rsdate desc
+	</select>
+	
+	<select id="info" parameterType="Map" resultType="Map">
+		select mid, mname, maddr, mbirth, mphone, memail
+		from members
+		where mid = #{mid}
 	</select>
 	
 </mapper>

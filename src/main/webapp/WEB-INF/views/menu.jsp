@@ -193,7 +193,7 @@
                 <ul class="dropdown-menu" role="menu">
                   <li><a href="./zzim">찜목록</a></li>
                   <li><a href="./buy">구매목록</a></li>
-                  <li><a href="./rent">대여목록</a></li>
+                  <li><a href="./rent">대출이력</a></li>
                   <li><a href="./board">게시물 관리</a></li>
                   <li><a href="./comment">댓글 관리</a></li>
                   <li><a href="./question">문의 내역</a></li>

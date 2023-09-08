@@ -133,6 +133,7 @@
 						<c:if test="${loop.first || row.tgroup ne list[loop.index - 1].tgroup}">
 							<div class="col-sm-8">
 									<h3 class="widget-posts-title font-serif">${row.tgroup} <br> <fmt:formatNumber value="${row.total}" pattern="#,###"/>원</h3>
+									<hr>
 							</div>
 						</c:if>
 						<div class="widget-posts">
@@ -143,9 +144,7 @@
 						</div>	
 					</c:forEach>
 				</div>
-			</div>
-	</div>
-	</div>
+	</div></div></div></div>
 	</main>
 	<!--  
     JavaScripts

@@ -28,4 +28,8 @@ public interface MyPageDAO {
 
 	Map<String, Object> cdetail(int cno);
 
+	List<Map<String, Object>> rentlist(Map<String, Object> map);
+
+	Map<String, Object> info(Map<String, Object> map);
+
 }

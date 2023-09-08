@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+    pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%> 
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,7 +12,7 @@
     Document Title
     =============================================
     -->
-<title>Titan | Multipurpose HTML5 Template</title>
+<title>주문목록</title>
 <!--  
     Favicons
     =============================================
@@ -97,88 +98,37 @@
 			<div class="container">
 				<div class="row">
 					<div class="col-sm-6 col-sm-offset-3">
-						<h1 class="module-title font-alt">글관리</h1>
+						<h1 class="module-title font-alt">회원정보 수정</h1>
 					</div>
 				</div>
 			</div>
-
-			<section class="module-small">
-				<div class="container">
-				<button class="btn" onclick="location.href='./board?cate=0'">전체보기</button>
-				<br>
-					<form action="./board" method="get" class="row">
-						<div class="mb-sm-20">
-							<select class="form-control" name="cate" id="cate"
-								onclick="cateChange()">
-								<optgroup label="카테고리">
-									<option value="0">전체</option>
-									<option value="1">1</option>
-									<option value="2">2</option>
-									<option value="3">3</option>
-								</optgroup>
-							</select>
-						</div>
-						<div class="mb-sm-20">
-							<select class="form-control" name="searchN">
-								<option value="title">글제목</option>
-								<option value="content">글내용</option>
-							</select>
-						</div>
-						<div class="search-box">
-							<input class="form-control" type="text" name="searchV"
-								required="required" placeholder="Search..">
-							<button class="search-btn" type="submit">
-								<i class="fa fa-search"></i>
-							</button>
-						</div>
-					</form>
-				</div>
-			</section>
-			<div class="container">
-				<div class="row multi-columns-row">
-					<div class="col-sm-6">
-						<div class="menu">
-								<c:forEach items="${list }" var="row">
-							<div class="row" onclick="detail(${row.bno})">
-									<div class="col-sm-8">
-										<div class="menu-detail font-serif">${row.bno}</div>
-										<div class="menu-title font-alt">${row.btitle}</div>
-									</div>
-									<div class="col-sm-4 menu-price-detail">
-										<div class="menu-price font-alt">${row.bdate}</div>
-										<button onclick="edit(${row.bno})">수정</button>
-										<button onclick="del(${row.bno})">삭제</button>
-									</div>
-							</div>
-								</c:forEach>
-						</div>
-					</div>
-				</div>
-			</div>
+	
+          <div class="container">
+            <div class="row">
+              <div class="col-sm-8 col-sm-offset-2">
+                <form class="form" role="form">
+                  <div class="form-group">
+                    아이디 : <input class="form-control" type="text" placeholder="아이디"/>
+                  </div>
+                  <div class="form-group">
+                    새 비밀번호 : <input class="form-control" type="text" placeholder="새 비밀번호를 입력해주세요."/>
+                  </div>
+                  <div class="form-group">
+                    비밀번호 확인 : <input class="form-control input-sm" type="text" placeholder="새 비밀번호를 한 번 더 입력해주세요."/>
+                  </div>
+                  <div class="form-group">
+                    이름 : <div class="form-control">${info.mname}</div>
+                    <button type="button" class="auth">본인인증</button>
+                  </div>
+                  <div class="form-group">
+                    생년월일 : <div class="form-control">${info.mbirth}</div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
 		</div>
 	</main>
-	<!-- Modal -->
-	<div class="modal fade" id="exampleModal" tabindex="-1"
-		aria-labelledby="exampleModalLabel" aria-hidden="true">
-		<div class="modal-dialog modal-lg">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLabel">본문제목</h5>
-					<button type="button" class="btn-close" data-bs-dismiss="modal"
-						aria-label="Close">닫기</button>
-				</div>
-				<div class="modal-body">
-					<div class="detail">
-						<div class="detail-date-read">    		
-							<div class="detail-date">날짜</div>     		
-							<div class="detail-read">조회수</div>	      		
-						</div> 
-						<div style="font-weight: bold; font-size: larger;" class="detail-content">본문내용</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
 	<!--  
     JavaScripts
     =============================================
@@ -201,80 +151,19 @@
 	<script src="../assets/js/main.js"></script>
 	
 	<script type="text/javascript">
-	// 수정
-    function edit(bno){
-    	if(confirm("수정하시겠습니까?")){
-    		location.href = "./edit?bno=" + bno;
-    	}
-    }
-    
- 	// 삭제
-    function del(bno){
- 		// alert(bno);
-    	if(confirm("삭제하시겠습니까?")){
-    		location.href = "./delete?bno=" + bno;
-    	}
-    }
- 	
- 	function detail(bno){
- 		$.ajax({
- 			url:'./detail',
- 			type:'post',
- 			data:{bno:bno},
- 			dataType:'json',
- 			success:function(data){
- 				$(".detail-date").text("날짜 : "+data.bdate);
- 				$(".detail-read").text("조회수:"+data.bread);
- 				$("#exampleModal").modal("show");
- 			},
- 			error:function(error){
- 				alert('에러');
- 			}
- 		});
- 	}
- 	
- 	$(function() {
- 	// URL에서 cate 매개변수를 가져와서 기본값으로 설정
-    var defaultCate = getParameterByName('cate');
-    $('#cate').val(defaultCate);
-    
-	$('#cate').on('change', function(){
-		var cate = $('#cate').val();
-		// alert(cate);
-		$.ajax({
-			url:'./board',
-			type:'get',
-			data:{cate:cate},
-			success:function(data){
-				location.href="./board?cate=" + cate;
-				
-			},
-			error:function(error){
-				alert('에러');
-			}
+	$(function() {
+		$('.auth').click(function(){
+			$.ajax({
+				url : './message',
+				type : 'post',
+				success: function(data){
+				},
+				error: function(error){
+					alert('에러');
+				}
+			});
 		});
 	});
-	
-	// URL에서 매개변수를 추출하는 함수
-    /*function getParameterByName(name, url) {
-        if (!url) {
-        	url = window.location.href;
-        }
-        name = name.replace(/[\[\]]/g, '\\$&');
-        var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)');
-        var results = regex.exec(url);
-        if (!results) return null;
-        if (!results[2]) return '';
-        return decodeURIComponent(results[2].replace(/\+/g, ' '));
-    }*/
-    function getParameterByName(name, url) {
-    	const urlParams = new URL(location.href).searchParams;
-    	return urlParams.get(name);
-    }
-    
-    
-	});
- 	</script>
-
+	</script>
 </body>
 </html>
