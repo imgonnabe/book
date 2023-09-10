@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.book.web.dao.AdminDAO">
+	
+	<select id="stocklist" parameterType="Map" resultType="Map">
+		select b.bkno, b.bkname, b.bkwrite, b.bkpublisher, b.bkprice, b.bstock, b.bkcate
+		from books b
+		<where>
+			<if test="cate gt 0">and b.bkcate = #{cate}</if>
+			<choose>
+				<when test="searchN == 'title'">and b.bkname like concat('%', #{searchV},'%')</when>
+				<when test="searchN == 'writer'">and b.bkwrite like concat('%', #{searchV},'%')</when>
+				<when test="searchN == 'publisher'">and b.bkpubilsher like concat('%', #{searchV},'%')</when>
+			</choose>
+		</where>
+		order by b.bkno desc
+	</select>
+	
+</mapper>
