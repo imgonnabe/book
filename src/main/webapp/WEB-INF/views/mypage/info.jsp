@@ -118,7 +118,7 @@
                   </div>
                   <div class="form-group">
                     이름 : <div class="form-control">${info.mname}</div>
-                    <button type="button" class="auth">본인인증</button>
+                      <input type="button" onclick="authnum()" id="phoneChk" class="doubleChk" value = "본인인증확인">
                   </div>
                   <div class="form-group">
                     생년월일 : <div class="form-control">${info.mbirth}</div>
@@ -129,6 +129,30 @@
           </div>
 		</div>
 	</main>
+	<!-- Modal -->
+	<div class="modal fade" id="exampleModal" tabindex="-1"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">본인인증</h5>
+				</div>
+				<div class="modal-body">
+					<div class="detail">
+						<input required style="width: 300px;" name="phone" id="phone" type="text" placeholder="전화번호를 입력하세요..">
+					</div>
+					<br>
+					<div class="detail">
+						<input id="phoneChk" class="doubleChk" value = "인증번호 받기">	
+						<input id="phone2" type="text" name="phone2" title="인증번호 입력" disabled required/>
+						<span id="phoneChk2" class="doubleChk">본인인증</span>
+						<span class="point successPhoneChk">휴대폰 번호 입력후 인증번호 보내기를 해주십시오.</span>
+						<input type="hidden" id="phoneDoubleChk"/>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 	<!--  
     JavaScripts
     =============================================
@@ -151,19 +175,35 @@
 	<script src="../assets/js/main.js"></script>
 	
 	<script type="text/javascript">
-	$(function() {
-		$('.auth').click(function(){
-			$.ajax({
-				url : './message',
-				type : 'post',
-				success: function(data){
-				},
-				error: function(error){
-					alert('에러');
-				}
-			});
-		});
-	});
+	function authnum() {
+		   $("#exampleModal").modal("show");
+		 //휴대폰 번호 인증
+		   var code2 = "";
+		   $("#phoneChk").click(function(){
+		   	alert("인증번호 발송이 완료되었습니다.\n휴대폰에서 인증번호 확인을 해주십시오.");
+		   	var phone = $("#phone").val();
+		   	$.ajax({
+		           type:"GET",
+		           url:"phoneCheck?phone=" + phone,
+		           cache : false,
+		           success:function(data){
+		           	if(data == "error"){
+		           		alert("휴대폰 번호가 올바르지 않습니다.")
+		   				$(".successPhoneChk").text("유효한 번호를 입력해주세요.");
+		   				$(".successPhoneChk").css("color","red");
+		   				$("#phone").attr("autofocus",true);
+		           	}else{	        		
+		           		$("#phone2").attr("disabled",false);
+		           		$("#phoneChk2").css("display","inline-block");
+		           		$(".successPhoneChk").text("인증번호를 입력한 뒤 본인인증을 눌러주십시오.");
+		           		$(".successPhoneChk").css("color","green");
+		           		$("#phone").attr("readonly",true);
+		           		code2 = data;
+		           	}
+		           }
+		       });
+		   });
+		}
 	</script>
 </body>
 </html>

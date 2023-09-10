@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,14 +16,23 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.book.web.service.MyPageService;
+import com.book.web.utils.SmsUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import net.nurigo.sdk.message.model.Message;
+import net.nurigo.sdk.message.request.SingleMessageSendingRequest;
+import net.nurigo.sdk.message.response.SingleMessageSentResponse;
+import net.nurigo.sdk.message.service.MessageService;
 
 @Controller
 @RequestMapping("/mypage")
 public class MyPageController {
 	@Autowired
 	private MyPageService myPageService;
+	
+	@Autowired
+	private SmsUtil smsUtil;
 	
 	@GetMapping({"/", "/main"})
 	public String main(Model model) {
@@ -128,4 +139,12 @@ public class MyPageController {
 		return "/mypage/info";
 	}
 	
+	@ResponseBody
+	@GetMapping("/phoneCheck")
+	public String sendSMS(@RequestParam("phone") String userPhoneNumber) {// 휴대폰 문자보내기
+		int randomNumber = (int)((Math.random()* (9999 - 1000 + 1)) + 1000);//난수 생성
+
+		smsUtil.sendOne("phone", randomNumber);
+		return "/mypage/info";
+	}
 }
