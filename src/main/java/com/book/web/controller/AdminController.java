@@ -69,4 +69,31 @@ public class AdminController {
 		// System.out.println(comment);
 		return json.toString();
 	}
+	
+	@ResponseBody
+	@PostMapping("/memberOut")
+	public void memberOut(@RequestParam(value = "mid", required = true) String mid) {
+		System.out.println(mid);
+		adminService.memberOut(mid);
+	}
+	
+	@ResponseBody
+	@PostMapping("/bdel")
+	public void bdel(@RequestParam(value = "bno", required = true) int bno) {
+		System.out.println(bno);
+		adminService.bdel(bno);
+	}
+	
+	@GetMapping("/rent")
+	public String rent(Model model, @RequestParam Map<String, Object> map,
+			@RequestParam(name="cate", required = false, defaultValue = "0") int cate) {
+		if(!map.containsKey("cate") || map.get("cate").equals(null) || map.get("cate").equals("")) {
+			map.put("cate", 0);
+		}
+		System.out.println(cate);
+		System.out.println(map);
+		List<Map<String, Object>> list = adminService.rentlist(map);
+		model.addAttribute("list", list);
+		return "/admin/rent";
+	}
 }

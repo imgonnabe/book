@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.book.web.booklist.BooklistDAO">
 
-<select id="booklist" parameterType="Integer" resultType="BooklistDTO">
+<select id="booklist" parameterType="Integer" resultType="com.book.web.booklist.BooklistDTO">
   SELECT bkno, bkname, bkwrite, bkimg, bkprice, bkcate,
          (
          SELECT COUNT(*) FROM books
@@ -25,7 +25,7 @@
   FROM books WHERE bkno=#{bkno }
 </select>
 
-<select id="booktop" resultType="BooklistDTO">
+<select id="booktop" resultType="com.book.web.booklist.BooklistDTO">
   SELECT *
   FROM books 
   ORDER BY bcnt DESC

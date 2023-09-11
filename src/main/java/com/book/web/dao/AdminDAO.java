@@ -18,4 +18,10 @@ public interface AdminDAO {
 
 	List<Map<String, Object>> comment(int bno);
 
+	void memberOut(String mid);
+
+	void bdel(int bno);
+
+	List<Map<String, Object>> rentlist(Map<String, Object> map);
+
 }

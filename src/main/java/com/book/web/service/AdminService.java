@@ -32,4 +32,16 @@ public class AdminService {
 	public List<Map<String, Object>> comment(int bno) {
 		return adminDAO.comment(bno);
 	}
+
+	public void memberOut(String mid) {
+		adminDAO.memberOut(mid);
+	}
+
+	public void bdel(int bno) {
+		adminDAO.bdel(bno);
+	}
+
+	public List<Map<String, Object>> rentlist(Map<String, Object> map) {
+		return adminDAO.rentlist(map);
+	}
 }

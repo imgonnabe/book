@@ -88,10 +88,6 @@
 .gray{
 	background-color: gray;
 }
-
-.silver{
-	background-color: silver;
-}
 </style>
 </head>
 <body data-spy="scroll" data-target=".onpage-navigation"
@@ -106,16 +102,16 @@
 			<div class="container">
 				<div class="row">
 					<div class="col-sm-6 col-sm-offset-3">
-						<h1 class="module-title font-alt">게시물 관리</h1>
+						<h1 class="module-title font-alt">대여 관리</h1>
 					</div>
 				</div>
 			</div>
 
 			<section class="module-small">
 				<div class="container">
-				<button class="btn" onclick="location.href='./board?cate=0'">전체보기</button>
+				<button class="btn" onclick="location.href='./stock?cate=0'">전체보기</button>
 				<br>
-					<form action="./board" method="get" class="row">
+					<form action="./stock" method="get" class="row">
 						<div class="mb-sm-20">
 							<select class="form-control" name="cate" id="cate"
 								onclick="cateChange()">
@@ -129,8 +125,9 @@
 						</div>
 						<div class="mb-sm-20">
 							<select class="form-control" name="searchN">
-								<option value="title">글제목</option>
-								<option value="content">글내용</option>
+								<option value="title">책제목</option>
+								<option value="writer">저자</option>
+								<option value="publisher">출판사</option>
 							</select>
 						</div>
 						<div class="search-box">
@@ -148,24 +145,19 @@
 					<div class="col-sm-6">
 						<div class="menu">
 								<c:forEach items="${list }" var="row">
-							<div class="row <c:if test="${row.m_grade eq 0}">gray</c:if> <c:if test="${row.bdel eq 0}">silver</c:if>" >
+							<div class="row <c:if test="${row.rdel eq 0}">gray</c:if>">
 									<div class="col-sm-8">
-										<div class="menu-detail font-serif">${row.bno}</div>
-										<div onclick="detail(${row.bno})" class="menu-title font-alt">${row.btitle}</div>
-										<div class="menu-detail font-serif">${row.mid}(${row.mname})</div>
+										<div class="menu-detail font-serif">${row.rno}</div>
+										<div class="menu-title font-alt">${row.bkname}</div>
+										<div class="menu-title font-alt">${row.bkwrite}</div>
 									</div>
 									<div class="col-sm-4 menu-price-detail">
-										<div class="menu-price font-alt">${row.bdate}</div>
-										<div class="menu-price font-alt">
-											<select class="form-control" name="punish" id="punish">
-												<option value="0">회원 탈퇴</option>
-												<option value="1">게시물 삭제</option>
-											</select>
-											<button type="button" class="btn punishbtn" data-bno="${row.bno}" data-mid="${row.mid}">등록</button>
-										</div>
+										<div class="menu-price font-alt">${row.bkpublisher}</div>
+										<div class="menu-price font-alt">${row.rsdate}</div>
+										<div class="menu-price font-alt">${row.rddate}</div>
+										<div class="menu-price font-alt">${row.bkcate}</div>
 									</div>
 							</div>
-							<hr>
 								</c:forEach>
 						</div>
 					</div>
@@ -179,17 +171,22 @@
 		<div class="modal-dialog modal-lg">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLabel">본문제목</h5>
+					<h5 class="modal-title" id="exampleModalLabel">재고</h5>
 				</div>
 				<div class="modal-body">
+					<input id="bkno2" type="hidden">
 					<div class="detail">
-						<div class="detail-date-read">    		
-							<div class="detail-date">날짜</div>     		
-							<div class="detail-read">조회수</div>	      		
-						</div> 
-						<div style="font-weight: bold; font-size: larger;" class="detail-content">본문내용</div>
-						<div class="comment">
-						</div>
+						<!-- <select class="form-control" name="stock" id="stock" onclick="stockChange()">
+								<option value="10">10</option>
+								<option value="20">20</option>
+								<option value="30">30</option>
+								<option value="40">40</option>
+								<option value="50">50</option>
+								<option value="admin">사용자 지정</option>
+						</select> 
+						<div id="adminInputContainer"></div>-->
+						<input id="stockCnt" type="text" placeholder="수량을 입력하세요...">
+						<button id="stockbtn">재고 업데이트</button>
 					</div>
 				</div>
 			</div>
@@ -218,80 +215,83 @@
 	
 	<script type="text/javascript">
 	
-   $(".punishbtn").click(function(){
-	  var selected = $("#punish").val();
-   	  var bno = $(this).data("bno");
-   	  var mid = $(this).data("mid");
-	  if(selected == 0){
-		  var con = confirm("회원을 탈퇴시키겠습니까?");
-		  if(con){
-			  $.ajax({
-				  url: 'memberOut',
-	                type: 'post',
-	                data: {mid: mid},
-	                success: function(data){
-	                    location.href='./board';
-	                },
-	                error: function(error){
-	                    alert('에러');
-	                }
-			  });
-		  }
-	  } else if(selected == 1){
-		  var con2 = confirm("게시물을 삭제하시겠습니까?");
-		  if(con2){
-			  $.ajax({
-				  url: 'bdel',
-	                type: 'post',
-	                data: {bno:bno},
-	                success: function(data){
-	                    location.href='./board';
-	                },
-	                error: function(error){
-	                    alert('에러');
-	                }
-			  });
-		  }
-	  } else {
-		  return false;
-	  }
+	function stock(bkno, bstock) {
+		// alert(bkno +" "+ bstock);
+	    if (confirm(bstock + "개 남은 재고를 바꾸시겠습니까?")) {
+	    	$("#bkno2").val(bkno);
+	        $("#exampleModal").modal("show");
+	    }
+	}
+	
+	$(document).on('click', '#stockbtn', function () {
+		var bkno = $('#bkno2').val();
+		var bstock = $("#stockCnt").val();
+		var cate = getParameterByName('cate');
+		// alert(bkno + " " + bstock);
+		$.ajax({
+            url: './updateStock',
+            type: 'post',
+            data: {bkno: bkno, bstock: bstock, cate:cate},
+            success: function (data) {
+                alert("재고가 업데이트됐습니다.");
+                location.href = "./stock";
+            },
+            error: function (error) {
+                alert('에러');
+            }
+        });
 	});
 	
-	function memberOut(){
+	/*function stockChange() {
 		
+	    var adminInputContainer = document.getElementById("adminInputContainer");
+
+	    // "사용자 지정" 옵션이 선택되었을 때
+	    if ($('#stock').val() === "admin") {
+	        // <input> 요소를 생성하여 adminInputContainer에 추가
+	        var adminInput = document.createElement("input");
+	        adminInput.id = "admin";
+	        adminInput.name = "admin";
+	        adminInput.placeholder = "사용자 지정 내용을 입력하세요";
+	        adminInputContainer.innerHTML = ""; // 이전 내용 삭제
+	        adminInputContainer.appendChild(adminInput);
+	    } else {
+	        // 다른 옵션을 선택한 경우, adminInputContainer를 비운다.
+	        adminInputContainer.innerHTML = "";
+	    }
+	    
+	    $(document).on('click', '#stockbtn', function () {
+	    	var bkno = $('#bkno2').val(); // 책 번호 가져오기
+	    	// alert(bkno);
+	    	var bstock = "";
+	    	if ($('#stock').val() == "admin") {
+	            bstock = $('#admin').val(); // 사용자가 정의한 재고 값을 가져오기
+	        } else {
+	            bstock = $('#stock').val(); // 선택한 재고 값을 가져오기
+	        }
+
+	        var cate = getParameterByName('cate');
+	        
+	        $.ajax({
+	            url: './updateStock',
+	            type: 'post',
+	            data: { bkno: bkno, bstock: bstock, cate:cate },
+	            success: function (data) {
+	                // location.href = "./stock?cate=" + cate;
+	                alert("재고가 업데이트됐습니다.");
+	            },
+	            error: function (error) {
+	                alert('에러');
+	            }
+	        });
+	    });
+	}*/
+
+	function getParameterByName(name) {
+	    const urlParams = new URL(location.href).searchParams;
+	    return urlParams.get(name);
 	}
  	
- 	function detail(bno){
- 		$.ajax({
- 			url:'./detail',
- 			type:'post',
- 			data:{bno:bno},
- 			dataType:'json',
- 			success:function(data){
- 				var detail = data.detail;
- 				var comment = data.comment;
- 				// alert(comment);
- 				$(".modal-title").text(detail.btitle);
- 				$(".detail-date").text("날짜 : "+detail.bdate);
- 				$(".detail-read").text("조회수:"+detail.bread);
- 				$(".detail-content").html(detail.bcontent + "<hr>");
- 				
- 				var commentHtml = "";
- 	            for(var i = 0; i < comment.length; i++){
- 	                commentHtml += "<div class='comment-item'>";
- 	                commentHtml += comment[i].mid + "(" + comment[i].mname + ")&nbsp;&nbsp;&nbsp;";
- 	                commentHtml += comment[i].cdate + "<br>";
- 	                commentHtml += "<div style='font-weight: bold; font-size: larger;'>" + comment[i].comment + "</div>";
- 	                commentHtml += "</div><hr>";
- 	            }
- 	            $(".comment").html(commentHtml);
- 				$("#exampleModal").modal("show");
- 			},
- 			error:function(error){
- 				alert('에러');
- 			}
- 		});
- 	}
  	
  	$(function() {
  	// URL에서 cate 매개변수를 가져와서 기본값으로 설정
@@ -302,11 +302,11 @@
 		var cate = $('#cate').val();
 		// alert(cate);
 		$.ajax({
-			url:'./board',
+			url:'./stock',
 			type:'get',
 			data:{cate:cate},
 			success:function(data){
-				location.href="./board?cate=" + cate;
+				location.href="./stock?cate=" + cate;
 				
 			},
 			error:function(error){
@@ -315,26 +315,8 @@
 		});
 	});
 	
-	// URL에서 매개변수를 추출하는 함수
-    /*function getParameterByName(name, url) {
-        if (!url) {
-        	url = window.location.href;
-        }
-        name = name.replace(/[\[\]]/g, '\\$&');
-        var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)');
-        var results = regex.exec(url);
-        if (!results) return null;
-        if (!results[2]) return '';
-        return decodeURIComponent(results[2].replace(/\+/g, ' '));
-    }*/
-    function getParameterByName(name, url) {
-    	const urlParams = new URL(location.href).searchParams;
-    	return urlParams.get(name);
-    }
-    
-    
 	});
  	</script>
- 	
+
 </body>
 </html>

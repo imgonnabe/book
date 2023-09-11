@@ -49,4 +49,28 @@
 		where c.bno = #{bno}
 	</select>
 	
+	<update id="memberOut" parameterType="String">
+		update members set mgrade = 0
+		where mid = #{mid}
+	</update>
+	
+	<update id="bdel" parameterType="Integer">
+		update board set bdel = 0
+		where bno = #{bno}
+	</update>
+	
+	<select id="rentlist" parameterType="Map" resultType="Map">
+		select b.bkno, b.bkname, b.bkwrite, b.bkpublisher, r.rsdate, r.rddate, r.rdel, r.rno, r.mid
+		from books b join rental r
+		<where>
+			<if test="cate gt 0">and b.bkcate = #{cate}</if>
+			<choose>
+				<when test="searchN == 'title'">and b.bkname like concat('%', #{searchV},'%')</when>
+				<when test="searchN == 'writer'">and b.bkwrite like concat('%', #{searchV},'%')</when>
+				<when test="searchN == 'publisher'">and b.bkpubilsher like concat('%', #{searchV},'%')</when>
+			</choose>
+		</where>
+		order by r.rno desc
+	</select>
+	
 </mapper>
