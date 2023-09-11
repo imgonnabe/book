@@ -147,9 +147,9 @@
 										<div class="menu-title font-alt">${row.bkwrite}</div>
 									</div>
 									<div class="col-sm-4 menu-price-detail">
-										<div class="menu-price font-alt">${row.bkprice}</div>
+										<div class="menu-price font-alt">${row.bkprice}원</div>
 										<div class="menu-price font-alt">${row.bkpublisher}</div>
-										<div onclick="stock('${row.bkno}', '${row.bstock}')" class="menu-price font-alt" data-bkno="${row.bkno}" data-bstock="${row.bstock}">${row.bstock}</div>
+										<div onclick="stock('${row.bkno}', '${row.bstock}')" class="menu-price font-alt" data-bkno="${row.bkno}" data-bstock="${row.bstock}">${row.bstock}개</div>
 										<div class="menu-price font-alt">${row.bkcate}</div>
 									</div>
 							</div>
@@ -169,18 +169,19 @@
 					<h5 class="modal-title" id="exampleModalLabel">재고</h5>
 				</div>
 				<div class="modal-body">
+					<input id="bkno2" type="hidden">
 					<div class="detail">
-						<select class="form-control" name="stock" id="stock"
-							onclick="stockChange()">
+						<!-- <select class="form-control" name="stock" id="stock" onclick="stockChange()">
 								<option value="10">10</option>
 								<option value="20">20</option>
 								<option value="30">30</option>
 								<option value="40">40</option>
 								<option value="50">50</option>
 								<option value="admin">사용자 지정</option>
-						</select>
-						<div id="adminInputContainer"></div>
-						<div style="font-weight: bold; font-size: larger;" class="detail-content">본문내용</div>
+						</select> 
+						<div id="adminInputContainer"></div>-->
+						<input id="stockCnt" type="text" placeholder="수량을 입력하세요...">
+						<button id="stockbtn">재고 업데이트</button>
 					</div>
 				</div>
 			</div>
@@ -209,24 +210,39 @@
 	
 	<script type="text/javascript">
 	
-	function stock(bkno, bkstock) {
-	    var bkno = ele.getAttribute("data-bkno");
-	    var bkstock = ele.getAttribute("data-bstock");
-
-	    if (confirm(bkstock + "개 남은 재고를 바꾸시겠습니까?")) {
+	function stock(bkno, bstock) {
+		// alert(bkno +" "+ bstock);
+	    if (confirm(bstock + "개 남은 재고를 바꾸시겠습니까?")) {
+	    	$("#bkno2").val(bkno);
 	        $("#exampleModal").modal("show");
 	    }
 	}
 	
-	function stockChange() {
-		var stockSelect = $('#stock')[0]; // jQuery 객체에서 DOM 요소로 변환
+	$(document).on('click', '#stockbtn', function () {
+		var bkno = $('#bkno2').val();
+		var bstock = $("#stockCnt").val();
+		var cate = getParameterByName('cate');
+		// alert(bkno + " " + bstock);
+		$.ajax({
+            url: './updateStock',
+            type: 'post',
+            data: {bkno: bkno, bstock: bstock, cate:cate},
+            success: function (data) {
+                alert("재고가 업데이트됐습니다.");
+                location.href = "./stock";
+            },
+            error: function (error) {
+                alert('에러');
+            }
+        });
+	});
+	
+	/*function stockChange() {
+		
 	    var adminInputContainer = document.getElementById("adminInputContainer");
 
-	    var bkno = stockSelect.getAttribute("data-bkno");
-	    var bkstock = stockSelect.getAttribute("data-bstock");
-
 	    // "사용자 지정" 옵션이 선택되었을 때
-	    if (stockSelect.value === "admin") {
+	    if ($('#stock').val() === "admin") {
 	        // <input> 요소를 생성하여 adminInputContainer에 추가
 	        var adminInput = document.createElement("input");
 	        adminInput.id = "admin";
@@ -235,48 +251,36 @@
 	        adminInputContainer.innerHTML = ""; // 이전 내용 삭제
 	        adminInputContainer.appendChild(adminInput);
 	    } else {
-	        // 다른 옵션을 선택한 경우, adminInputContainer를 비웁니다.
+	        // 다른 옵션을 선택한 경우, adminInputContainer를 비운다.
 	        adminInputContainer.innerHTML = "";
 	    }
-
-	    bkstock = $('#stock').val();
-
-	    $.ajax({
-	        url: './stock',
-	        type: 'post',
-	        data: { bkno: bkno, bkstock: bkstock },
-	        success: function (data) {
-	            location.href = "./stock?cate=" + cate;
-	        },
-	        error: function (error) {
-	            alert('에러');
+	    
+	    $(document).on('click', '#stockbtn', function () {
+	    	var bkno = $('#bkno2').val(); // 책 번호 가져오기
+	    	// alert(bkno);
+	    	var bstock = "";
+	    	if ($('#stock').val() == "admin") {
+	            bstock = $('#admin').val(); // 사용자가 정의한 재고 값을 가져오기
+	        } else {
+	            bstock = $('#stock').val(); // 선택한 재고 값을 가져오기
 	        }
-	    });
-	}
 
-	// 다음과 같이 함수를 호출하여 초기화할 수 있습니다.
-	$(document).ready(function () {
-	    initialize();
-	});
-
-	function initialize() {
-	    var defaultCate = getParameterByName('cate');
-	    $('#cate').val(defaultCate);
-	    $('#cate').on('change', function () {
-	        var cate = $('#cate').val();
+	        var cate = getParameterByName('cate');
+	        
 	        $.ajax({
-	            url: './stock',
-	            type: 'get',
-	            data: { cate: cate },
+	            url: './updateStock',
+	            type: 'post',
+	            data: { bkno: bkno, bstock: bstock, cate:cate },
 	            success: function (data) {
-	                location.href = "./stock?cate=" + cate;
+	                // location.href = "./stock?cate=" + cate;
+	                alert("재고가 업데이트됐습니다.");
 	            },
 	            error: function (error) {
 	                alert('에러');
 	            }
 	        });
 	    });
-	}
+	}*/
 
 	function getParameterByName(name) {
 	    const urlParams = new URL(location.href).searchParams;
@@ -306,24 +310,6 @@
 		});
 	});
 	
-	// URL에서 매개변수를 추출하는 함수
-    /*function getParameterByName(name, url) {
-        if (!url) {
-        	url = window.location.href;
-        }
-        name = name.replace(/[\[\]]/g, '\\$&');
-        var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)');
-        var results = regex.exec(url);
-        if (!results) return null;
-        if (!results[2]) return '';
-        return decodeURIComponent(results[2].replace(/\+/g, ' '));
-    }*/
-    function getParameterByName(name, url) {
-    	const urlParams = new URL(location.href).searchParams;
-    	return urlParams.get(name);
-    }
-    
-    
 	});
  	</script>
 

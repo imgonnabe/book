@@ -16,4 +16,20 @@ public class AdminService {
 	public List<Map<String, Object>> stocklist(Map<String, Object> map) {
 		return adminDAO.stocklist(map);
 	}
+
+	public void updateStock(Map<String, Object> map) {
+		adminDAO.updateStock(map);
+	}
+
+	public List<Map<String, Object>> boardlist(Map<String, Object> map) {
+		return adminDAO.boardlist(map);
+	}
+
+	public Map<String, Object> bdetail(int bno) {
+		return adminDAO.bdetail(bno);
+	}
+
+	public List<Map<String, Object>> comment(int bno) {
+		return adminDAO.comment(bno);
+	}
 }

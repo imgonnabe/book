@@ -125,7 +125,7 @@
 		</div>
 	</section>
 	<div class="container">
-	<div class="module-subtitle font-alt">${list[0].count }</div>
+	<div class="module-subtitle font-alt">총 주문개수 : ${list[0].count }개</div>
 		<div class="row multi-columns-row">
 			<div class="col-sm-6">
 				<div class="widget-posts">

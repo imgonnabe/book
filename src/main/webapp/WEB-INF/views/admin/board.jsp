@@ -84,6 +84,11 @@
 <link href="../assets/css/style.css" rel="stylesheet">
 <link id="color-scheme" href="../assets/css/colors/default.css"
 	rel="stylesheet">
+	<style type="text/css">
+	.gray{
+		background-color: gray;
+	}
+	</style>
 </head>
 <body data-spy="scroll" data-target=".onpage-navigation"
 	data-offset="60">
@@ -97,7 +102,7 @@
 			<div class="container">
 				<div class="row">
 					<div class="col-sm-6 col-sm-offset-3">
-						<h1 class="module-title font-alt">글관리</h1>
+						<h1 class="module-title font-alt">게시물 관리</h1>
 					</div>
 				</div>
 			</div>
@@ -139,17 +144,23 @@
 					<div class="col-sm-6">
 						<div class="menu">
 								<c:forEach items="${list }" var="row">
-							<div class="row" onclick="detail(${row.bno})">
+							<div class="row <c:if test="${row.m_grade eq 0}">gray</c:if>" >
 									<div class="col-sm-8">
 										<div class="menu-detail font-serif">${row.bno}</div>
-										<div class="menu-title font-alt">${row.btitle}</div>
+										<div onclick="detail(${row.bno})" class="menu-title font-alt">${row.btitle}</div>
+										<div class="menu-detail font-serif">${row.mid}(${row.mname})</div>
 									</div>
 									<div class="col-sm-4 menu-price-detail">
 										<div class="menu-price font-alt">${row.bdate}</div>
-										<button onclick="edit(${row.bno})">수정</button>
-										<button onclick="del(${row.bno})">삭제</button>
+										<div class="menu-price font-alt">
+											<select class="form-control" name="punish" id="punish">
+												<option value="0">회원 탈퇴</option>
+												<option value="1">게시물 삭제</option>
+											</select>
+										</div>
 									</div>
 							</div>
+							<hr>
 								</c:forEach>
 						</div>
 					</div>
@@ -172,6 +183,8 @@
 							<div class="detail-read">조회수</div>	      		
 						</div> 
 						<div style="font-weight: bold; font-size: larger;" class="detail-content">본문내용</div>
+						<div class="comment">
+						</div>
 					</div>
 				</div>
 			</div>
@@ -199,20 +212,27 @@
 	<script src="../assets/js/main.js"></script>
 	
 	<script type="text/javascript">
-	// 수정
-    function edit(bno){
-    	if(confirm("수정하시겠습니까?")){
-    		location.href = "./edit?bno=" + bno;
-    	}
-    }
-    
- 	// 삭제
-    function del(bno){
- 		// alert(bno);
-    	if(confirm("삭제하시겠습니까?")){
-    		location.href = "./delete?bno=" + bno;
-    	}
-    }
+	
+   $("select[name=punish]").change(function(){
+	  var selected = $(this).val());
+	  if(selected == 0){
+		  var con = confirm("회원을 탈퇴시키겠습니까?");
+		  if(con){
+			  
+		  }
+	  } else if(selected == 1){
+		  var con2 = confirm("게시물을 삭제하시겠습니까?");
+		  if(con2){
+			  
+		  }
+	  } else {
+		  return false;
+	  }
+	});
+	
+	function memberOut(){
+		
+	}
  	
  	function detail(bno){
  		$.ajax({
@@ -221,10 +241,23 @@
  			data:{bno:bno},
  			dataType:'json',
  			success:function(data){
- 				$(".detail-title").text("날짜 : "+data.btitle);
- 				$(".detail-date").text("날짜 : "+data.bdate);
- 				$(".detail-read").text("조회수:"+data.bread);
- 				$(".detail-content").html(data.bcontent);
+ 				var detail = data.detail;
+ 				var comment = data.comment;
+ 				// alert(comment);
+ 				$(".modal-title").text(detail.btitle);
+ 				$(".detail-date").text("날짜 : "+detail.bdate);
+ 				$(".detail-read").text("조회수:"+detail.bread);
+ 				$(".detail-content").html(detail.bcontent + "<hr>");
+ 				
+ 				var commentHtml = "";
+ 	            for(var i = 0; i < comment.length; i++){
+ 	                commentHtml += "<div class='comment-item'>";
+ 	                commentHtml += comment[i].mid + "(" + comment[i].mname + ")&nbsp;&nbsp;&nbsp;";
+ 	                commentHtml += comment[i].cdate + "<br>";
+ 	                commentHtml += "<div style='font-weight: bold; font-size: larger;'>" + comment[i].comment + "</div>";
+ 	                commentHtml += "</div><hr>";
+ 	            }
+ 	            $(".comment").html(commentHtml);
  				$("#exampleModal").modal("show");
  			},
  			error:function(error){
@@ -275,6 +308,6 @@
     
 	});
  	</script>
-
+ 	
 </body>
 </html>

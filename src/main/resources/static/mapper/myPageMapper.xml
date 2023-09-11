@@ -24,11 +24,11 @@
 	<select id="buylist" parameterType="Map" resultType="Map">
 		SELECT t.tno, t.bkno, b.bkimg, b.bkname, b.bkprice, t.tamount, t.tdate, t.tgroup,
 			SUM(t.ttotal) OVER (PARTITION BY t.tgroup) AS total,
-			(SELECT COUNT(DISTINCT tgroup) FROM trade WHERE mid = 1) AS count
+			(SELECT COUNT(DISTINCT tgroup) FROM trade WHERE mid = "test") AS count
 			FROM trade t
 			LEFT JOIN books b ON t.bkno = b.bkno
 		<where>
-		t.mid = 1
+		t.mid = "test"
 			<choose>
 				<when test="searchN == 'no'">and t.tgroup like concat('%', #{searchV},'%')</when>
 				<when test="searchN == 'title'">and b.bkname like concat('%', #{searchV},'%')</when>

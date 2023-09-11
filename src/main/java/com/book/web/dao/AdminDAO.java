@@ -10,4 +10,12 @@ public interface AdminDAO {
 
 	List<Map<String, Object>> stocklist(Map<String, Object> map);
 
+	void updateStock(Map<String, Object> map);
+
+	List<Map<String, Object>> boardlist(Map<String, Object> map);
+
+	Map<String, Object> bdetail(int bno);
+
+	List<Map<String, Object>> comment(int bno);
+
 }

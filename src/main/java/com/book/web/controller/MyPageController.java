@@ -133,11 +133,12 @@ public class MyPageController {
 	}
 	
 	@ResponseBody
-	@GetMapping("/phoneCheck")
-	public String sendSMS(@RequestParam("phone") String userPhoneNumber) {// 휴대폰 문자보내기
+	@PostMapping("/phoneCheck")
+	public int sendSMS(@RequestParam(name="phone", required = false) String phone) {// 휴대폰 문자보내기
+		System.out.println(phone);
 		int randomNumber = (int)((Math.random()* (9999 - 1000 + 1)) + 1000);//난수 생성
 
-		smsUtil.sendOne("phone", randomNumber);
-		return "/mypage/info";
+		smsUtil.sendOne(phone, randomNumber);
+		return randomNumber;
 	}
 }

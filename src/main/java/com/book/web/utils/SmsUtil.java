@@ -14,9 +14,9 @@ import net.nurigo.sdk.message.service.DefaultMessageService;
 @Component
 public class SmsUtil {
 
-    @Value("${coolsms.api.key}")
+    @Value("NCS2D38ZGKF5CS9A")
     private String apiKey;
-    @Value("${coolsms.api.secret}")
+    @Value("EX01KZRCURQLG1JGJINEYWLHHGFBEALK")
     private String apiSecretKey;
 
     private DefaultMessageService messageService;

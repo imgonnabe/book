@@ -108,7 +108,7 @@
               <div class="col-sm-8 col-sm-offset-2">
                 <form class="form" role="form">
                   <div class="form-group">
-                    아이디 : <input class="form-control" type="text" placeholder="아이디"/>
+                    아이디 : <input class="form-control" type="text" placeholder="아이디" value="${info.mid}"/>
                   </div>
                   <div class="form-group">
                     새 비밀번호 : <input class="form-control" type="text" placeholder="새 비밀번호를 입력해주세요."/>
@@ -118,7 +118,14 @@
                   </div>
                   <div class="form-group">
                     이름 : <div class="form-control">${info.mname}</div>
-                      <input type="button" onclick="authnum()" id="phoneChk" class="doubleChk" value = "본인인증확인">
+                      <div class="detail">
+                      <input type="text" required="required" id="phone" placeholder="전화번호를 입력하세요...">
+						<input type="button" id="phoneChk" value = "인증번호 받기">	
+						<input id="phone2" type="text" disabled required/>
+						<input type="button" id="phoneChk2" value = "본인인증" disabled="disabled">
+						<div><span class="point successPhoneChk">휴대폰 번호 입력후 인증번호 보내기를 해주십시오.</span></div>
+						<input type="hidden" id="phoneDoubleChk"/>
+					</div>
                   </div>
                   <div class="form-group">
                     생년월일 : <div class="form-control">${info.mbirth}</div>
@@ -129,30 +136,6 @@
           </div>
 		</div>
 	</main>
-	<!-- Modal -->
-	<div class="modal fade" id="exampleModal" tabindex="-1"
-		aria-labelledby="exampleModalLabel" aria-hidden="true">
-		<div class="modal-dialog modal-lg">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLabel">본인인증</h5>
-				</div>
-				<div class="modal-body">
-					<div class="detail">
-						<input required style="width: 300px;" name="phone" id="phone" type="text" placeholder="전화번호를 입력하세요..">
-					</div>
-					<br>
-					<div class="detail">
-						<input id="phoneChk" class="doubleChk" value = "인증번호 받기">	
-						<input id="phone2" type="text" name="phone2" title="인증번호 입력" disabled required/>
-						<span id="phoneChk2" class="doubleChk">본인인증</span>
-						<span class="point successPhoneChk">휴대폰 번호 입력후 인증번호 보내기를 해주십시오.</span>
-						<input type="hidden" id="phoneDoubleChk"/>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
 	<!--  
     JavaScripts
     =============================================
@@ -175,35 +158,60 @@
 	<script src="../assets/js/main.js"></script>
 	
 	<script type="text/javascript">
-	function authnum() {
-		   $("#exampleModal").modal("show");
+	$(function(){
 		 //휴대폰 번호 인증
-		   var code2 = "";
-		   $("#phoneChk").click(function(){
+		   $(document).on("click", "#phoneChk", function() {
+		   	var phone = $("#phone").val().trim();
+		   	if (!strToInt(phone)) {
+	            return; // 숫자로 변환되지 않으면 함수 종료
+	        }
 		   	alert("인증번호 발송이 완료되었습니다.\n휴대폰에서 인증번호 확인을 해주십시오.");
-		   	var phone = $("#phone").val();
 		   	$.ajax({
-		           type:"GET",
-		           url:"phoneCheck?phone=" + phone,
-		           cache : false,
+		           type:"post",
+		           url:"phoneCheck",// "phoneCheck?phone=" + phone하려면 밑에 data를 빼야함
+		           data:{phone:phone},
 		           success:function(data){
-		           	if(data == "error"){
-		           		alert("휴대폰 번호가 올바르지 않습니다.")
-		   				$(".successPhoneChk").text("유효한 번호를 입력해주세요.");
-		   				$(".successPhoneChk").css("color","red");
-		   				$("#phone").attr("autofocus",true);
-		           	}else{	        		
-		           		$("#phone2").attr("disabled",false);
-		           		$("#phoneChk2").css("display","inline-block");
-		           		$(".successPhoneChk").text("인증번호를 입력한 뒤 본인인증을 눌러주십시오.");
-		           		$(".successPhoneChk").css("color","green");
-		           		$("#phone").attr("readonly",true);
-		           		code2 = data;
-		           	}
-		           }
+		        	    alert(data);
+		           	    update();
+		           		if(data == $("#phone2").val().trim()){
+		           			alert("본인 인증이 확인되었습니다.");
+		           		} else {
+		           			$("#phoneChk2").attr("disabled",true);
+		           		}
+	           		},
+	           		error:function(error){
+	           			alert("에러");
+	           		}
 		       });
-		   });
+		  });
+	});
+	
+	function strToInt(str) {
+		if(str.length > 11){
+			alert("다시 입력하세요...");
+			return false;
 		}
+		
+	    for (let i = 0; i < str.length; i++) {
+	        if (isNaN(parseInt(str[i]))) {
+	            // 숫자가 아닌 문자가 중간에 포함된 경우
+	            alert("숫자만 입력하세요...");
+	            return false;
+	        }
+	    }
+
+	    // 숫자로만 이루어진 문자열을 정수로 변환하여 반환
+	    return str;
+	}
+	
+	function update(){
+		$("#phone2").attr("disabled",false);
+   		$("#phone2").attr("placeholder","인증번호를 입력하세요...");
+   		$("#phoneChk2").attr("disabled",false);
+   		$(".successPhoneChk").text("인증번호를 입력한 뒤 본인인증을 눌러주십시오.");
+   		$(".successPhoneChk").css("color","green");
+   		$("#phone").attr("readonly",true);
+	}
 	</script>
 </body>
 </html>

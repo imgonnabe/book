@@ -16,4 +16,37 @@
 		order by b.bkno desc
 	</select>
 	
+	<update id="updateStock" parameterType="Map">
+		update books set bstock = bstock + #{bstock}
+		where bkno=#{bkno}
+			<if test="cate gt 0">and bkcate = #{cate}</if>
+	</update>
+	
+	<select id="boardlist" parameterType="Map" resultType="Map">
+		select b.bno, b.btitle, b.bcontent, DATE_FORMAT(b.bdate, '%y-%m-%d %h:%m') AS bdate, b.bcate,
+		m.mid, m.mname, b.bdel
+		from board b, members m
+		<where>
+		b.mno = m.mno
+			<if test="cate gt 0">and b.bcate = #{cate}</if>
+			<choose>
+				<when test="searchN == 'title'">and b.btitle like concat('%', #{searchV},'%')</when>
+				<when test="searchN == 'content'">and b.bcontent like concat('%', #{searchV},'%')</when>
+			</choose>
+		</where>
+		order by b.bno desc
+	</select>
+	
+	<select id="bdetail" parameterType="Integer" resultType="Map">
+		select btitle, bcontent, bdate, bread
+		FROM board
+		where bno = #{bno}
+	</select>
+	
+	<select id="comment" parameterType="Integer" resultType="Map">
+		select c.comment, c.cdate, c.cdel, m.mid, m.mname
+		FROM comments c join members m on c.mno = m.mno
+		where c.bno = #{bno}
+	</select>
+	
 </mapper>
