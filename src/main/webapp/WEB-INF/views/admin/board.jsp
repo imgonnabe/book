@@ -153,7 +153,7 @@
 									<div class="col-sm-4 menu-price-detail">
 										<div class="menu-price font-alt">${row.bdate}</div>
 										<div class="menu-price font-alt">
-											<select class="form-control" name="punish" id="punish">
+											<select class="form-control" name="punish" id="punish" data-bno="${row.bno}" data-mid="${row.mid}">
 												<option value="0">회원 탈퇴</option>
 												<option value="1">게시물 삭제</option>
 											</select>
@@ -215,6 +215,9 @@
 	
    $("select[name=punish]").change(function(){
 	  var selected = $(this).val());
+   	  var bno = $(this).data("bno");
+   	  alert(bno);
+   	  var mid = $(this).data("mid");
 	  if(selected == 0){
 		  var con = confirm("회원을 탈퇴시키겠습니까?");
 		  if(con){
