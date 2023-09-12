@@ -101,7 +101,15 @@
 					</div>
 				</div>
 			</div>
-
+			<c:choose>
+				<c:when test="${list[0].count eq null}">
+					<section class="module-small">
+						<div class="container">
+							<h2 style="text-align: center;">댓글이 없습니다.</h2>
+						</div>
+					</section>
+				</c:when>
+			<c:otherwise>
 			<section class="module-small">
 				<div class="container">
 				<button class="btn" onclick="location.href='./comment?cate=0'">전체보기</button>
@@ -156,6 +164,8 @@
 					</div>
 				</div>
 			</div>
+			</c:otherwise>
+			</c:choose>
 		</div>
 	</main>
 	<!-- Modal -->

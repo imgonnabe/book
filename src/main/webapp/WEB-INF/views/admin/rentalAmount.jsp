@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+	pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%> 
 <!DOCTYPE html>
 <html>
@@ -12,7 +12,7 @@
     Document Title
     =============================================
     -->
-<title>주문목록</title>
+<title>Titan | Multipurpose HTML5 Template</title>
 <!--  
     Favicons
     =============================================
@@ -85,6 +85,13 @@
 <link href="../assets/css/style.css" rel="stylesheet">
 <link id="color-scheme" href="../assets/css/colors/default.css"
 	rel="stylesheet">
+	 <!-- Google Charts 라이브러리 로드 -->
+	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<style type="text/css">
+.gray{
+	background-color: gray;
+}
+</style>
 </head>
 <body data-spy="scroll" data-target=".onpage-navigation"
 	data-offset="60">
@@ -95,72 +102,56 @@
 			<div class="loader">Loading...</div>
 		</div>
 		<div class="main">
-	<div class="container">
-		<div class="row">
-			<div class="col-sm-6 col-sm-offset-3">
-				<h1 class="module-title font-alt">주문목록</h1>
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-6 col-sm-offset-3">
+						<h1 class="module-title font-alt">대여량</h1>
+					</div>
+				</div>
 			</div>
-		</div>
-		
-	</div>
-	
-	<c:choose>
-		<c:when test="${list[0].count eq null}">
-			<section class="module-small">
+			
+  			<section class="module-small">
 				<div class="container">
-					<h2 style="text-align: center;">주문 목록이 없습니다.</h2>
+				<button class="btn" onclick="location.href='./sales?cate=0'">전체보기</button>
+				<br>
+				<form action="./main" method="get" class="row">
+					<div class="mb-sm-20">
+						<select class="form-control" name="cate" id="cate"
+							onclick="cateChange()">
+							<optgroup label="카테고리">
+								<option value="0">전체</option>
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+							</optgroup>
+						</select>
+					</div>
+				</form>
 				</div>
 			</section>
-		</c:when>
-	<c:otherwise>
-		<section class="module-small">
-		<div class="module-subtitle font-alt">총 주문개수 : ${list[0].count }개</div>
-		<div class="container">
-		<button class="btn" onclick="location.href='./buy'">전체보기</button>
-			<form action="./buy" method="get" class="row">
-				<div class="mb-sm-20">
-					<select class="form-control" name="searchN">
-						<option value="no">주문번호</option>
-						<option value="title">책제목</option>
-						<option value="writer">글쓴이</option>
-					</select>
-				</div>
-				<div class="search-box">
-					<input class="form-control" type="text" name="searchV"
-						required="required" placeholder="Search..">
-					<button class="search-btn" type="submit">
-						<i class="fa fa-search"></i>
-					</button>
-				</div>
-			</form>
-		</div>
-	</section>
-	<div class="container">
-	
-		<div class="row multi-columns-row">
-			<div class="col-sm-6">
-				<div class="widget-posts">
-					<c:forEach items="${list }" var="row"  varStatus="loop">
-						<c:if test="${loop.first || row.tgroup ne list[loop.index - 1].tgroup}">
-							<div class="col-sm-8">
-									<h3 class="widget-posts-title font-serif">${row.tgroup} <br> <fmt:formatNumber value="${row.total}" pattern="#,###"/>원</h3>
-									<hr>
+			<div class="container">
+				<div class="row">
+  					<div id="chart_div" style="height: 500px;"></div>
+  				</div>
+  			</div>
+			<div class="container">
+				<div class="row multi-columns-row">
+					<div class="col-sm-6">
+						<div class="menu">
+							<div class="row">
+							<c:forEach items="${list }" var="row">
+									<div class="col-sm-8">
+										<div class="menu-detail font-serif">${row.bkcate}</div>
+										<div class="menu-title font-alt">${row.rsdate}</div>
+										<div class="menu-title font-alt">${row.count }개</div>
+									</div>
+							</c:forEach>
 							</div>
-						</c:if>
-						<div class="widget-posts">
-							<h4 class="widget-posts-title font-serif"><a href="../bookdetail?bkno=${row.bkno}">${row.bkname}</a></h4>
-							<div class="gallery-image"><a href="../bookdetail?bkno=${row.bkno}"><img src="${row.bkimg }" alt="Blog-post Thumbnail"/></a></div>
-							<div class="widget-posts-title font-alt"><fmt:formatNumber value="${row.bkprice}" pattern="#,###"/>원</div>
-							<div class="widget-posts-title font-serif">${row.tamount}개</div>
-						</div>	
-					</c:forEach>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>
-	</c:otherwise>
-	</c:choose>
-	</div>
 	</main>
 	<!--  
     JavaScripts
@@ -182,5 +173,108 @@
 		src="../assets/lib/simple-text-rotator/jquery.simple-text-rotator.min.js"></script>
 	<script src="../assets/js/plugins.js"></script>
 	<script src="../assets/js/main.js"></script>
+	
+	<script type="text/javascript">
+	$(function() {
+	 	// URL에서 cate 매개변수를 가져와서 기본값으로 설정
+	    var defaultCate = getParameterByName('cate');
+	    $('#cate').val(defaultCate);
+	    
+		$('#cate').on('change', function(){
+			var cate = $('#cate').val();
+			// alert(cate);
+			$.ajax({
+				url:'./rentalAmount',
+				type:'get',
+				data:{cate:cate},
+				success:function(data){
+					location.href="./rentalAmount?cate=" + cate;
+					
+				},
+				error:function(error){
+					alert('에러');
+				}
+			});
+		});
+		
+	    function getParameterByName(name, url) {
+	    	const urlParams = new URL(location.href).searchParams;
+	    	return urlParams.get(name);
+	    }
+	    
+	});
+	</script>
+	
+	<script type="text/javascript">
+	google.charts.load('current', {packages: ['corechart', 'bar']});
+	google.charts.setOnLoadCallback(drawTrendlines);
+	
+	function drawTrendlines() {
+	    // 날짜와 카테고리별 판매 데이터를 저장할 객체 생성
+	    var arr = {};
+	
+	    <c:forEach items="${list}" var="a">
+	        var date = '${a.rsdate}';
+	        var category = '${a.bkcate}';
+	        var total = ${a.count};
+	
+	        // 객체가 존재하지 않으면 초기화
+	        if (!arr[date]) {
+	            arr[date] = {};
+	        }
+	
+	        // 카테고리 합계가 없으면 초기화
+	        if (!arr[date][category]) {
+	            arr[date][category] = 0;
+	        }
+	
+	        // 해당 카테고리 및 날짜에 합계 추가
+	        arr[date][category] += total;
+	    </c:forEach>
+	
+	    // 데이터 테이블 생성
+	    var data = new google.visualization.DataTable();
+	    data.addColumn('string', '날짜'); // 날짜를 나타내기 위해 string 으로 변경
+	
+	    // 동적으로 각 카테고리에 대한 열을 추가합니다.
+	    var categoryList = [];
+	
+	    for (var date in arr) {
+	        for (var category in arr[date]) {
+	            if (!categoryList.includes(category)) {
+	                categoryList.push(category);
+	                data.addColumn('number', '카테고리 ' + category);
+	            }
+	        }
+	    }
+	
+	    // 데이터 테이블에 데이터 행을 추가합니다.
+	    for (var date in arr) {
+	        var rowData = [date];
+	
+	        for (var i = 0; i < categoryList.length; i++) {
+	            var category = categoryList[i];
+	            rowData.push(arr[date][category] || 0);
+	        }
+	
+	        data.addRow(rowData);
+	    }
+	
+	    var options = {
+	        title: '날짜별 카테고리당 판매량',
+	        hAxis: {
+	            title: '날짜',
+	        },
+	        vAxis: {
+	            title: '판매량'
+	        },
+	        legend: { position: 'top' } // 범례를 위쪽에 배치
+	    };
+	
+	    var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+	    chart.draw(data, options);
+	}
+	</script>
+
 </body>
 </html>

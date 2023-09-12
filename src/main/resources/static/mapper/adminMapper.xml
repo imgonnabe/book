@@ -60,7 +60,7 @@
 	</update>
 	
 	<select id="rentlist" parameterType="Map" resultType="Map">
-		select b.bkno, b.bkname, b.bkwrite, b.bkpublisher, r.rsdate, r.rddate, r.rdel, r.rno, r.mid
+		select b.bkno, b.bkname, b.bkwrite, b.bkpublisher, b.bkcate, r.rsdate, r.rddate, r.rdel, r.rno, r.mid
 		from books b join rental r
 		<where>
 			<if test="cate gt 0">and b.bkcate = #{cate}</if>
@@ -71,6 +71,24 @@
 			</choose>
 		</where>
 		order by r.rno desc
+	</select>
+	
+	<select id="tradelist" parameterType="Map" resultType="Map">
+		select DATE_FORMAT(t.tdate, '%y-%m-%d') AS ttdate, b.bkcate,
+			SUM(t.ttotal) AS total
+		from trade t, books b
+		where t.bkno = b.bkno
+			<if test="cate gt 0">and b.bkcate = #{cate}</if>
+		group by ttdate, b.bkcate
+	</select>
+	
+	<select id="rentalAmount" parameterType="Map" resultType="Map">
+		select DATE_FORMAT(r.rsdate, '%y-%m-%d') AS rsdate, b.bkcate,
+			count(r.rno) AS count
+		from rental r, books b
+		where r.bkno = b.bkno
+			<if test="cate gt 0">and b.bkcate = #{cate}</if>
+		group by r.rsdate, b.bkcate
 	</select>
 	
 </mapper>

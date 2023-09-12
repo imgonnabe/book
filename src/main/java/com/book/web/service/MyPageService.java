@@ -13,16 +13,16 @@ public class MyPageService {
 	@Autowired
 	private MyPageDAO myPageDAO;
 
-	public List<Map<String, Object>> booklist() {
-		return myPageDAO.booklist();
+	public List<Map<String, Object>> booklist(String mid) {
+		return myPageDAO.booklist(mid);
 	}
 
-	public List<Map<String, Object>> zzimlist() {
-		return myPageDAO.zzimlist();
+	public List<Map<String, Object>> zzimlist(String mid) {
+		return myPageDAO.zzimlist(mid);
 	}
 
-	public int zdelete(String del) {
-		return myPageDAO.zdelete(del);
+	public int zdelete(Map<String, Object> map) {
+		return myPageDAO.zdelete(map);
 	}
 
 	public List<Map<String, Object>> buylist(Map<String, Object> map) {

@@ -96,4 +96,24 @@ public class AdminController {
 		model.addAttribute("list", list);
 		return "/admin/rent";
 	}
+	
+	@GetMapping("/sales")
+	public String sales(Model model, @RequestParam Map<String, Object> map) {
+		if(!map.containsKey("cate") || map.get("cate").equals(null) || map.get("cate").equals("")) {
+			map.put("cate", 0);
+		}
+		List<Map<String, Object>> list = adminService.tradelist(map);
+		model.addAttribute("list", list);
+		return "/admin/sales";
+	}
+	
+	@GetMapping("/rentalAmount")
+	public String rentalAmount(Model model, @RequestParam Map<String, Object> map) {
+		if(!map.containsKey("cate") || map.get("cate").equals(null) || map.get("cate").equals("")) {
+			map.put("cate", 0);
+		}
+		List<Map<String, Object>> list = adminService.rentalAmount(map);
+		model.addAttribute("list", list);
+		return "/admin/rentalAmount";
+	}
 }

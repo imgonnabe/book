@@ -8,11 +8,11 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface MyPageDAO {
 
-	List<Map<String, Object>> booklist();
+	List<Map<String, Object>> booklist(String mid);
 
-	List<Map<String, Object>> zzimlist();
+	List<Map<String, Object>> zzimlist(String mid);
 
-	int zdelete(String del);
+	int zdelete(Map<String, Object> map);
 
 	List<Map<String, Object>> buylist(Map<String, Object> map);
 

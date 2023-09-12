@@ -24,4 +24,8 @@ public interface AdminDAO {
 
 	List<Map<String, Object>> rentlist(Map<String, Object> map);
 
+	List<Map<String, Object>> tradelist(Map<String, Object> map);
+
+	List<Map<String, Object>> rentalAmount(Map<String, Object> map);
+
 }

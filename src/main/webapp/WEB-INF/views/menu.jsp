@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
   <head>
@@ -188,20 +189,41 @@
                 </ul>
               </li>
 
-              <li class="dropdown"><a href="./mypage/main">관리자 페이지</a></li>
-              <li class="dropdown"><a class="dropdown-toggle" href="mypage/main" data-toggle="dropdown">마이페이지</a>
+              <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown">관리자 페이지</a>
+              	<ul class="dropdown-menu" role="menu">
+                  <li><a href="/admin/board">게시물 관리</a></li>
+                  <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown">구매</a>
+                  	<ul class="dropdown-menu">
+	                  <li><a href="/admin/stock">재고 관리</a></li>
+	                  <li><a href="/admin/product">상품 등록</a></li>
+	                  <li><a href="/admin/sales">매출액</a></li>
+                  	</ul>
+                  <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown">대여</a>
+                  	<ul class="dropdown-menu">
+	                  <li><a href="/admin/rent">대여 관리</a></li>
+	                  <li><a href="/admin/rentalAmount">대여량</a></li>
+                  	</ul>
+                </ul>
+               </li>
+              <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown">마이페이지</a>
                 <ul class="dropdown-menu" role="menu">
-                  <li><a href="./zzim">찜목록</a></li>
-                  <li><a href="./buy">구매목록</a></li>
-                  <li><a href="./rent">대출이력</a></li>
-                  <li><a href="./board">게시물 관리</a></li>
-                  <li><a href="./comment">댓글 관리</a></li>
-                  <li><a href="./question">문의 내역</a></li>
-                  <li><a href="./info">회원정보관리</a></li>
+                  <li><a href="/mypage/main">메인</a></li>
+                  <li><a href="/mypage/zzim">찜목록</a></li>
+                  <li><a href="/mypage/buy">구매목록</a></li>
+                  <li><a href="/mypage/rent">대출이력</a></li>
+                  <li><a href="/mypage/board">게시물 관리</a></li>
+                  <li><a href="/mypage/comment">댓글 관리</a></li>
+                  <li><a href="/mypage/info">회원정보관리</a></li>
                 </ul>
               </li>
-              <li class="dropdown"><a href="documentation.html">로그인</a></li>
-              <li class="dropdown"><a href="documentation.html">로그아웃</a></li>
+              <c:choose>
+	              <c:when test="${sessionScope.mname eq null}">
+	              	<li class="dropdown"><a href="/login">로그인</a></li>
+	              </c:when>
+	              <c:otherwise>
+	             	 <li class="dropdown"><a href="/logout">로그아웃</a></li>
+	              </c:otherwise>
+              </c:choose>
             </ul>
           </div>
         </div>

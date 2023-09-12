@@ -12,7 +12,7 @@
     Document Title
     =============================================
     -->
-<title>주문목록</title>
+<title>회원정보</title>
 <!--  
     Favicons
     =============================================
@@ -106,31 +106,36 @@
           <div class="container">
             <div class="row">
               <div class="col-sm-8 col-sm-offset-2">
-                <form class="form" role="form">
                   <div class="form-group">
-                    아이디 : <input class="form-control" type="text" placeholder="아이디" value="${info.mid}"/>
+                    아이디  <input class="form-control" type="text" placeholder="아이디" value="${info.mid}"/>
                   </div>
                   <div class="form-group">
-                    새 비밀번호 : <input class="form-control" type="text" placeholder="새 비밀번호를 입력해주세요."/>
+                    새 비밀번호  <input class="form-control" id="pw" type="text" placeholder="새 비밀번호를 입력해주세요."/>
                   </div>
                   <div class="form-group">
-                    비밀번호 확인 : <input class="form-control input-sm" type="text" placeholder="새 비밀번호를 한 번 더 입력해주세요."/>
+                    비밀번호 확인  <input class="form-control input-sm" id="pwchk" type="text" placeholder="새 비밀번호를 한 번 더 입력해주세요."/>
                   </div>
                   <div class="form-group">
-                    이름 : <div class="form-control">${info.mname}</div>
+                    이름  <div class="form-control">${info.mname}</div>
+                  </div>
+                  <div class="form-group"> 전화번호 (숫자만 입력하세요.)
                       <div class="detail">
-                      <input type="text" required="required" id="phone" placeholder="전화번호를 입력하세요...">
+                      <input class="form-control" type="text" required="required" id="phone" placeholder="${info.mphone }">
 						<input type="button" id="phoneChk" value = "인증번호 받기">	
-						<input id="phone2" type="text" disabled required/>
+						<br><br>
+						<input class="form-control" id="phone2" type="text" disabled required/>
 						<input type="button" id="phoneChk2" value = "본인인증" disabled="disabled">
 						<div><span class="point successPhoneChk">휴대폰 번호 입력후 인증번호 보내기를 해주십시오.</span></div>
 						<input type="hidden" id="phoneDoubleChk"/>
 					</div>
                   </div>
-                  <div class="form-group">
-                    생년월일 : <div class="form-control">${info.mbirth}</div>
-                  </div>
-                </form>
+                    <form action="./info" method="post" class="row">
+	                  <div class="form-group">
+	                    생년월일  <div class="form-control">${info.mbirth}</div>
+					      <p><input id="birth" type="date" min="1900-01-01"></p>
+					      <p><input type="submit" value="생일 바꾸기"></p>
+	                  </div>
+				    </form>
               </div>
             </div>
           </div>
@@ -156,7 +161,29 @@
 		src="../assets/lib/simple-text-rotator/jquery.simple-text-rotator.min.js"></script>
 	<script src="../assets/js/plugins.js"></script>
 	<script src="../assets/js/main.js"></script>
-	
+	<script type="text/javascript">
+	$(function(){
+		// 오늘 이후 선택이 안되게 함
+		var now_utc = Date.now()// 지금 날짜를 밀리초로
+		// getTimezoneOffset()은 현재 시간과의 차이를 분 단위로 반환
+		var timeOff = new Date().getTimezoneOffset()*60000;// 분단위를 밀리초로 변환
+		// new Date(now_utc-timeOff).toISOString()은 '2022-05-11T18:09:38.134Z'를 반환
+		var today = new Date(now_utc-timeOff).toISOString().split("T")[0];
+		document.getElementById("birth").setAttribute("max", today);
+		var birth = $("#birth").val();
+		$.ajax({
+			type:"post",
+	        url:"birthChange",
+	        data:{birth:birth},
+	        success:function(data){
+	        	
+	        },
+	        error:function(error){
+	        	
+	        }
+		});
+	});
+	</script>
 	<script type="text/javascript">
 	$(function(){
 		 //휴대폰 번호 인증
@@ -173,11 +200,21 @@
 		           success:function(data){
 		        	    alert(data);
 		           	    update();
+		           		var clickCnt = 0;
+		           	 $(document).on("click", "#phoneChk2", function() {
 		           		if(data == $("#phone2").val().trim()){
 		           			alert("본인 인증이 확인되었습니다.");
-		           		} else {
 		           			$("#phoneChk2").attr("disabled",true);
+		           			$("#phoneChk2").css("color",green);
+		           			return;
+		           		} else if (clickCnt < 5){
+		           			alert("인증 번호가 틀렸습니다. 다시 시도하세요.");
+		           		} else if(clickCnt >= 5){
+		           			alert("인증 번호를 다시 받으세요.");
+		           			location.href = "./info";
 		           		}
+		           		clickCnt++;
+		           	 });
 	           		},
 	           		error:function(error){
 	           			alert("에러");
@@ -187,7 +224,7 @@
 	});
 	
 	function strToInt(str) {
-		if(str.length > 11){
+		if(str.length > 11 && str.length < 9){
 			alert("다시 입력하세요...");
 			return false;
 		}
@@ -199,14 +236,14 @@
 	            return false;
 	        }
 	    }
-
 	    // 숫자로만 이루어진 문자열을 정수로 변환하여 반환
-	    return str;
+	    return parseInt(str);
 	}
 	
 	function update(){
 		$("#phone2").attr("disabled",false);
    		$("#phone2").attr("placeholder","인증번호를 입력하세요...");
+   		$("#phoneChk").attr("disabled",true);
    		$("#phoneChk2").attr("disabled",false);
    		$(".successPhoneChk").text("인증번호를 입력한 뒤 본인인증을 눌러주십시오.");
    		$(".successPhoneChk").css("color","green");

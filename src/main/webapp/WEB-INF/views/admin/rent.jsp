@@ -147,15 +147,14 @@
 								<c:forEach items="${list }" var="row">
 							<div class="row <c:if test="${row.rdel eq 0}">gray</c:if>">
 									<div class="col-sm-8">
-										<div class="menu-detail font-serif">${row.rno}</div>
+										<div class="menu-detail font-serif">${row.rno}(${row.bkcate})</div>
 										<div class="menu-title font-alt">${row.bkname}</div>
 										<div class="menu-title font-alt">${row.bkwrite}</div>
 									</div>
 									<div class="col-sm-4 menu-price-detail">
 										<div class="menu-price font-alt">${row.bkpublisher}</div>
-										<div class="menu-price font-alt">${row.rsdate}</div>
-										<div class="menu-price font-alt">${row.rddate}</div>
-										<div class="menu-price font-alt">${row.bkcate}</div>
+										<div class="menu-price font-alt">대여일 : ${row.rsdate}</div>
+										<div class="menu-price font-alt">반납일 : ${row.rddate}</div>
 									</div>
 							</div>
 								</c:forEach>
