@@ -22,6 +22,17 @@ public class AdminController {
 	@Autowired
 	private AdminService adminService;
 	
+	@GetMapping("login")
+	public String login() {
+		return "/admin/login";
+	}
+	
+	@PostMapping("login")
+	public String login(@RequestParam Map<String, Object> map,Model model) {
+		//Map<String, Object> list = adminService.login();
+		return "/admin/main";
+	}
+	
 	@GetMapping("/stock")
 	public String stock(Model model, @RequestParam Map<String, Object> map,
 			@RequestParam(name="cate", required = false, defaultValue = "0") int cate) {

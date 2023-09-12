@@ -3,7 +3,7 @@
 <mapper namespace="com.book.web.login.LoginDAO">
 
 	<select id="login" parameterType="Map" resultType="Map">
-		SELECT count(*) as count, mid, mname
+		SELECT count(*) as count, mid, mname, mgrade
 		FROM members
 		WHERE mid=#{id} AND mpw=#{pw}
 	</select>

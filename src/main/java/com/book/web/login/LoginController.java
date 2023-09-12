@@ -43,9 +43,10 @@ public class LoginController {
 			Map<String, Object> autoresult = loginService.autoLogin(SuserID);	// 쿠키id와 디비id 일치여부확인
 			
 			if (String.valueOf(autoresult.get("autocount")).equals("1")) {
-				
+				// System.out.println(autoresult);
 				session.setAttribute("mid", autoresult.get("mid"));
 				session.setAttribute("mname", autoresult.get("mname"));
+				session.setAttribute("mgrade", autoresult.get("mgrade"));
 				//System.out.println(session.getAttribute("mname"));
 				System.out.println("됨??");
 				
