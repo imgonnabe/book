@@ -68,6 +68,10 @@ public class MyPageService {
 	public void infoChange(Map<String, Object> map) {
 		myPageDAO.infoChange(map);
 	}
+
+	public Map<String, Object> idchk(String id) {
+		return myPageDAO.idchk(id);
+	}
 	
 
 }

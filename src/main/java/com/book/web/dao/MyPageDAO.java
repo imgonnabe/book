@@ -36,4 +36,6 @@ public interface MyPageDAO {
 
 	void infoChange(Map<String, Object> map);
 
+	Map<String, Object> idchk(String id);
+
 }

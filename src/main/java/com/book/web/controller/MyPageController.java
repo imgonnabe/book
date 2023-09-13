@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -185,7 +186,7 @@ public class MyPageController {
 	@GetMapping("/info")
 	public String info(Model model, @RequestParam Map<String, Object> map, HttpSession session) {
 		if(session.getAttribute("mid") != null) {
-			map.put("mid", session.getAttribute("mid"));
+			map.put("mno", session.getAttribute("mno"));
 			Map<String, Object> info = myPageService.info(map);
 			model.addAttribute("info", info);
 			return "/mypage/info";
@@ -223,29 +224,54 @@ public class MyPageController {
 		}
 	}
 	
+	@ResponseBody
+	@PostMapping("/idchk")
+	public String idchk(@RequestParam(name="id", required = true) String id, HttpSession session) {
+		System.out.println(id);
+		if(session.getAttribute("mid") != null) {
+			Map<String, Object> map = myPageService.idchk(id);
+			JSONObject json = new JSONObject();
+			json.put("count", map.get("count"));
+			json.put("mid", map.get("mid"));
+			return json.toString();
+		} else {
+			return "redirect:/login";
+		}
+	}
+	
 	@PostMapping("/infoChange")
 	public String infoChange(@RequestParam Map<String, Object> map, HttpSession session) {
 		System.out.println(map);// {postcode=03438, address=서울 은평구 가좌로 344, detailAddress=11, extraAddress= (신사동, 현대아파트)}
-		// 아무것도 없을 때 : {postcode=, address=, detailAddress=, extraAddress=}
+		// 아무것도 없을 때 : {id=, pw=, postcode=, address=, detailAddress=, extraAddress=, birth=}
 		if(session.getAttribute("mid") != null) {
-			if(map != null && !map.isEmpty()) {
-				String address = (String) map.get("address");
-				String postcode = (String) map.get("postcode");
-				String detailAddress = (String) map.get("detailAddress");
-				String extraAddress = (String) map.get("extraAddress");
+			String address = (String) map.get("address");
+			String postcode = (String) map.get("postcode");
+			String detailAddress = (String) map.get("detailAddress");
+			String extraAddress = (String) map.get("extraAddress");
+			String id = (String) map.get("id");
+			String pw = (String) map.get("pw");
+			String birth = (String) map.get("birth");
+			System.out.println(id + " " +pw);
+			
+			if(id != null && !id.isEmpty() || pw != null && !pw.isEmpty() || 
+					birth != null && !birth.isEmpty() || address != null && !address.isEmpty() &&
+					postcode != null && !postcode.isEmpty() &&
+					detailAddress != null && !detailAddress.isEmpty() &&
+					extraAddress != null && !extraAddress.isEmpty()) {
 				
-				if (address != null && !address.isEmpty() &&
-						postcode != null && !postcode.isEmpty() &&
+				if(postcode != null && !postcode.isEmpty() &&
 						detailAddress != null && !detailAddress.isEmpty() &&
 						extraAddress != null && !extraAddress.isEmpty()) {
 					
 					String addr = address + " " + postcode + " " + detailAddress + " " + extraAddress;
 					map.put("addr", addr);
 				}
-				map.put("mname", session.getAttribute("mname"));
+				map.put("mno", session.getAttribute("mno"));
 				myPageService.infoChange(map);
+				return "redirect:/mypage/info";
 			}
-			return "redirect:/mypage/info";
+			return "redirect:/mypage/info?error=empty";
+			
 		} else {
 			return "redirect:/login";
 		}

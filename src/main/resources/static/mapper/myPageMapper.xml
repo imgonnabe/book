@@ -112,27 +112,31 @@
 	<select id="info" parameterType="Map" resultType="Map">
 		select mid, mname, maddr, mbirth, mphone, memail
 		from members
-		where mid = #{mid}
+		where mno = #{mno}
 	</select>
 	
 	<update id="phoneSave" parameterType="Map">
 		update members set mphone = #{phone}
-		where mid = #{mid}
+		where mno = #{mno}
 	</update>
 	
 	<update id="infoChange" parameterType="Map">
-		update members
-		<set>
+		update members set
 			<choose>
-				<when test="id != null and id != ' '">mid = #{id}</when>
-				<when test="pw != null and pw != ' '">mpw = #{pw}</when>
-				<when test="birth != null and birth != ' '">mbirth = #{birth}</when>
-				<when test="addr != null and addr != ' '">maddr = #{addr}</when>
+				<when test="id != null and id != ''">mid = #{id}</when>
+				<when test="pw != null and pw != ''">mpw = #{pw}</when>
+				<when test="birth != null and birth != ''">mbirth = #{birth}</when>
+				<when test="addr != null and addr != ''">maddr = #{addr}</when>
 			</choose>
-		</set>
 		<where>
-			mname = #{mname}
+			mno = #{mno}
 		</where>
 	</update>
+	
+	<select id="idchk" parameterType="String" resultType="Map">
+		select mid, count(*) as count
+		from members
+		where mid = #{id}
+	</select>
 	
 </mapper>

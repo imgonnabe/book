@@ -46,7 +46,7 @@ public class LoginController {
 				// System.out.println(autoresult);
 				session.setAttribute("mid", autoresult.get("mid"));
 				session.setAttribute("mname", autoresult.get("mname"));
-				session.setAttribute("mgrade", autoresult.get("mgrade"));
+				session.setAttribute("mno", autoresult.get("mno"));
 				//System.out.println(session.getAttribute("mname"));
 				System.out.println("됨??");
 				
@@ -67,7 +67,9 @@ public class LoginController {
 					
 				session.setAttribute("mid", result.get("mid"));
 				session.setAttribute("mname", result.get("mname"));
+				session.setAttribute("mno", result.get("mno"));
 				//System.out.println(session.getAttribute("mname"));
+				System.out.println(session.getAttribute("mno"));
 					
 				return "redirect:/index";
 			}

@@ -102,23 +102,34 @@
 					</div>
 				</div>
 			</div>
-	
+		  <div class="container">
+            <div class="row">
+            	<c:if test="${param.error eq 'empty' }">
+            		<div class="col-sm-8 col-sm-offset-3">
+            			<h3>회원정보를 수정할 생각이 없으시다면 다른 페이지로 가세요.</h3>
+            		</div>
+            	</c:if>
+            </div>
+           </div>
           <div class="container">
             <div class="row">
-            <form action="./infoChange" method="post" class="row">
+            <form action="./infoChange" method="post" class="row" onsubmit="return validateForm()">
               <div class="col-sm-8 col-sm-offset-2">
                   <div class="form-group">
                     아이디 : <p style="display: inline" id="name" class="menu-title">${info.mid}</p>
                     <div>
-                    	<input id="id" class="menu-title" type="text" placeholder="아이디"/>
+                    	<input name="id" id="id" class="menu-title" type="text" placeholder="아이디"/>
+                    	<input name="idchk" id="idchk" class="menu-title" type=button value="아이디 중복 확인"/>
+                    	&nbsp;<span style="color: red;" id="idchkMsg"></span>
+                    	<input id="idchkhidden" type="hidden"></input>
                   	</div>
                   </div>
                   <div class="form-group">
-                    새 비밀번호  <input style="width: 300px;" class="menu-title" id="pw" type="text" placeholder="새 비밀번호를 입력해주세요."/>
+                    새 비밀번호  <input name="pw" style="width: 300px;" class="menu-title" id="pw" type="password" placeholder="새 비밀번호를 입력해주세요."/>
                   </div>
                   <div class="form-group">
-                    비밀번호 확인  <input style="width: 300px;" class="menu-title input-sm" id="pwchk" type="text" placeholder="새 비밀번호를 한 번 더 입력해주세요."/>
-                  	&nbsp;<span style="color: red;" class="pwchkMsg">비밀번호와 일치하지 않습니다.</span>
+                    비밀번호 확인  <input style="width: 300px;" class="menu-title input-sm" id="pwchk" type="password" placeholder="새 비밀번호를 한 번 더 입력해주세요."/>
+                  	&nbsp;<span style="color: red;" id="pwchkMsg">비밀번호와 일치하지 않습니다.</span>
                   </div>
                   <div class="form-group">
                     이름 : <p style="display: inline" id="name" class="menu-title">${info.mname}</p>
@@ -147,7 +158,7 @@
                   </div>
                   <div class="form-group">
                     생년월일 : <p style="display: inline" class="menu-title">${info.mbirth}&nbsp;</p>
-				      <div><input id="birth" type="date" min="1900-01-01"></div>
+				      <div><input name="birth" id="birth" type="date" min="1900-01-01"></div>
                   </div>
                   <hr>
                   <button type="submit" class="btn infobtn">회원정보 변경</button>
@@ -229,83 +240,108 @@
         }).open();
     }
     
-    $(function(){
-    	// 주소의 모든 값이 있거나 모든 값이 없을 때만 @controller로 간다.
-    	$(document).on("click", ".infobtn", function(event) {
-            const isAllEmpty = $('#postcode').val() === '' &&
-                $('#address').val() === '' &&
-                $('#detailAddress').val() === '' &&
-                $('#extraAddress').val() === '';
-
-            const isAllFilled = $('#postcode').val() !== '' &&
-                $('#address').val() !== '' &&
-                $('#detailAddress').val() !== '' &&
-                $('#extraAddress').val() !== '';
-
-            if (!(isAllEmpty || isAllFilled)) {
-                event.preventDefault(); // 입력이 혼합되어 있을 때 이벤트 기본 동작을 방지
-            }
-            
-	        // id, pw 검사
-			let id = $('#id').val();
-			let pw = $('#pw').val();
-			if(id.length > 0 && id.length < 4){
-				alert('올바른 아이디를 입력하세요.');
-				$('#id').focus();
-		        event.preventDefault(); // 폼 제출을 방지
-		        return false;
-			}
-			if(pw.length > 0 && pw.length < 4){
-				alert('올바른 비밀번호를 입력하세요.');
-				$('#pw').focus();
-		        event.preventDefault(); // 폼 제출을 방지
-		        return false;
-			}
+ 	// 아이디 중복 검사(form 유효성 검사 안으로 들어가면 작동안함)
+  	$(document).on('click', '#idchk', function() {
+  		var id = $('#id').val();
+  		$.ajax({
+				url : './idchk?id=' + id,
+				type : 'post',
+				dataType: 'json',
+				success: function(data){
+					if(data.count >= 1){
+						$('#id').val('');
+						$('#id').focus();
+						$('#idchkMsg').text('중복된 아이디가 있습니다. 다시 적으세요.').css('color', 'red');
+					} else {
+						$('#idchkMsg').text('사용가능한 아이디입니다.').css('color', 'green');
+					}
+				},
+				error: function(error){
+					alert('에러');
+				}
+			});
+  		});
+    
+    	// 비밀번호 입력 필드의 값이 변경될 때 확인
+        $(document).on('input', '#pw', function() {
+            checkPw();
         });
-    	
-    	// 모든 값들이 없을 때 form으로 들어가지 않게 함
-        $(document).on("submit", "form", function(event) {
-            // 주소 입력 폼 요소들의 값을 가져옴
+
+        // 비밀번호 확인 필드의 값이 변경될 때 확인
+        $(document).on('input', '#pwchk', function() {
+            checkPw();
+        });
+		
+     	// pw와 pwchk 비교
+        function checkPw() {
+     		// 여기에 pw, pwchk를 안쓰면 처음 쓴 값으로 고정된다.
+        	var pw = $('#pw').val();
+            var pwchk = $('#pwchk').val();
+            if (pw === pwchk) {
+                $('#pwchkMsg').text('비밀번호와 일치합니다.').css('color', 'green');
+            } else {
+                $('#pwchkMsg').text('비밀번호와 일치하지 않습니다.').css('color', 'red');
+            }
+        }
+    
+     	// form 유효성 검사
+        function validateForm() {
+            var id = $('#id').val();
+            var pw = $('#pw').val();
+            var pwchk = $('#pwchk').val();
+            var birth = $('#birth').val();
             var postcode = $('#postcode').val().trim();
             var address = $('#address').val().trim();
             var detailAddress = $('#detailAddress').val().trim();
             var extraAddress = $('#extraAddress').val().trim();
 
-            // 모든 입력 값이 비어있는 경우
-            if (postcode === '' && address === '' && detailAddress === '' && extraAddress === '') {
-                // 폼 전송을 막음
-                event.preventDefault();
-                // 빈 map을 생성하고 서버로 전송
-                var emptyMap = {
-                    postcode: '',
-                    address: '',
-                    detailAddress: '',
-                    extraAddress: ''
-                };
-                
-	             // 빈 키(key)를 삭제
-                 for (var key in emptyMap) {
-                     if (emptyMap.hasOwnProperty(key) && emptyMap[key] === '') {
-                        delete emptyMap[key];
-                     }
-                 }
-             
-                $.ajax({
-                    type: "POST",
-                    url: "./infoChange", // 적절한 URL로 변경
-                    data: emptyMap, // 빈 map을 서버로 전송
-                    success: function(data) {
-                        // 서버 응답을 처리하는 로직을 추가할 수 있음
-                        // console.log(data);
-                    },
-                    error: function(error) {
-                        // 오류 처리 로직을 추가할 수 있음
-                        alert('에러');
-                    }
-                });
+            // id 길이
+            if (id.length > 0 && id.length < 4) {
+                alert('올바른 아이디를 입력하세요.');
+                $('#id').focus();
+                return false;
             }
-        });
-    });
+			// pw 길이
+            if (pw.length > 0 && pw.length < 4) {
+                alert('올바른 비밀번호를 입력하세요.');
+                $('#pw').focus();
+                return false;
+            }
+			// pw, pwchk 비교
+            if (pw !== pwchk) {
+                alert('비밀번호 확인 칸을 다시 작성하세요.');
+                $('#pwchk').focus();
+                return false;
+            }
+
+            // 주소의 모든 값이 있거나 모든 값이 없을 때만 @controller로 간다.
+            const isAllEmpty = postcode === '' && address === '' && detailAddress === '' && extraAddress === '';
+            const isAllFilled = postcode !== '' && address !== '' && detailAddress !== '' && extraAddress !== '';
+
+            if (!(isAllEmpty || isAllFilled)) {
+                alert('주소를 전부 입력하세요.');
+                return false;
+            }
+            
+	          // 모든 입력 값이 하나라도 비어있는 경우
+	          if(!(postcode === '' && address === '' && detailAddress === '' && extraAddress === '')){
+		          if (postcode === '' || address === '' || detailAddress === '' || extraAddress === '') {
+		          	alert('주소를 전부 입력해주세요.');
+		          	return false;
+		          }
+	          }
+	          
+	          // 전부 입력 안 됐을 때
+	          if(postcode === '' && address === '' && detailAddress === '' && extraAddress === '' &&
+	        		id === '' && pw === '' && birth === ''){
+	        	  alert('회원정보를 수정할 생각이 없으시다면 다른 페이지로 가세요.');
+	        	  return false;
+	          }
+	          
+            // 위의 유효성 검사를 모두 통과하면 true를 반환하여 폼 제출을 허용
+            return true;
+        }
+    
     
 </script>
 	
@@ -317,10 +353,8 @@
 		var timeOff = new Date().getTimezoneOffset()*60000;// 분단위를 밀리초로 변환
 		// new Date(now_utc-timeOff).toISOString()은 '2022-05-11T18:09:38.134Z'를 반환
 		var today = new Date(now_utc-timeOff).toISOString().split("T")[0];
-		var now = Date.now();
-		document.getElementById("birth").setAttribute("max", today);
-		var birth = $("#birth").val();
-		
+		// document.getElementById("birth").setAttribute("max", today);
+		$("#birth").attr("max", today);
 	});
 	</script>
 	

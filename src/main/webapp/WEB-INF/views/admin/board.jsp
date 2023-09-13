@@ -114,7 +114,8 @@
 			<section class="module-small">
 				<div class="container">
 				<button class="btn" onclick="location.href='./board?cate=0'">전체보기</button>
-				<br>
+						<span class="form-control gray" style="width: 100px;">회원탈퇴</span>
+						<span class="form-control silver" style="width: 100px;">게시물 삭제</span>
 					<form action="./board" method="get" class="row">
 						<div class="mb-sm-20">
 							<select class="form-control" name="cate" id="cate"
