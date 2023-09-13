@@ -188,37 +188,36 @@
                   <li><a href="typography.html"><i class="fa fa-font"></i> Typography</a></li>
                 </ul>
               </li>
-              <%-- <c:if test="${sessionScope.mgrade eq 2}"> --%>
-              
-              <li class="dropdown"><a href="/admin/login" class="dropdown-toggle" data-toggle="dropdown">관리자 페이지</a>
-              	<ul class="dropdown-menu" role="menu">
-                  <li><a href="/admin/board">게시물 관리</a></li>
-                  <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown">구매</a>
-                  	<ul class="dropdown-menu">
-	                  <li><a href="/admin/stock">재고 관리</a></li>
-	                  <li><a href="/admin/product">상품 등록</a></li>
-	                  <li><a href="/admin/sales">매출액</a></li>
-                  	</ul>
-                  <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown">대여</a>
-                  	<ul class="dropdown-menu">
-	                  <li><a href="/admin/rent">대여 관리</a></li>
-	                  <li><a href="/admin/rentalAmount">대여량</a></li>
-                  	</ul>
-                </ul>
-               </li>
-                <%-- </c:if> --%>
-               <c:if test="${sessionScope.mname ne null}">
-              <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown">마이페이지</a>
-                <ul class="dropdown-menu" role="menu">
-                  <li><a href="/mypage/main">메인</a></li>
-                  <li><a href="/mypage/zzim">찜목록</a></li>
-                  <li><a href="/mypage/buy">구매목록</a></li>
-                  <li><a href="/mypage/rent">대출이력</a></li>
-                  <li><a href="/mypage/board">게시물 관리</a></li>
-                  <li><a href="/mypage/comment">댓글 관리</a></li>
-                  <li><a href="/mypage/info">회원정보관리</a></li>
-                </ul>
-              </li>
+              <c:if test="${sessionScope.mname eq 'admin'}">
+	              <li class="dropdown"><a href="/admin/login" class="dropdown-toggle" data-toggle="dropdown">관리자 페이지</a>
+	              	<ul class="dropdown-menu" role="menu">
+	                  <li><a href="/admin/board">게시물 관리</a></li>
+	                  <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown">구매</a>
+	                  	<ul class="dropdown-menu">
+		                  <li><a href="/admin/stock">재고 관리</a></li>
+		                  <li><a href="/admin/product">상품 등록</a></li>
+		                  <li><a href="/admin/sales">매출액</a></li>
+	                  	</ul>
+	                  <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown">대여</a>
+	                  	<ul class="dropdown-menu">
+		                  <li><a href="/admin/rent">대여 관리</a></li>
+		                  <li><a href="/admin/rentalAmount">대여량</a></li>
+	                  	</ul>
+	                </ul>
+	               </li>
+               </c:if>
+               <c:if test="${sessionScope.mname ne null && sessionScope.mname ne 'admin'}">
+	              <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown">마이페이지</a>
+	                <ul class="dropdown-menu" role="menu">
+	                  <li><a href="/mypage/main">메인</a></li>
+	                  <li><a href="/mypage/zzim">찜목록</a></li>
+	                  <li><a href="/mypage/buy">구매목록</a></li>
+	                  <li><a href="/mypage/rent">대출이력</a></li>
+	                  <li><a href="/mypage/board">게시물 관리</a></li>
+	                  <li><a href="/mypage/comment">댓글 관리</a></li>
+	                  <li><a href="/mypage/info">회원정보관리</a></li>
+	                </ul>
+	              </li>
               </c:if>
               <c:choose>
 	              <c:when test="${sessionScope.mname eq null}">

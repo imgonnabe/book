@@ -115,4 +115,24 @@
 		where mid = #{mid}
 	</select>
 	
+	<update id="phoneSave" parameterType="Map">
+		update members set mphone = #{phone}
+		where mid = #{mid}
+	</update>
+	
+	<update id="infoChange" parameterType="Map">
+		update members
+		<set>
+			<choose>
+				<when test="id != null and id != ' '">mid = #{id}</when>
+				<when test="pw != null and pw != ' '">mpw = #{pw}</when>
+				<when test="birth != null and birth != ' '">mbirth = #{birth}</when>
+				<when test="addr != null and addr != ' '">maddr = #{addr}</when>
+			</choose>
+		</set>
+		<where>
+			mname = #{mname}
+		</where>
+	</update>
+	
 </mapper>

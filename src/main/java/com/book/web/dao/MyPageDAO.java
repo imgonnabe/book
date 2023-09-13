@@ -32,4 +32,8 @@ public interface MyPageDAO {
 
 	Map<String, Object> info(Map<String, Object> map);
 
+	void phoneSave(Map<String, Object> map);
+
+	void infoChange(Map<String, Object> map);
+
 }

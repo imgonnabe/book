@@ -105,38 +105,54 @@
 	
           <div class="container">
             <div class="row">
+            <form action="./infoChange" method="post" class="row">
               <div class="col-sm-8 col-sm-offset-2">
                   <div class="form-group">
-                    아이디  <input class="form-control" type="text" placeholder="아이디" value="${info.mid}"/>
+                    아이디 : <p style="display: inline" id="name" class="menu-title">${info.mid}</p>
+                    <div>
+                    	<input id="id" class="menu-title" type="text" placeholder="아이디"/>
+                  	</div>
                   </div>
                   <div class="form-group">
-                    새 비밀번호  <input class="form-control" id="pw" type="text" placeholder="새 비밀번호를 입력해주세요."/>
+                    새 비밀번호  <input style="width: 300px;" class="menu-title" id="pw" type="text" placeholder="새 비밀번호를 입력해주세요."/>
                   </div>
                   <div class="form-group">
-                    비밀번호 확인  <input class="form-control input-sm" id="pwchk" type="text" placeholder="새 비밀번호를 한 번 더 입력해주세요."/>
+                    비밀번호 확인  <input style="width: 300px;" class="menu-title input-sm" id="pwchk" type="text" placeholder="새 비밀번호를 한 번 더 입력해주세요."/>
+                  	&nbsp;<span style="color: red;" class="pwchkMsg">비밀번호와 일치하지 않습니다.</span>
                   </div>
                   <div class="form-group">
-                    이름  <div class="form-control">${info.mname}</div>
+                    이름 : <p style="display: inline" id="name" class="menu-title">${info.mname}</p>
+                  </div>
+                  <div class="form-group">
+                  	주소 :
+                  	<p style="display: inline" class="menu-title">${info.maddr}</p>
+                  	<div>
+	                  	<input name="postcode" class="menu-title" type="text" id="postcode" placeholder="우편번호">
+						<input class="menu-title" type="button" onclick="addrChange()" value="우편번호 찾기"><br>
+						<input name="address" class="menu-title" type="text" id="address" placeholder="주소"><br>
+						<input name="detailAddress" class="menu-title" type="text" id="detailAddress" placeholder="상세주소">
+						<input name="extraAddress" class="menu-title" type="text" id="extraAddress" placeholder="참고항목">
+                    </div>
                   </div>
                   <div class="form-group"> 전화번호 (숫자만 입력하세요.)
                       <div class="detail">
-                      <input class="form-control" type="text" required="required" id="phone" placeholder="${info.mphone }">
-						<input type="button" id="phoneChk" value = "인증번호 받기">	
+                      <input class="menu-title" type="text" id="phone" placeholder="${info.mphone }">
+						<input class="btn" type="button" id="phoneChk" value = "인증번호 받기">	
 						<br><br>
-						<input class="form-control" id="phone2" type="text" disabled required/>
-						<input type="button" id="phoneChk2" value = "본인인증" disabled="disabled">
-						<div><span class="point successPhoneChk">휴대폰 번호 입력후 인증번호 보내기를 해주십시오.</span></div>
+						<input class="menu-title" id="phone2" type="text" disabled required/>
+						<input class="btn" type="button" id="phoneChk2" value = "본인인증" disabled="disabled">
+						<div><span style="color: red;" class="point successPhoneChk">휴대폰 번호 입력후 인증번호 보내기를 해주십시오.</span></div>
 						<input type="hidden" id="phoneDoubleChk"/>
 					</div>
                   </div>
-                    <form action="./info" method="post" class="row">
-	                  <div class="form-group">
-	                    생년월일  <div class="form-control">${info.mbirth}</div>
-					      <p><input id="birth" type="date" min="1900-01-01"></p>
-					      <p><input type="submit" value="생일 바꾸기"></p>
-	                  </div>
-				    </form>
-              </div>
+                  <div class="form-group">
+                    생년월일 : <p style="display: inline" class="menu-title">${info.mbirth}&nbsp;</p>
+				      <div><input id="birth" type="date" min="1900-01-01"></div>
+                  </div>
+                  <hr>
+                  <button type="submit" class="btn infobtn">회원정보 변경</button>
+              	</div>
+		    </form>
             </div>
           </div>
 		</div>
@@ -161,6 +177,138 @@
 		src="../assets/lib/simple-text-rotator/jquery.simple-text-rotator.min.js"></script>
 	<script src="../assets/js/plugins.js"></script>
 	<script src="../assets/js/main.js"></script>
+	<!-- 도로명 주소 -->
+	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+	
+	<script type="text/javascript">
+    function addrChange() {
+        new daum.Postcode({
+            oncomplete: function(data) {
+                // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+
+                // 각 주소의 노출 규칙에 따라 주소를 조합한다.
+                // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+                var addr = ''; // 주소 변수
+                var extraAddr = ''; // 참고항목 변수
+
+                //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+                if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+                    addr = data.roadAddress;
+                } else { // 사용자가 지번 주소를 선택했을 경우(J)
+                    addr = data.jibunAddress;
+                }
+
+                // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
+                if(data.userSelectedType === 'R'){
+                    // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+                    // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+                    if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+                        extraAddr += data.bname;
+                    }
+                    // 건물명이 있고, 공동주택일 경우 추가한다.
+                    if(data.buildingName !== '' && data.apartment === 'Y'){
+                        extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                    }
+                    // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+                    if(extraAddr !== ''){
+                        extraAddr = ' (' + extraAddr + ')';
+                    }
+                    // 조합된 참고항목을 해당 필드에 넣는다.
+                    document.getElementById("extraAddress").value = extraAddr;
+                
+                } else {
+                    document.getElementById("extraAddress").value = '';
+                }
+
+                // 우편번호와 주소 정보를 해당 필드에 넣는다.
+                document.getElementById('postcode').value = data.zonecode;
+                document.getElementById("address").value = addr;
+                // 커서를 상세주소 필드로 이동한다.
+                document.getElementById("detailAddress").focus();
+            }
+        }).open();
+    }
+    
+    $(function(){
+    	// 주소의 모든 값이 있거나 모든 값이 없을 때만 @controller로 간다.
+    	$(document).on("click", ".infobtn", function(event) {
+            const isAllEmpty = $('#postcode').val() === '' &&
+                $('#address').val() === '' &&
+                $('#detailAddress').val() === '' &&
+                $('#extraAddress').val() === '';
+
+            const isAllFilled = $('#postcode').val() !== '' &&
+                $('#address').val() !== '' &&
+                $('#detailAddress').val() !== '' &&
+                $('#extraAddress').val() !== '';
+
+            if (!(isAllEmpty || isAllFilled)) {
+                event.preventDefault(); // 입력이 혼합되어 있을 때 이벤트 기본 동작을 방지
+            }
+            
+	        // id, pw 검사
+			let id = $('#id').val();
+			let pw = $('#pw').val();
+			if(id.length > 0 && id.length < 4){
+				alert('올바른 아이디를 입력하세요.');
+				$('#id').focus();
+		        event.preventDefault(); // 폼 제출을 방지
+		        return false;
+			}
+			if(pw.length > 0 && pw.length < 4){
+				alert('올바른 비밀번호를 입력하세요.');
+				$('#pw').focus();
+		        event.preventDefault(); // 폼 제출을 방지
+		        return false;
+			}
+        });
+    	
+    	// 모든 값들이 없을 때 form으로 들어가지 않게 함
+        $(document).on("submit", "form", function(event) {
+            // 주소 입력 폼 요소들의 값을 가져옴
+            var postcode = $('#postcode').val().trim();
+            var address = $('#address').val().trim();
+            var detailAddress = $('#detailAddress').val().trim();
+            var extraAddress = $('#extraAddress').val().trim();
+
+            // 모든 입력 값이 비어있는 경우
+            if (postcode === '' && address === '' && detailAddress === '' && extraAddress === '') {
+                // 폼 전송을 막음
+                event.preventDefault();
+                // 빈 map을 생성하고 서버로 전송
+                var emptyMap = {
+                    postcode: '',
+                    address: '',
+                    detailAddress: '',
+                    extraAddress: ''
+                };
+                
+	             // 빈 키(key)를 삭제
+                 for (var key in emptyMap) {
+                     if (emptyMap.hasOwnProperty(key) && emptyMap[key] === '') {
+                        delete emptyMap[key];
+                     }
+                 }
+             
+                $.ajax({
+                    type: "POST",
+                    url: "./infoChange", // 적절한 URL로 변경
+                    data: emptyMap, // 빈 map을 서버로 전송
+                    success: function(data) {
+                        // 서버 응답을 처리하는 로직을 추가할 수 있음
+                        // console.log(data);
+                    },
+                    error: function(error) {
+                        // 오류 처리 로직을 추가할 수 있음
+                        alert('에러');
+                    }
+                });
+            }
+        });
+    });
+    
+</script>
+	
 	<script type="text/javascript">
 	$(function(){
 		// 오늘 이후 선택이 안되게 함
@@ -169,21 +317,13 @@
 		var timeOff = new Date().getTimezoneOffset()*60000;// 분단위를 밀리초로 변환
 		// new Date(now_utc-timeOff).toISOString()은 '2022-05-11T18:09:38.134Z'를 반환
 		var today = new Date(now_utc-timeOff).toISOString().split("T")[0];
+		var now = Date.now();
 		document.getElementById("birth").setAttribute("max", today);
 		var birth = $("#birth").val();
-		$.ajax({
-			type:"post",
-	        url:"birthChange",
-	        data:{birth:birth},
-	        success:function(data){
-	        	
-	        },
-	        error:function(error){
-	        	
-	        }
-		});
+		
 	});
 	</script>
+	
 	<script type="text/javascript">
 	$(function(){
 		 //휴대폰 번호 인증
@@ -192,7 +332,7 @@
 		   	if (!strToInt(phone)) {
 	            return; // 숫자로 변환되지 않으면 함수 종료
 	        }
-		   	alert("인증번호 발송이 완료되었습니다.\n휴대폰에서 인증번호 확인을 해주십시오.");
+		   	alert("인증번호 발송이 완료되었습니다.\n휴대폰에서 인증번호 확인을 해주세요.");
 		   	$.ajax({
 		           type:"post",
 		           url:"phoneCheck",// "phoneCheck?phone=" + phone하려면 밑에 data를 빼야함
@@ -205,8 +345,17 @@
 		           		if(data == $("#phone2").val().trim()){
 		           			alert("본인 인증이 확인되었습니다.");
 		           			$("#phoneChk2").attr("disabled",true);
-		           			$("#phoneChk2").css("color",green);
-		           			return;
+		           			$("#phoneChk2").css("background-color",'green');
+		           			$.ajax({
+		           			   type:"post",
+		     		           url:"phoneSave",
+		     		           data:{phone:phone},
+		     		           success:function(data){
+		     		        	   location.href="./info";
+		     		           }, error:function(error){
+		     		        	   alert('에러');
+		     		           }
+		           			});
 		           		} else if (clickCnt < 5){
 		           			alert("인증 번호가 틀렸습니다. 다시 시도하세요.");
 		           		} else if(clickCnt >= 5){
@@ -224,7 +373,7 @@
 	});
 	
 	function strToInt(str) {
-		if(str.length > 11 && str.length < 9){
+		if(str.length > 11 || str.length < 10){
 			alert("다시 입력하세요...");
 			return false;
 		}

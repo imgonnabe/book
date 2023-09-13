@@ -38,7 +38,7 @@ public class MyPageController {
 			model.addAttribute("list", list);
 			return "/mypage/main";
 		} else {
-			return "/login";
+			return "redirect:/login";
 		}
 	}
 	
@@ -50,7 +50,7 @@ public class MyPageController {
 			model.addAttribute("list", list);
 			return "/mypage/zzim";
 		} else {
-			return "/login";
+			return "redirect:/login";
 		}
 	}
 	
@@ -67,7 +67,7 @@ public class MyPageController {
 			}
 			return "redirect:/mypage/zzim";
 		} else {
-			return "/login";
+			return "redirect:/login";
 		}
 	}
 	
@@ -80,7 +80,7 @@ public class MyPageController {
 			model.addAttribute("list", list);
 			return "/mypage/buy";
 		} else {
-			return "/login";
+			return "redirect:/login";
 		}
 	}
 	
@@ -97,7 +97,7 @@ public class MyPageController {
 			model.addAttribute("list", list);
 			return "/mypage/rent";
 		} else {
-			return "/login";
+			return "redirect:/login";
 		}
 	}
 	
@@ -115,7 +115,7 @@ public class MyPageController {
 			model.addAttribute("list", list);
 			return "/mypage/board";
 		} else {
-			return "/login";
+			return "redirect:/login";
 		}
 	}
 	
@@ -130,7 +130,7 @@ public class MyPageController {
 			String json = mapp.writeValueAsString(map);
 			return json;
 		} else {
-			return "/login";
+			return "redirect:/login";
 		}
 	}
 	
@@ -145,7 +145,7 @@ public class MyPageController {
 			myPageService.bdelete(map);
 			return "redirect:/mypage/board";
 		} else {
-			return "/login";
+			return "redirect:/login";
 		}
 	}
 	
@@ -163,7 +163,7 @@ public class MyPageController {
 			model.addAttribute("list", list);
 			return "/mypage/comment";
 		} else {
-			return "/login";
+			return "redirect:/login";
 		}
 	}
 	
@@ -178,7 +178,7 @@ public class MyPageController {
 			String json = mapp.writeValueAsString(map);
 			return json;
 		} else {
-			return "/login";
+			return "redirect:/login";
 		}
 	}
 	
@@ -190,7 +190,7 @@ public class MyPageController {
 			model.addAttribute("info", info);
 			return "/mypage/info";
 		} else {
-			return "/login";
+			return "redirect:/login";
 		}
 	}
 	
@@ -204,7 +204,50 @@ public class MyPageController {
 			smsUtil.sendOne(phone, randomNumber);
 			return String.valueOf(randomNumber);
 		} else {
-			return "/login";
+			return "redirect:/login";
+		}
+	}
+	
+	@ResponseBody
+	@PostMapping("/phoneSave")
+	public String phoneSave(@RequestParam(name="phone", required = false) String phone, HttpSession session) {
+		if(session.getAttribute("mid") != null) {
+			System.out.println("phonSave : " + phone);
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("phone", phone);
+			map.put("mid", session.getAttribute("mid"));
+			myPageService.phoneSave(map);
+			return "redirect:/mypage/info";
+		} else {
+			return "redirect:/login";
+		}
+	}
+	
+	@PostMapping("/infoChange")
+	public String infoChange(@RequestParam Map<String, Object> map, HttpSession session) {
+		System.out.println(map);// {postcode=03438, address=서울 은평구 가좌로 344, detailAddress=11, extraAddress= (신사동, 현대아파트)}
+		// 아무것도 없을 때 : {postcode=, address=, detailAddress=, extraAddress=}
+		if(session.getAttribute("mid") != null) {
+			if(map != null && !map.isEmpty()) {
+				String address = (String) map.get("address");
+				String postcode = (String) map.get("postcode");
+				String detailAddress = (String) map.get("detailAddress");
+				String extraAddress = (String) map.get("extraAddress");
+				
+				if (address != null && !address.isEmpty() &&
+						postcode != null && !postcode.isEmpty() &&
+						detailAddress != null && !detailAddress.isEmpty() &&
+						extraAddress != null && !extraAddress.isEmpty()) {
+					
+					String addr = address + " " + postcode + " " + detailAddress + " " + extraAddress;
+					map.put("addr", addr);
+				}
+				map.put("mname", session.getAttribute("mname"));
+				myPageService.infoChange(map);
+			}
+			return "redirect:/mypage/info";
+		} else {
+			return "redirect:/login";
 		}
 	}
 }

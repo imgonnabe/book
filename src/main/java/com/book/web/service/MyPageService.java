@@ -60,6 +60,14 @@ public class MyPageService {
 	public Map<String, Object> info(Map<String, Object> map) {
 		return myPageDAO.info(map);
 	}
+
+	public void phoneSave(Map<String, Object> map) {
+		myPageDAO.phoneSave(map);
+	}
+
+	public void infoChange(Map<String, Object> map) {
+		myPageDAO.infoChange(map);
+	}
 	
 
 }
