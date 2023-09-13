@@ -94,34 +94,53 @@
 			<div class="loader">Loading...</div>
 		</div>
 		<div class="main">
-          <form action="">
-          <div class="container">
-            <div class="row">
-              <div class="col-sm-6 col-sm-offset-3">
-              	<h1 class="module-title font-alt">찜목록</h1>
-                	<div class="font-alt">
-	                	<input name="allCheck" type="checkbox">&nbsp;찜한 상품
-						<span class="zzim"></span> / ${list[0].count }
-						<button class="delbtn" type="button" onclick="deleteValue()">삭제</button>
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-6 col-sm-offset-3">
+						<h1 class="module-title font-alt">찜목록</h1>
 					</div>
-              </div>
-            </div>
-            <div class="row multi-columns-row post-columns">
-                <c:forEach items="${list }" var="row">
-                <div class="gallery-item">
-					<div class="col-sm-6 col-md-3 col-lg-3">
-						<div><input name="rowCheck" type="checkbox" value="${row.zno }"></div>
-							<div class="gallery-image"><a href="../bookdetail?bkno=${row.bkno}"><img src="${row.bkimg }" alt="Blog-post Thumbnail"/></a></div>
-						<div class="post-title"><a href="../bookdetail?bkno=${row.bkno}">${row.bkname}</a></div>
-						<div class="post-entry">${row.bkwrite}</div>
-					</div>
-					</div>
-				</c:forEach>
-              </div>
-            </div>
-			</form>
-		
-	</div>
+				</div>
+				<c:choose>
+					<c:when test="${list[0].count eq null}">
+						<section class="module-small">
+							<div class="container">
+								<h2 style="text-align: center;">찜목록이 없습니다.</h2>
+							</div>
+						</section>
+					</c:when>
+					<c:otherwise>
+						<section class="module-small">
+							<div class="row">
+								<input name="allCheck" type="checkbox">&nbsp;찜한 상품 <span
+									class="zzim"></span> / ${list[0].count }
+								<button class="delbtn" type="button" onclick="deleteValue()">삭제</button>
+							</div>
+						</section>
+						<div class="row multi-columns-row post-columns">
+							<c:forEach items="${list }" var="row">
+								<div class="row" style="display: inline; width: 100px;">
+									<div class="gallery-item">
+										<div class="col-sm-6 col-md-3 col-lg-3">
+											<div>
+												<input name="rowCheck" type="checkbox" value="${row.zno }">
+											</div>
+											<div class="post-image">
+												<a href="../bookdetail?bkno=${row.bkno}"><img
+													src="${row.bkimg }" alt="Blog-post Thumbnail" /></a>
+											</div>
+											<div class="post-title">
+												<a href="../bookdetail?bkno=${row.bkno}">${row.bkname}</a>
+											</div>
+											<div class="post-entry">${row.bkwrite}</div>
+										</div>
+									</div>
+								</div>
+							</c:forEach>
+						</div>
+					</c:otherwise>
+				</c:choose>
+			</div>
+		</div>
 	</main>
 	<!--  
     JavaScripts
@@ -143,107 +162,110 @@
 		src="../assets/lib/simple-text-rotator/jquery.simple-text-rotator.min.js"></script>
 	<script src="../assets/js/plugins.js"></script>
 	<script src="../assets/js/main.js"></script>
-	
+
 	<script type="text/javascript">
-	$(function() {
-		var check = document.getElementsByName("rowCheck");
-		var checkCnt = check.length;
-		$('.zzim').text('0');
-		
-		$('input[name="allCheck"]').click(function(){
-			var checkList = $('input[name="rowCheck"]');
-			for(var i = 0; i < checkList.length; i++){
-				checkList[i].checked = this.checked;
+		$(function() {
+			var check = document.getElementsByName("rowCheck");
+			var checkCnt = check.length;
+			$('.zzim').text('0');
+
+			$('input[name="allCheck"]').click(function() {
+				var checkList = $('input[name="rowCheck"]');
+				for (var i = 0; i < checkList.length; i++) {
+					checkList[i].checked = this.checked;
+				}
+			});
+
+			$('input[name="rowCheck"]').click(function() {
+				if ($('input[name="rowCheck"]:checked').length == checkCnt) {
+					$('input[name="allCheck"]')[0].checked = true;
+				} else {
+					$('input[name="allCheck"]')[0].checked = false;
+				}
+			});
+
+			// 모든 체크박스 요소를 가져오기
+			var allCheckCb = document.querySelector('input[name="allCheck"]');
+			var rowCheckCb = document
+					.querySelectorAll('input[name="rowCheck"]');
+
+			// "찜한 상품" 옆 체크박스의 변경 이벤트 처리
+			allCheckCb.addEventListener('change', function() {
+				var checkedCount = 0;
+				if (allCheckCb.checked) {
+					// "찜한 상품" 체크박스가 체크되면 모든 상품 체크박스도 체크
+					rowCheckCb.forEach(function(checkbox) {
+						checkbox.checked = true;
+						checkedCount++;
+					});
+				} else {
+					// "찜한 상품" 체크박스가 해제되면 모든 상품 체크박스도 해제
+					rowCheckCb.forEach(function(checkbox) {
+						checkbox.checked = false;
+					});
+				}
+
+				// 총 선택된 상품 개수를 업데이트
+				updateTotalCount(checkedCount);
+			});
+
+			// 각 상품 옆 체크박스의 변경 이벤트 처리
+			rowCheckCb.forEach(function(checkbox) {
+				checkbox.addEventListener('change', function() {
+					var checkedCount = 0;
+					rowCheckCb.forEach(function(checkbox) {
+						if (checkbox.checked) {
+							checkedCount++;
+						}
+					});
+
+					// 총 선택된 상품 개수를 업데이트
+					updateTotalCount(checkedCount);
+				});
+			});
+
+			// 총 선택된 상품 개수를 업데이트하는 함수
+			function updateTotalCount(count) {
+				var zzimTotalElement = document.querySelector('.zzim');
+				zzimTotalElement.textContent = count;
 			}
-		});
-		
-		$('input[name="rowCheck"]').click(function(){
-			if($('input[name="rowCheck"]:checked').length == checkCnt){
-				$('input[name="allCheck"]')[0].checked = true;
-			} else {
-				$('input[name="allCheck"]')[0].checked = false;
-			}
-		});
-		
-		// 모든 체크박스 요소를 가져오기
-	    var allCheckCb = document.querySelector('input[name="allCheck"]');
-	    var rowCheckCb = document.querySelectorAll('input[name="rowCheck"]');
 
-	    // "찜한 상품" 옆 체크박스의 변경 이벤트 처리
-	    allCheckCb.addEventListener('change', function () {
-	        var checkedCount = 0;
-	        if (allCheckCb.checked) {
-	            // "찜한 상품" 체크박스가 체크되면 모든 상품 체크박스도 체크
-	            rowCheckCb.forEach(function (checkbox) {
-	                checkbox.checked = true;
-	                checkedCount++;
-	            });
-	        } else {
-	            // "찜한 상품" 체크박스가 해제되면 모든 상품 체크박스도 해제
-	            rowCheckCb.forEach(function (checkbox) {
-	                checkbox.checked = false;
-	            });
-	        }
+			$('.delbtn').click(function() {
+				deleteValue();
+			});
 
-	        // 총 선택된 상품 개수를 업데이트
-	        updateTotalCount(checkedCount);
-	    });
-
-	    // 각 상품 옆 체크박스의 변경 이벤트 처리
-	    rowCheckCb.forEach(function (checkbox) {
-	        checkbox.addEventListener('change', function () {
-	            var checkedCount = 0;
-	            rowCheckCb.forEach(function (checkbox) {
-	                if (checkbox.checked) {
-	                    checkedCount++;
-	                }
-	            });
-
-	            // 총 선택된 상품 개수를 업데이트
-	            updateTotalCount(checkedCount);
-	        });
-	    });
-
-	    // 총 선택된 상품 개수를 업데이트하는 함수
-	    function updateTotalCount(count) {
-	        var zzimTotalElement = document.querySelector('.zzim');
-	        zzimTotalElement.textContent = count;
-	    }
-		
-		$('.delbtn').click(function() {
-		    deleteValue();
-		});
-		
-		function deleteValue(){
-			var valueArr = new Array();
-			var list = $('input[name="rowCheck"]');
-			for(var i = 0; i < list.length; i++){
-				if(list[i].checked){
-					valueArr.push(list[i].value);
+			function deleteValue() {
+				var valueArr = new Array();
+				var list = $('input[name="rowCheck"]');
+				for (var i = 0; i < list.length; i++) {
+					if (list[i].checked) {
+						valueArr.push(list[i].value);
+					}
+				}
+				// alert("valueArr: " + valueArr);
+				if (valueArr.length == 0) {
+					alert('선택된 글이 없습니다.');
+					return false;
+				} else {
+					var chk = confirm('정말 삭제하시겠습니까?');
+					$.ajax({
+						url : './zdelete',
+						type : 'post',
+						traditional : true,// valueArr=[1, 2, 3] > valueArr=1&valueArr=2&valueArr=3
+						data : {
+							valueArr : valueArr
+						},
+						success : function(data) {
+							alert('삭제했습니다.');
+							location.href = "./zzim";
+						},
+						error : function(error) {
+							alert('에러');
+						}
+					});
 				}
 			}
-			// alert("valueArr: " + valueArr);
-			if(valueArr.length == 0){
-				alert('선택된 글이 없습니다.');
-				return false;
-			} else {
-				var chk = confirm('정말 삭제하시겠습니까?');
-				$.ajax({
-					url : './delete',
-					type : 'post',
-					traditional: true,// valueArr=[1, 2, 3] > valueArr=1&valueArr=2&valueArr=3
-					data:{valueArr:valueArr},
-					success: function(data){
-						alert('삭제했습니다.');
-						location.href="./zzim";
-					},
-					error: function(error){
-						alert('에러');
-					}
-				});
-			}
-		}
-	});
-</script>
+		});
+	</script>
 </body>
 </html>

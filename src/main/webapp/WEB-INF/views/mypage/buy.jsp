@@ -143,11 +143,11 @@
 					<c:forEach items="${list }" var="row"  varStatus="loop">
 						<c:if test="${loop.first || row.tgroup ne list[loop.index - 1].tgroup}">
 							<div class="col-sm-8">
-									<h3 class="widget-posts-title font-serif">${row.tgroup} <br> <fmt:formatNumber value="${row.total}" pattern="#,###"/>원</h3>
-									<hr>
+								<h3 class="widget-posts-title font-serif">${row.tgroup} <br> <fmt:formatNumber value="${row.total}" pattern="#,###"/>원</h3>
+								<hr>
 							</div>
 						</c:if>
-						<div class="widget-posts">
+						<div class="widget-posts" style="display: inline;">
 							<h4 class="widget-posts-title font-serif"><a href="../bookdetail?bkno=${row.bkno}">${row.bkname}</a></h4>
 							<div class="gallery-image"><a href="../bookdetail?bkno=${row.bkno}"><img src="${row.bkimg }" alt="Blog-post Thumbnail"/></a></div>
 							<div class="widget-posts-title font-alt"><fmt:formatNumber value="${row.bkprice}" pattern="#,###"/>원</div>

@@ -63,6 +63,7 @@
 		select b.bkno, b.bkname, b.bkwrite, b.bkpublisher, b.bkcate, r.rsdate, r.rddate, r.rdel, r.rno, r.mid
 		from books b join rental r
 		<where>
+		b.bkno = r.bkno
 			<if test="cate gt 0">and b.bkcate = #{cate}</if>
 			<choose>
 				<when test="searchN == 'title'">and b.bkname like concat('%', #{searchV},'%')</when>

@@ -8,12 +8,29 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface BooklistDAO {
 
-	List<BooklistDTO> booklist(int bkcate);
+	List<BooklistDTO> list();
 
-	Map<String, Object> bookdetail(int bkno);
+	Map<String, Object> detail(int bkno);
 
-	List<BooklistDTO> booktop();
+	void detail2(CartDTO dto);
 
+	List<Map<String, Object>> cart(CartDTO dto);
 
+	int delete(Map<String, Object> map);
+
+	int delete2(Map<String, Object> map);
+
+	void cart2(CartDTO dto);
+
+	List<Map<String, Object>> purchase(String mid);
+
+	/* List<Map<String, Object>> list(String mid); */
 	
+	void stockupdate(Map<String, Object> map);
+	
+	void insert(Map<String, Object> map);
+
+	void delete3(Map<String, Object> map);
+
+
 }

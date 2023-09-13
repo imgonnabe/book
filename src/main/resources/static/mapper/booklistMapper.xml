@@ -2,33 +2,85 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.book.web.booklist.BooklistDAO">
 
-<select id="booklist" parameterType="Integer" resultType="com.book.web.booklist.BooklistDTO">
-  SELECT bkno, bkname, bkwrite, bkimg, bkprice, bkcate,
-         (
-         SELECT COUNT(*) FROM books
-         <where>
-         <if test="bkcate gt 0">AND bkcate = #{bkcate}</if>
-         </where>
-         ) AS count
+<select id="list" resultType="BooklistDTO">
+  SELECT * 
   FROM books
-  <where>
-    <if test="bkcate gt 0">
-        AND bkcate = #{bkcate}
-    </if>
-  </where>
-    ORDER BY bkno asc
-  
 </select>
 
-<select id="bookdetail" parameterType="Integer" resultType="Map">
-  SELECT *
-  FROM books WHERE bkno=#{bkno }
+<select id="detail" parameterType="Integer" resultType="Map">
+		SELECT *
+		FROM books WHERE bkno=#{bkno }
 </select>
 
-<select id="booktop" resultType="com.book.web.booklist.BooklistDTO">
-  SELECT *
-  FROM books 
-  ORDER BY bcnt DESC
+<insert id="detail2" parameterType="CartDTO">
+INSERT INTO cart(bkno,bkimg, bkscontent, price, total, amount, mid) VALUES(#{bkno},#{bkimg}, #{bkscontent}, #{price}, #{price}*#{amount}, #{amount}, #{mid})
+
+
+</insert>
+
+<select id="cart" parameterType="CartDTO"  resultType="Map">
+SELECT *
+FROM cart
+WHERE amount > 0 AND mid=#{mid} 
+ORDER BY cartno desc
+
+
+
 </select>
+
+ <update id="delete" parameterType="Map">
+UPDATE cart SET amount = amount - #{mod}, total = (SELECT price FROM cart WHERE cartno=#{cartno}) * ((SELECT amount FROM cart WHERE cartno = #{cartno}) - #{mod}) WHERE cartno=#{cartno}
+
+</update>
+
+<delete id="delete2" parameterType="Map">
+ DELETE FROM cart WHERE cartno = #{cartno} AND amount = 0
+
+
+</delete>
+ 
+
+<update id="cart2" parameterType="CartDTO">
+UPDATE cart SET amount = amount + #{amount} , total = total + #{price} * #{amount} WHERE bkno = #{bkno} AND mid = #{mid}
+</update>
+ 
+ 
+ <select id="purchase" parameterType="String" resultType="Map">
+SELECT c.mid as mid, c.amount as amount, c.price as price, c.total as total, b.bkname as bkname,
+  ROW_NUMBER() OVER (ORDER BY c.bkno) AS rownum
+FROM cart c
+LEFT JOIN books b ON c.bkno = b.bkno
+WHERE c.mid = #{mid};
+ 
+
+ </select>
+ 
+<!--  <select id="list" parameterType="String" resultType="Map">
+ SELECT bkno,amount FROM cart WHERE mid=#{mid}
+ 
+ </select> -->
+ 
+ 
+ 
+ <update id="stockupdate" parameterType="Map">
+ UPDATE books set bstock = bstock - #{amount} WHERE bkno =#{bkno};
+ 
+ 
+ </update>
+ 
+ 
+ 
+ 
+ 
+ <insert id="insert" parameterType="Map">
+ 
+ INSERT INTO trade(ttotal ,mid, tamount, bkno) VALUES(#{total}, #{mid}, #{amount},#{bkno})
+ 
+ </insert>
+ 
+ <delete id="delete3" parameterType="Map">
+ DELETE FROM cart WHERE mid =#{mid} 
+ </delete>
+ 
 
 </mapper>
