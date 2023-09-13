@@ -241,7 +241,7 @@ public class MyPageController {
 	
 	@PostMapping("/infoChange")
 	public String infoChange(@RequestParam Map<String, Object> map, HttpSession session) {
-		System.out.println(map);// {postcode=03438, address=서울 은평구 가좌로 344, detailAddress=11, extraAddress= (신사동, 현대아파트)}
+		System.out.println(map);// {postcode=0, address=서울, detailAddress=11, extraAddress= (신사동)}
 		// 아무것도 없을 때 : {id=, pw=, postcode=, address=, detailAddress=, extraAddress=, birth=}
 		if(session.getAttribute("mid") != null) {
 			String address = (String) map.get("address");
