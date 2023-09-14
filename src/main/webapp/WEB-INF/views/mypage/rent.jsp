@@ -98,7 +98,7 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-sm-6 col-sm-offset-3">
-				<h1 class="module-title font-alt">대출이력</h1>
+				<h1 class="module-title font-alt">대여 내역</h1>
 			</div>
 			
 		</div>
@@ -108,7 +108,7 @@
 		<c:when test="${list[0].count eq null}">
 			<section class="module-small">
 				<div class="container">
-					<h2 style="text-align: center;">대출 이력이 없습니다.</h2>
+					<h2 style="text-align: center;">대여 내역이 없습니다.</h2>
 				</div>
 			</section>
 		</c:when>
@@ -161,6 +161,7 @@
 						<c:choose>
 							<c:when test="${row.rdel eq 1}">
 								<div class="widget-posts-title font-alt">대출중</div>
+								<div><button class="return" type="button" data-bkno="${row.bkno}">반납</button></div>
 							</c:when>
 							<c:otherwise>
 								<div class="widget-posts-title font-alt">반납</div>
@@ -224,6 +225,21 @@ $(function() {
     	const urlParams = new URL(location.href).searchParams;
     	return urlParams.get(name);
     }
+    
+    $(document).on('click','.return', function(){
+    	var bkno = $(this).data('bkno');
+    	$.ajax({
+    		url:'./returnBook',
+			type:'post',
+			data:{cate:cate, bkno:bkno},
+			success:function(data){
+				location.href="./rent?cate=" + cate;
+			},
+			error:function(error){
+				alert('에러');
+			}
+    	});
+    });
 });
 </script>
 </body>

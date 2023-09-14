@@ -212,7 +212,7 @@
 	                  <li><a href="/mypage/main">메인</a></li>
 	                  <li><a href="/mypage/zzim">찜목록</a></li>
 	                  <li><a href="/mypage/buy">구매목록</a></li>
-	                  <li><a href="/mypage/rent">대출이력</a></li>
+	                  <li><a href="/mypage/rent">대여내역</a></li>
 	                  <li><a href="/mypage/board">게시물 관리</a></li>
 	                  <li><a href="/mypage/comment">댓글 관리</a></li>
 	                  <li><a href="/mypage/info">회원정보관리</a></li>

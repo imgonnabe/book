@@ -102,6 +102,16 @@ public class MyPageController {
 		}
 	}
 	
+	@PostMapping("/returnBook")
+	public String returnBook(Model model, @RequestParam Map<String, Object> map, HttpSession session) {
+		if(session.getAttribute("mid") != null) {
+			return "";
+		} else {
+			return "redirect:/login";
+		}
+		
+	}
+	
 	@GetMapping("/board")
 	public String board(Model model, @RequestParam Map<String, Object> map,
 			@RequestParam(name="cate", required = false, defaultValue = "0") int cate, HttpSession session) {
