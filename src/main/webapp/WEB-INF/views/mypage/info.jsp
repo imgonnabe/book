@@ -160,8 +160,27 @@
                     생년월일 : <p style="display: inline" class="menu-title">${info.mbirth}&nbsp;</p>
 				      <div><input name="birth" id="birth" type="date" min="1900-01-01"></div>
                   </div>
+				<div class="form-group">
+                  	이메일 : <p style="display: inline" class="menu-title">${info.memail}&nbsp;</p>
+                  	<div class="form-group divEmail"  id="divEmail">
+					<span class="form-group"><input type="text" id="email" name="email" value=""/></span>
+					<span class="at">@</span>
+					<span class="menu-title">
+	                  	<select id="selectEmailDomain" name="selectEmailDomain">
+							<option value="0">naver.com</option>
+							<option value="1">kakao.com</option>
+							<option value="2">daum.net</option>
+							<option value="3">nate.com</option>
+							<option value="4">gmail.com</option>
+							<option value="5">직접 입력</option>
+						</select>
+					</span>
+					<!-- 직접 입력시 노출 -->
+					<input type="text" id="emailDomain" name="emailDomain" class="emailInput" value="" style="display: none"/>
+                  </div>
                   <hr>
                   <button type="submit" class="btn infobtn">회원정보 변경</button>
+              	</div>
               	</div>
 		    </form>
             </div>
@@ -286,6 +305,14 @@
                 $('#pwchkMsg').text('비밀번호와 일치하지 않습니다.').css('color', 'red');
             }
         }
+     	
+     	// 이메일 사용자 지정
+     	$('#selectEmailDomain').on('click', function(){
+     		var emailDomain = $('#selectEmailDomain').val();
+     		if(emailDomain == '5'){
+     			$('#emailDomain').css('display', 'inline');
+     		}
+     	});
     
      	// form 유효성 검사
         function validateForm() {
@@ -297,6 +324,11 @@
             var address = $('#address').val().trim();
             var detailAddress = $('#detailAddress').val().trim();
             var extraAddress = $('#extraAddress').val().trim();
+            var email = $('#email').val();
+            var emailDomain;
+            if($('#selectEmailDomain').val() == 5){
+            	emailDomain = $('#emailDomain').val();
+            }
 
             // id 길이
             if (id.length > 0 && id.length < 4) {
@@ -342,10 +374,19 @@
 	          }
 	          
 	          // ID 중복 확인을 하지 않은 경우
-	          if (!isIdChecked) {
+	          if (id == null && !isIdChecked) {
 	              alert("ID 중복 확인을 해주세요.");
 	              return false; // 폼 제출 중지
 	          }
+	          
+	        // 이메일 도메인 체크(동적 안됨. 다르게 만들어야함)
+	        if(emailDomain.indexOf('.com') == -1 || emailDomain.indexOf('.net') == -1 || 
+	        		emailDomain.indexOf('.org') == -1 || emailDomain.indexOf('.gov') == -1 ||
+	        		emailDomain.indexOf('.co') == -1 || emailDomain.indexOf('.io') == -1 ||
+	        		emailDomain.indexOf('.edu') == -1){
+	        	alert("이메일 도메인을 체크해주세요.");
+	        	return false;
+	        }
 	          
             // 위의 유효성 검사를 모두 통과하면 true를 반환하여 폼 제출을 허용
             return true;
