@@ -118,12 +118,10 @@
 					<div class="mb-sm-20">
 						<select class="form-control" name="cate" id="cate"
 							onclick="cateChange()">
-							<optgroup label="카테고리">
 								<option value="0">전체</option>
-								<option value="1">1</option>
-								<option value="2">2</option>
-								<option value="3">3</option>
-							</optgroup>
+								<option value="1">소설</option>
+								<option value="2">에세이</option>
+								<option value="3">자기계발</option>
 						</select>
 					</div>
 				</form>
