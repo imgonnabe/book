@@ -1,12 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>    
     
 <!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="X-UA-Compatible">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!--  
     Document Title
@@ -17,7 +18,7 @@
     Favicons
     =============================================
     -->
-    <link rel="apple-touch-icon" sizes="57x57" href="assets/images/favicons/apple-icon-57x57.png">
+        <link rel="apple-touch-icon" sizes="57x57" href="assets/images/favicons/apple-icon-57x57.png">
     <link rel="apple-touch-icon" sizes="60x60" href="assets/images/favicons/apple-icon-60x60.png">
     <link rel="apple-touch-icon" sizes="72x72" href="assets/images/favicons/apple-icon-72x72.png">
     <link rel="apple-touch-icon" sizes="76x76" href="assets/images/favicons/apple-icon-76x76.png">
@@ -30,7 +31,7 @@
     <link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicons/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="96x96" href="assets/images/favicons/favicon-96x96.png">
     <link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicons/favicon-16x16.png">
-    <link rel="manifest" href="/manifest.json">
+    <link rel="manifest" href="assets/images/favicons/manifest.json">
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-TileImage" content="assets/images/favicons/ms-icon-144x144.png">
     <meta name="theme-color" content="#ffffff">
@@ -56,83 +57,247 @@
     <!-- Main stylesheet and color file-->
     <link href="assets/css/style.css" rel="stylesheet">
     <link id="color-scheme" href="assets/css/colors/default.css" rel="stylesheet">
+    <link href="../css/booklist.css" rel="stylesheet">
+    <script type="text/javascript">
+
+    window.onload = function() {
+   
+     //카테고리 선택하면 페이지 바로이동
+      var selectElement = document.querySelector("select[name='bkcate']");
+      var currentBkcate = getUrlParameter('bkcate');
+      if (currentBkcate) {
+        selectElement.value = currentBkcate;
+      }
+      
+      //카테고리 유지
+      var searchN = document.getElementById("searchN");
+      var searchNvalue = getUrlParameter('searchN');
+      if (searchNvalue) {
+    	  searchN.value = searchNvalue;
+      }
+      
+     //검색값 유지
+      var searchV = document.getElementById("searchV");
+      var searchVvalue = getUrlParameter('searchV');
+      if (searchVvalue) {
+    	  searchV.value = searchVvalue;
+      }
+    
+     //페이지값 유지
+      var pageSize = document.getElementById("pageSize");
+      var pageSizevalue = getUrlParameter('pageSize');
+      if (pageSizevalue) {
+    	  pageSize.value = pageSizevalue;
+      }
+    };
+    
+
+    function getUrlParameter(name) {
+      name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+      var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+      var results = regex.exec(location.search);
+      return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+    }
+    
+    
+    function pageSizeSelect(selectElement) {
+    	  var pagesizesele = selectElement.value;
+    	  var currentURL = window.location.href;
+    	  var newURL;
+
+    	  // 현재 URL에 이미 pageSize 매개변수가 있는지 확인
+    	  if (currentURL.includes('pageSize=')) {
+    	    // 이미 pageSize 매개변수가 있는 경우 업데이트
+    	    newURL = currentURL.replace(/(pageSize=)[^\&]+/, 'pageSize=' + pagesizesele);
+    	  } else {
+    	    // pageSize 매개변수가 없는 경우 추가
+    	    var separator = currentURL.includes('?') ? '&' : '?';
+    	    newURL = currentURL + separator + 'pageSize=' + pagesizesele;
+    	  }
+
+    	  window.location.href = newURL;
+    	}
+
+    function rePage(selectElement) {
+      var selectedValue = selectElement.value;
+        var url = './booklist?bkcate=' + selectedValue;
+        window.location.href = url;
+    }
+    
+    
+    function addPageToURL(pageNumber) {
+    	  // 현재 URL 가져오기
+    	  var currentURL = window.location.href;
+
+    	  // 현재 URL에 이미 page 매개변수가 있는지 확인
+    	  var hasPageParam = currentURL.includes('page=');
+
+    	  // 페이지 번호를 추가 또는 업데이트
+    	  if (hasPageParam) {
+    	    // 이미 page 매개변수가 있는 경우 업데이트
+    	    var updatedURL = currentURL.replace(/(page=)[^\&]+/, 'page=' + pageNumber);
+    	    window.location.href = updatedURL;
+    	  } else {
+    	    // page 매개변수가 없는 경우 추가
+    	    var separator = currentURL.includes('?') ? '&' : '?';
+    	    var newURL = currentURL + separator + 'page=' + pageNumber;
+    	    window.location.href = newURL;
+    	  }
+    	}
+    </script>
   </head>
   <body data-spy="scroll" data-target=".onpage-navigation" data-offset="60">
   <%@ include file="menu.jsp"%>
     <main>
-      <div class="page-loader">
-        <div class="loader">Loading...</div>
-      </div>
-
       <div class="main">
-        <section class="module bg-dark-60 shop-page-header" data-background="assets/images/shop/product-page-bg.jpg">
+       <%
+        String[] bpimgs = {"bp1.jpg", "bp2.jpg", "bp3.jpg", "bp4.jpg"};
+        %>
+       <hr class="divider-w">
           <div class="container">
-            <div class="row">
-              <div class="col-sm-6 col-sm-offset-3">
-                <h2 class="module-title font-alt">Shop Products</h2>
-                <div class="module-subtitle font-serif">A wonderful serenity has taken possession of my entire soul, like these sweet mornings of spring which I enjoy with my whole heart.</div>
+            <div class="row" style="margin-top: 60px; margin-bottom: 15px">
+              <div class="owl-carousel text-center" data-items="1" data-pagination="false" data-navigation="false">
+             <% for (String bpimg : bpimgs) { %>
+                <div class="owl-item">
+                  <div class="col-sm-12">
+                    <img src="../img/page/<%= bpimg %>" alt="이미지"  style="border-radius:20px;"/>
+                  </div>
+                </div>
+               <% } %>
               </div>
             </div>
           </div>
-        </section>
-        <section class="module-small">
+        <hr class="divider-w">
+        <!-- 필터 , 검색옵션 -->
+        <section class="module-small" style="margin-top: -35px; margin-bottom: -35px;">
           <div class="container">
-            <form class="row">
+            <form action="./booklist" method="get" class="row">
               <div class="col-sm-4 mb-sm-20">
-                <select class="form-control">
-                  <option selected="selected">Default Sorting</option>
-                  <option>Popular</option>
-                  <option>Latest</option>
-                  <option>Average Price</option>
-                  <option>High Price</option>
-                  <option>Low Price</option>
-                </select>
-              </div>
-              <div class="col-sm-2 mb-sm-20">
-                <select class="form-control">
-                  <option selected="selected">Woman</option>
-                  <option>Man</option>
+                <select class="form-control" name="bkcate">
+                  <option selected="selected" value="0">전체장르</option>
+                  <option value="1">소설</option>
+                  <option value="2">에세이</option>
+                  <option value="3">자기개발</option>
                 </select>
               </div>
               <div class="col-sm-3 mb-sm-20">
-                <select class="form-control">
-                  <option selected="selected">All</option>
-                  <option>Coats</option>
-                  <option>Jackets</option>
-                  <option>Dresses</option>
-                  <option>Jumpsuits</option>
-                  <option>Tops</option>
-                  <option>Trousers</option>
+                <select class="form-control" name="searchN" id="searchN">
+                  <option selected="selected" value="all">전체조건</option>
+                  <option value="name">책이름</option>
+                  <option value="write">저자</option>
                 </select>
               </div>
-              <div class="col-sm-3">
-                <button class="btn btn-block btn-round btn-g" type="submit">Apply</button>
+              <%-- <input type="hidden" name="bkcate" value="${param.bkcate }" > --%>
+              <div class="col-sm-4">
+                    <div class="search-box">
+                      <input class="form-control" type="text" name="searchV" id="searchV" placeholder="검색..."/>
+                      <button class="search-btn" type="submit"><i class="fa fa-search"></i></button>
+                    </div>
               </div>
+
             </form>
           </div>
         </section>
         <hr class="divider-w">
+  
+        <!-- 본문 책리스트 -->
+ 
         <section class="module-small">
-          <div class="container">
+        
+          <div class="container" style="width: 100%">
+              <div class="col-sm-1 col-md-1 sidebar">
+                <div class="pSize">
+                  <select class="form-control" name="pageSize" id="pageSize" onchange="pageSizeSelect(this)" >
+                   <option selected="selected" value="8">8개씩 보기</option>
+                   <option value="16">16개씩 보기</option>
+                   <option value="32">32개씩 보기</option>
+                  </select>
+                 </div>
+                <div class="widget">
+                <h4><b>카테고리</b></h4>
+                  <h3 class="widget-title"></h3>
+                  <ul class="icon-list">
+                    <li ><a href="./booklist?bkcate=0">전체 도서</a></li>
+                    <li><a href="./booklist?bkcate=1">소설</a></li>
+                    <li><a href="./booklist?bkcate=2">에세이</a></li>
+                    <li><a href="./booklist?bkcate=3">자기개발</a></li>
+                  </ul>
+                </div>
+                <div class="widget">
+                  <h5 class="widget-title font-alt">최근본 책</h5>
+                  <ul class="widget-posts">
+                  <c:forEach items="${booktop }" var="list"> 
+                    <li class="clearfix">
+                      <div class="widget-posts-image"><a href="#"><img src="/img/bookimg/${list.bkimg}"/></a></div>
+                      <div class="widget-posts-body">
+                        <div class="widget-posts-title"><a href="#">${list.bkname}</a></div>
+                        <div class="widget-posts-meta">${list.bkwrite}</div>
+                      </div>
+                    </li>
+                    </c:forEach>
+                  </ul>
+                </div>
+              </div>
+
+             <div class="col-sm-8 col-sm-offset-1">
             <div class="row multi-columns-row">
-              <c:forEach items="${list }" var="row">         
-              <div class="col-sm-6 col-md-4 col-lg-4">
+              <c:if test="${booklist[0].count eq null or booklist[0].count eq 0}">
+               <h2>검색 결과가 없습니다.</h2>
+              </c:if>
+              <c:forEach items="${booklist }" var="row">         
+              <div class="col-sm-3 col-md-3 col-lg-3">
                 <div class="shop-item">
-                  <div class="shop-item-image"><img src="${row.bkimg}" alt="책이미지"/>
-                    <div class="shop-item-detail" ><a class="btn btn-round btn-b" href="./bookdetail?bkno=${row.bkno}"><span class="icon-basket">상세보기</span></a></div>
+                  <div class="shop-item-image"><img style="height: 418px;" src="/img/bookimg/${row.bkimg}" alt="책이미지"/><img class="zheart" src="../img/icon/zzheart.png"/>
+                    <div class="shop-item-detail" ><a class="btn btn-round btn-b" href="./bookdetail?bkno=${row.bkno}">
+                    상세보기</a><br><br>
+                    <a class="btn btn-round btn-b" href="">
+                    찜하기</a>
+                    </div>
                   </div>
-                  <h4 class="shop-item-title font-alt"><a href="./bookdetail?bkno=${row.bkno}">${row.bkname} / ${row.bkwrite}</a></h4>${row.bkprice}원
+                  <h3 class="shop-item-title font-alt"><a href="./bookdetail?bkno=${row.bkno}">${row.bkname}</a></h3>
+                  <a href="./booklist?searchN=write&searchV=${row.bkwrite }"><h6>${row.bkwrite}</h6></a>
+                  <fmt:formatNumber value="${row.bkprice}" pattern="#,###"/>원
                 </div>
               </div>
               </c:forEach>
             </div>
-            <div class="row">
-              <div class="col-sm-12">
-                <div class="pagination font-alt"><a href="#"><i class="fa fa-angle-left"></i></a><a class="active" href="#">1</a><a href="#">2</a><a href="#">3</a><a href="#">4</a><a href="#"><i class="fa fa-angle-right"></i></a></div>
-              </div>
-            </div>
-          </div>
+			</div>
+			</div>
+			<!-- 페이징 -->
+			<div class="rowPagin">
+				<div class="col-sm-12">
+					<div class="pagination font-alt">
+						<c:if test="${currentPage > 1}">
+							<a href="javascript:void(0);" onclick="addPageToURL(1)"><i
+								class="fa fa-angle-double-left"></i></a>
+							<a href="javascript:void(0);"
+								onclick="addPageToURL(${currentPage - 1})"><i
+								class="fa fa-angle-left"></i></a>
+						</c:if>
+						<c:forEach var="pageNo" begin="1" end="${totalPage}">
+							<c:choose>
+								<c:when test="${pageNo == currentPage}">
+									<a class="active">${pageNo}</a>
+								</c:when>
+								<c:otherwise>
+									<a href="javascript:void(0);" onclick="addPageToURL(${pageNo})">${pageNo}</a>
+								</c:otherwise>
+							</c:choose>
+						</c:forEach>
+						<c:if test="${currentPage < totalPage}">
+							<a href="javascript:void(0);"
+								onclick="addPageToURL(${currentPage + 1})"><i
+								class="fa fa-angle-right"></i></a>
+							<a href="javascript:void(0);"
+								onclick="addPageToURL(${totalPage})"><i
+								class="fa fa-angle-double-right"></i></a>
+						</c:if>
+					</div>
+				</div>
+			</div>
         </section>
+
+			<!-- 하단 풋 -->
         <div class="module-small bg-dark">
           <div class="container">
             <div class="row">
@@ -207,24 +372,24 @@
           </div>
         </footer>
       </div>
-      <div class="scroll-up"><a href="#totop"><i class="fa fa-angle-double-up"></i></a></div>
+      <div class="scroll-up"><a href="#totop"><i class="fa  fa-chevron-up"></i></a></div>
     </main>
     <!--  
     JavaScripts
     =============================================
     -->
-    <script src="assets/lib/jquery/dist/jquery.js"></script>
-    <script src="assets/lib/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script src="assets/lib/wow/dist/wow.js"></script>
-    <script src="assets/lib/jquery.mb.ytplayer/dist/jquery.mb.YTPlayer.js"></script>
-    <script src="assets/lib/isotope/dist/isotope.pkgd.js"></script>
-    <script src="assets/lib/imagesloaded/imagesloaded.pkgd.js"></script>
-    <script src="assets/lib/flexslider/jquery.flexslider.js"></script>
-    <script src="assets/lib/owl.carousel/dist/owl.carousel.min.js"></script>
-    <script src="assets/lib/smoothscroll.js"></script>
-    <script src="assets/lib/magnific-popup/dist/jquery.magnific-popup.js"></script>
-    <script src="assets/lib/simple-text-rotator/jquery.simple-text-rotator.min.js"></script>
-    <script src="assets/js/plugins.js"></script>
-    <script src="assets/js/main.js"></script>
+    <script src="../assets/lib/jquery/dist/jquery.js"></script>
+    <script src="../assets/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="../assets/lib/wow/dist/wow.js"></script>
+    <script src="../assets/lib/jquery.mb.ytplayer/dist/jquery.mb.YTPlayer.js"></script>
+    <script src="../assets/lib/isotope/dist/isotope.pkgd.js"></script>
+    <script src="../assets/lib/imagesloaded/imagesloaded.pkgd.js"></script>
+    <script src="../assets/lib/flexslider/jquery.flexslider.js"></script>
+    <script src="../assets/lib/owl.carousel/dist/owl.carousel.min.js"></script>
+    <script src="../assets/lib/smoothscroll.js"></script>
+    <script src="../assets/lib/magnific-popup/dist/jquery.magnific-popup.js"></script>
+    <script src="../assets/lib/simple-text-rotator/jquery.simple-text-rotator.min.js"></script>
+    <script src="../assets/js/plugins.js"></script>
+    <script src="../assets/js/main.js"></script>
   </body>
 </html>

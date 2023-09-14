@@ -215,9 +215,19 @@
 	
 	    <c:forEach items="${list}" var="a">
 	        var date = '${a.ttdate}';
-	        var category = '${a.bkcate}';
+	        var categoryCode = ${a.bkcate};
 	        var total = ${a.total};
-	
+	        var category;
+			
+	     	// 카테고리 코드에 따라 카테고리 이름 설정
+            if (categoryCode === 1) {
+                category = '소설';
+            } else if (categoryCode === 2) {
+                category = '에세이';
+            } else if (categoryCode === 3) {
+                category = '자기계발';
+            }
+	        
 	        // 객체가 존재하지 않으면 초기화
 	        if (!arr[date]) {
 	            arr[date] = {};
@@ -240,13 +250,13 @@
 	    var categoryList = [];
 	
 	    for (var date in arr) {
-	        for (var category in arr[date]) {
-	            if (!categoryList.includes(category)) {
-	                categoryList.push(category);
-	                data.addColumn('number', '카테고리 ' + category);
-	            }
-	        }
-	    }
+            for (var category in arr[date]) {
+                if (!categoryList.includes(category)) {
+                    categoryList.push(category);
+                    data.addColumn('number', category);
+                }
+            }
+        }
 	
 	    // 데이터 테이블에 데이터 행을 추가합니다.
 	    for (var date in arr) {

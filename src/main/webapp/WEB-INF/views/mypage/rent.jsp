@@ -116,27 +116,33 @@
 	<section class="module-small">
 	<div class="module-subtitle font-alt">총 대출 건수 : ${list[0].count }개</div>
 		<div class="container">
-		<button class="btn" onclick="location.href='./rent'">전체보기</button>
+		<div class="col-sm-2 mb-sm-20">
+			<button class="btn" onclick="location.href='./rent'">전체보기</button>
+		</div>
 			<form action="./rent" method="get" class="row">
-				<select class="form-control" name="cate" id="cate">
-					<optgroup label="날짜">
-						<option value="1">최근 1개월</option>
-						<option value="3">최근 3개월</option>
-						<option value="6">최근 6개월</option>
-					</optgroup>
-				</select>
-				<div class="mb-sm-20">
+				<div class="col-sm-3 mb-sm-20">
+					<select class="form-control" name="cate" id="cate">
+						<optgroup label="날짜">
+							<option selected="selected" value="1">최근 1개월</option>
+							<option value="3">최근 3개월</option>
+							<option value="6">최근 6개월</option>
+						</optgroup>
+					</select>
+				</div>
+				<div class="col-sm-2 mb-sm-20">
 					<select class="form-control" name="searchN">
-						<option value="title">책제목</option>
+						<option selected="selected" value="title">책제목</option>
 						<option value="writer">저자</option>
 					</select>
 				</div>
+				<div class="col-sm-4">
 				<div class="search-box">
 					<input class="form-control" type="text" name="searchV"
 						required="required" placeholder="Search..">
 					<button class="search-btn" type="submit">
 						<i class="fa fa-search"></i>
 					</button>
+				</div>
 				</div>
 			</form>
 		</div>

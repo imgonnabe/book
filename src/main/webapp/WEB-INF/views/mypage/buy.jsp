@@ -116,21 +116,25 @@
 		<section class="module-small">
 		<div class="module-subtitle font-alt">총 주문개수 : ${list[0].count }개</div>
 		<div class="container">
-		<button class="btn" onclick="location.href='./buy'">전체보기</button>
+		<div class="col-sm-2 mb-sm-20">
+			<button class="btn" onclick="location.href='./buy'">전체보기</button>
+		</div>
 			<form action="./buy" method="get" class="row">
-				<div class="mb-sm-20">
+				<div class="col-sm-3 mb-sm-20">
 					<select class="form-control" name="searchN">
-						<option value="no">주문번호</option>
+						<option selected="selected" value="no">주문번호</option>
 						<option value="title">책제목</option>
 						<option value="writer">글쓴이</option>
 					</select>
 				</div>
+				<div class="col-sm-4">
 				<div class="search-box">
 					<input class="form-control" type="text" name="searchV"
 						required="required" placeholder="Search..">
 					<button class="search-btn" type="submit">
 						<i class="fa fa-search"></i>
 					</button>
+				</div>
 				</div>
 			</form>
 		</div>

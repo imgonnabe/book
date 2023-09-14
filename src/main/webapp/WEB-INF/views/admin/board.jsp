@@ -113,28 +113,33 @@
 
 			<section class="module-small">
 				<div class="container">
-				<button class="btn" onclick="location.href='./board?cate=0'">전체보기</button>
-						<span class="form-control gray" style="width: 100px;">회원탈퇴</span>
-						<span class="form-control silver" style="width: 100px;">게시물 삭제</span>
+				<div class="col-sm-2 mb-sm-20">
+					<button class="btn" onclick="location.href='./board?cate=0'">전체보기</button>
+				</div>
+				<div class="col-sm-2 mb-sm-20">
+					<button class="btn gray" onclick="location.href='./board?cate=0'">회원탈퇴</button>
+				</div>
+				<div class="col-sm-2 mb-sm-20">
+					<button class="btn silver" onclick="location.href='./board?cate=0'">게시글보기</button>
+				</div>
+				<br><br>
 					<form action="./board" method="get" class="row">
-						<div class="mb-sm-20">
+						<div class="col-sm-3 mb-sm-20">
 							<select class="form-control" name="cate" id="cate"
 								onclick="cateChange()">
-								<optgroup label="카테고리">
-									<option value="0">전체</option>
-									<option value="1">1</option>
-									<option value="2">2</option>
-									<option value="3">3</option>
-								</optgroup>
+									<option selected="selected" value="0">전체</option>
+									<option value="1">자유게시판</option>
+									<option value="2">독후감</option>
+									<option value="3">공지사항</option>
 							</select>
 						</div>
-						<div class="mb-sm-20">
+						<div class="col-sm-3 mb-sm-20">
 							<select class="form-control" name="searchN">
 								<option value="title">글제목</option>
 								<option value="content">글내용</option>
 							</select>
 						</div>
-						<div class="search-box">
+						<div class="col-sm-4 search-box">
 							<input class="form-control" type="text" name="searchV"
 								required="required" placeholder="Search..">
 							<button class="search-btn" type="submit">

@@ -109,27 +109,29 @@
 
 			<section class="module-small">
 				<div class="container">
-				<button class="btn" onclick="location.href='./stock?cate=0'">전체보기</button>
-				<br>
+					<div class="col-sm-2 mb-sm-20">
+						<button class="btn" onclick="location.href='./stock?cate=0'">전체보기</button>
+					</div>
 					<form action="./stock" method="get" class="row">
-						<div class="mb-sm-20">
+						<div class="col-sm-2 mb-sm-20">
 							<select class="form-control" name="cate" id="cate"
 								onclick="cateChange()">
 								<optgroup label="카테고리">
 									<option value="0">전체</option>
-									<option value="1">1</option>
-									<option value="2">2</option>
-									<option value="3">3</option>
+									<option value="1">소설</option>
+									<option value="2">에세이</option>
+									<option value="3">자기계발</option>
 								</optgroup>
 							</select>
 						</div>
-						<div class="mb-sm-20">
+						<div class="col-sm-2 mb-sm-20">
 							<select class="form-control" name="searchN">
 								<option value="title">책제목</option>
 								<option value="writer">저자</option>
 								<option value="publisher">출판사</option>
 							</select>
 						</div>
+						<div class="col-sm-4">
 						<div class="search-box">
 							<input class="form-control" type="text" name="searchV"
 								required="required" placeholder="Search..">
@@ -137,12 +139,13 @@
 								<i class="fa fa-search"></i>
 							</button>
 						</div>
+						</div>
 					</form>
 				</div>
 			</section>
 			<div class="container">
 				<div class="row multi-columns-row">
-					<div class="col-sm-6">
+					<div class="col-sm-8">
 						<div class="menu">
 								<c:forEach items="${list }" var="row">
 							<div class="row <c:if test="${row.rdel eq 0}">gray</c:if>">

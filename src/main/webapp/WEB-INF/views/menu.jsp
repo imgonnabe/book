@@ -112,14 +112,14 @@
                     </ul>
                   </li>
                 </ul>
-              <li class="dropdown"><a class="dropdown-toggle" href="./booklist?bkcate=0" data-toggle="dropdown">책</a>
+              <li class="dropdown"><a class="dropdown-toggle" href="booklist?bkcate=0" data-toggle="dropdown">책</a>
                 <ul class="dropdown-menu" role="menu">
-                  <li><a href="./booklist?bkcate=0">도서</a>
+                  <li><a href="/booklist?bkcate=0">도서</a>
                   </li>
                   <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown">장르</a>
                     <ul class="dropdown-menu">
-                      <li><a href="./booklist?bkcate=1">국내도서</a></li>
-                      <li><a href="./booklist?bkcate=2">외국도서</a></li>
+                      <li><a href="/booklist?bkcate=1">소설</a></li>
+                      <li><a href="/booklist?bkcate=2">에세이</a></li>
                     </ul>
                   </li>
                 </ul>
@@ -188,7 +188,7 @@
                   <li><a href="typography.html"><i class="fa fa-font"></i> Typography</a></li>
                 </ul>
               </li>
-              <c:if test="${sessionScope.mname eq 'admin'}">
+              <c:if test="${sessionScope.mname ne null && sessionScope.mname eq 'admin'}">
 	              <li class="dropdown"><a href="/admin/login" class="dropdown-toggle" data-toggle="dropdown">관리자 페이지</a>
 	              	<ul class="dropdown-menu" role="menu">
 	                  <li><a href="/admin/board">게시물 관리</a></li>

@@ -241,6 +241,7 @@
     }
     
  	// 아이디 중복 검사(form 유효성 검사 안으로 들어가면 작동안함)
+    var isIdChecked = false; // ID 중복 확인 여부를 저장하는 변수
   	$(document).on('click', '#idchk', function() {
   		var id = $('#id').val();
   		$.ajax({
@@ -252,8 +253,10 @@
 						$('#id').val('');
 						$('#id').focus();
 						$('#idchkMsg').text('중복된 아이디가 있습니다. 다시 적으세요.').css('color', 'red');
+						isIdChecked = false;// 중복된 경우 isIdChecked를 false로 설정
 					} else {
 						$('#idchkMsg').text('사용가능한 아이디입니다.').css('color', 'green');
+						 isIdChecked = true;// 중복되지 않은 경우 isIdChecked를 true로 설정
 					}
 				},
 				error: function(error){
@@ -331,11 +334,17 @@
 		          }
 	          }
 	          
-	          // 전부 입력 안 됐을 때
+	          // 전부 입력 안됐을 때
 	          if(postcode === '' && address === '' && detailAddress === '' && extraAddress === '' &&
 	        		id === '' && pw === '' && birth === ''){
 	        	  alert('회원정보를 수정할 생각이 없으시다면 다른 페이지로 가세요.');
 	        	  return false;
+	          }
+	          
+	          // ID 중복 확인을 하지 않은 경우
+	          if (!isIdChecked) {
+	              alert("ID 중복 확인을 해주세요.");
+	              return false; // 폼 제출 중지
 	          }
 	          
             // 위의 유효성 검사를 모두 통과하면 true를 반환하여 폼 제출을 허용

@@ -118,12 +118,10 @@
 					<div class="mb-sm-20">
 						<select class="form-control" name="cate" id="cate"
 							onclick="cateChange()">
-							<optgroup label="카테고리">
 								<option value="0">전체</option>
-								<option value="1">1</option>
-								<option value="2">2</option>
-								<option value="3">3</option>
-							</optgroup>
+								<option value="1">소설</option>
+								<option value="2">에세이</option>
+								<option value="3">자기계발</option>
 						</select>
 					</div>
 				</form>
@@ -206,75 +204,85 @@
 	</script>
 	
 	<script type="text/javascript">
-	google.charts.load('current', {packages: ['corechart', 'bar']});
-	google.charts.setOnLoadCallback(drawTrendlines);
-	
-	function drawTrendlines() {
-	    // 날짜와 카테고리별 판매 데이터를 저장할 객체 생성
-	    var arr = {};
-	
-	    <c:forEach items="${list}" var="a">
-	        var date = '${a.rsdate}';
-	        var category = '${a.bkcate}';
-	        var total = ${a.count};
-	
-	        // 객체가 존재하지 않으면 초기화
-	        if (!arr[date]) {
-	            arr[date] = {};
-	        }
-	
-	        // 카테고리 합계가 없으면 초기화
-	        if (!arr[date][category]) {
-	            arr[date][category] = 0;
-	        }
-	
-	        // 해당 카테고리 및 날짜에 합계 추가
-	        arr[date][category] += total;
-	    </c:forEach>
-	
-	    // 데이터 테이블 생성
-	    var data = new google.visualization.DataTable();
-	    data.addColumn('string', '날짜'); // 날짜를 나타내기 위해 string 으로 변경
-	
-	    // 동적으로 각 카테고리에 대한 열을 추가합니다.
-	    var categoryList = [];
-	
-	    for (var date in arr) {
-	        for (var category in arr[date]) {
-	            if (!categoryList.includes(category)) {
-	                categoryList.push(category);
-	                data.addColumn('number', '카테고리 ' + category);
-	            }
-	        }
-	    }
-	
-	    // 데이터 테이블에 데이터 행을 추가합니다.
-	    for (var date in arr) {
-	        var rowData = [date];
-	
-	        for (var i = 0; i < categoryList.length; i++) {
-	            var category = categoryList[i];
-	            rowData.push(arr[date][category] || 0);
-	        }
-	
-	        data.addRow(rowData);
-	    }
-	
-	    var options = {
-	        title: '날짜별 카테고리당 판매량',
-	        hAxis: {
-	            title: '날짜',
-	        },
-	        vAxis: {
-	            title: '판매량'
-	        },
-	        legend: { position: 'top' } // 범례를 위쪽에 배치
-	    };
-	
-	    var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
-	    chart.draw(data, options);
-	}
-	</script>
+    google.charts.load('current', {packages: ['corechart', 'bar']});
+    google.charts.setOnLoadCallback(drawTrendlines);
+    
+    function drawTrendlines() {
+        // 날짜와 카테고리별 판매 데이터를 저장할 객체 생성
+        var arr = {};
+
+        <c:forEach items="${list}" var="a">
+            var date = '${a.rsdate}';
+            var categoryCode = ${a.bkcate};
+            var total = ${a.count};
+            var category;
+
+            // 카테고리 코드에 따라 카테고리 이름 설정
+            if (categoryCode === 1) {
+                category = '소설';
+            } else if (categoryCode === 2) {
+                category = '에세이';
+            } else if (categoryCode === 3) {
+                category = '자기계발';
+            }
+
+            // 객체가 존재하지 않으면 초기화
+            if (!arr[date]) {
+                arr[date] = {};
+            }
+
+            // 카테고리 합계가 없으면 초기화
+            if (!arr[date][category]) {
+                arr[date][category] = 0;
+            }
+
+            // 해당 카테고리 및 날짜에 합계 추가
+            arr[date][category] += total;
+        </c:forEach>
+
+        // 데이터 테이블 생성
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', '날짜'); // 날짜를 나타내기 위해 string 으로 변경
+
+        // 동적으로 각 카테고리에 대한 열을 추가합니다.
+        var categoryList = [];
+
+        for (var date in arr) {
+            for (var category in arr[date]) {
+                if (!categoryList.includes(category)) {
+                    categoryList.push(category);
+                    data.addColumn('number', category);
+                }
+            }
+        }
+
+        // 데이터 테이블에 데이터 행을 추가합니다.
+        for (var date in arr) {
+            var rowData = [date];
+
+            for (var i = 0; i < categoryList.length; i++) {
+                var category = categoryList[i];
+                rowData.push(arr[date][category] || 0);
+            }
+
+            data.addRow(rowData);
+        }
+
+        var options = {
+            title: '날짜별 카테고리당 매출액',
+            hAxis: {
+                title: '날짜',
+            },
+            vAxis: {
+                title: '매출액'
+            },
+            legend: { position: 'top' } // 범례를 위쪽에 배치
+        };
+
+        var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+    }
+</script>
 
 </body>
 </html>

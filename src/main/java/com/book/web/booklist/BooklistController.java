@@ -1,161 +1,139 @@
 package com.book.web.booklist;
 
+import java.io.File;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpServletRequest;
 
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 public class BooklistController {
-
+	
 	@Autowired
-	private BooklistService booklistService;
+	private BooklistService booklistService; 
 
 	@GetMapping("/booklist")
-	public String list(Model model) {
-		List<BooklistDTO> list = booklistService.list();
-		model.addAttribute("list", list);
+	public String list(Model model, 
+		@RequestParam(name = "bkcate", required = false, defaultValue = "0") int bkcate,
+		@RequestParam Map<String, Object> map,
+		@RequestParam(name = "page", defaultValue = "1") int page, // 현재 페이지
+        @RequestParam(name = "pageSize", defaultValue = "8") int pageSize // 페이지 크기
+		){
+		
+		if(!(map.containsKey("bkcate")) || map.get("bkcate").equals(null) || map.get("bkcate").equals("")){
+			map.put("bkcate", 0);
+		}
+		
+		// 책 목록갯수
+	    int totalBookCount = booklistService.getTotalBookCount(map);
+	    
+	    //System.out.println(totalBookCount);
 
+	    // 페이징 정보계산
+	    int totalPage = (int) Math.ceil((double) totalBookCount / pageSize);
+	    if (page < 1) {
+	        page = 1;
+	    }
+	    if (page > totalPage) {
+	        page = totalPage;
+	    }
+
+	    int startRow = (page - 1) * pageSize;
+	    int endRow = startRow + pageSize;
+	    
+	    
+		System.out.println("카테고리 :" + bkcate );
+		System.out.println("검색 :" + map );
+		System.out.println("시작 페이지 : " + startRow);
+		System.out.println("끝 페이지 : " + endRow);
+		
+		//베스트셀러
+		List<BooklistDTO> booktop = booklistService.booktop();
+		model.addAttribute("booktop", booktop);
+
+		//책 목록 불러오기
+		//List<BooklistDTO> booklist = booklistService.booklist(bkcate);
+	    map.put("startRow", startRow);
+	    map.put("endRow", endRow);
+	    map.put("pageSize", pageSize);
+	    List<Map<String, Object>> booklist = booklistService.booklist(map);
+		model.addAttribute("booklist", booklist);
+	    model.addAttribute("currentPage", page);
+	    model.addAttribute("totalPage", totalPage);
+		
+		
 		return "booklist";
 	}
-
+	
+	
 	@GetMapping("/bookdetail")
-	public String detail(@RequestParam("bkno") int bkno, Model model) {
-
-		Map<String, Object> detail = booklistService.detail(bkno);
-		model.addAttribute("detail", detail);
-
-//System.out.println(detail);
-
+	public String detail(@RequestParam("bkno") int bkno,Model model) {
+		
+		//책 상세페이지
+		Map<String, Object> bookdetail = booklistService.bookdetail(bkno);
+		model.addAttribute("bookdetail", bookdetail);
+		
+		//베스트셀러
+		List<BooklistDTO> booktop = booklistService.booktop();
+		model.addAttribute("booktop", booktop);
+		
 		return "bookdetail";
 	}
+	
+	@GetMapping("/booknotice")
+	public String booknotice() {
+		return "booknotice";
+	}
+	
+	@PostMapping("/bookWrite")
+	public String bookWrite(@RequestParam("upFile") MultipartFile upfile, @RequestParam Map<String, Object> map) {
+		if (!upfile.isEmpty()) {
+			HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
+					.getRequest();
+			String path = request.getServletContext().getRealPath("/img/bookimg");
 
-	@PostMapping("/test")
-	public String detail2(CartDTO dto, HttpSession session) {
+			//UUID uuid = UUID.randomUUID();
+			LocalDateTime ldt = LocalDateTime.now();
+			String format = ldt.format(DateTimeFormatter.ofPattern("YYYYMMddHHmmss"));
+			String realFileName = format + upfile.getOriginalFilename();
 
-		dto.setMid((String) session.getAttribute("mid"));
-
-		// System.out.println(dto.getMid());
-		List<Map<String, Object>> cartList = booklistService.cart(dto);
-
-		// System.out.println(cartList);
-
-		boolean matchingItemFound = false;
-
-		for (int i = 0; i < cartList.size(); i++) {
-			if (cartList.get(i).get("bkno").equals(dto.getBkno())) {
-				booklistService.cart2(dto);
-				matchingItemFound = true;
-				break;
+			File newFileName = new File(path, realFileName);
+			try {
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
+			try {
+				FileCopyUtils.copy(upfile.getBytes(), newFileName);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+			// #{upFile}, #{realFile}
+			//map.put("upFile", upfile.getOriginalFilename());
+			map.put("upFile", realFileName);
 		}
 
-		if (!matchingItemFound) {
-			// If no matching item is found, proceed to detail2
-			booklistService.detail2(dto);
-		}
-
-		return "redirect:/test";
+		//map.put("mno", 4);// 로그인한 사람의 아이디를 담아주세요
+	    booklistService.bookWrite(map);
+		return "redirect:/booknotice";
 	}
-
-	@GetMapping("/test")
-	public String cart(Model model, HttpSession session) {
-		CartDTO dto = new CartDTO();
-		dto.setMid((String) session.getAttribute("mid"));
-		List<Map<String, Object>> cart = booklistService.cart(dto);
-
-		model.addAttribute("cart", cart);
-
-		return "/test";
-	}
-
-	@ResponseBody
-	@GetMapping("/delete")
-	public String delete(@RequestParam Map<String, Object> map) {
-
-		int result = booklistService.delete(map);
-		int result2 = booklistService.delete2(map);
-
-		JSONObject json = new JSONObject();
-		json.put("result", result);
-
-		return json.toString();
-
-	}
-
-	@GetMapping("/purchase")
-	public String purchase(Model model, HttpSession session) {
-
-		List<Map<String, Object>> map = booklistService.purchase((String) session.getAttribute("mid"));
-
-		// System.out.println(map);
-		model.addAttribute("map", map);
-
-		return "/purchase";
-	}
-
-	/*
-	 * @PostMapping("/check") public String purchase(@RequestParam Map<String,
-	 * Object> map, HttpSession session, CartDTO cart) {
-	 * 
-	 * cart.setMid((String) session.getAttribute("mid"));
-	 * 
-	 * List<Map<String, Object>> cartList = booklistService.cart(cart);
-	 * 
-	 * for (int i = 0; i < cartList.size(); i++) { if ((int)
-	 * cartList.get(i).get("amount") >= (cart.getAmount())) {
-	 * 
-	 * 
-	 * return "redirect:/purchase";
-	 * 
-	 * }
-	 * 
-	 * } return "redirect:/test"; }
-	 * 
-	 * 
-	 */
 	
 	
-
 	
-
-	@PostMapping("/purchase")
-	public String transaction(CartDTO cart, HttpSession session) {
-
-		cart.setMid((String) session.getAttribute("mid"));
-
-		List<Map<String, Object>> cartlist = booklistService.cart(cart);
-
-		
-		System.out.println(cartlist);
-		for (int i = 0; i < cartlist.size(); i++) {
-
-			booklistService.stockupdate(cartlist.get(i));
-
-		}
-
-		for (int i = 0; i < cartlist.size(); i++) {
-			booklistService.insert(cartlist.get(i));
-
-		}
-		
-		for (int i = 0; i < cartlist.size(); i++) {
-			booklistService.delete3(cartlist.get(i));
-
-		}
-		
-		
-
-		return "redirect:/booklist";
-	}
-
+	
 }

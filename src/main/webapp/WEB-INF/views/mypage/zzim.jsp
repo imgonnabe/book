@@ -110,10 +110,11 @@
 					</c:when>
 					<c:otherwise>
 						<section class="module-small">
-							<div class="row">
-								<input name="allCheck" type="checkbox">&nbsp;찜한 상품 <span
-									class="zzim"></span> / ${list[0].count }
-								<button class="delbtn" type="button" onclick="deleteValue()">삭제</button>
+							<div style="text-align: center;" class="row">
+								<input name="allCheck" type="checkbox">&nbsp;
+								<h3 style="display: inline;">찜한 상품 </h3>
+								<button class="delbtn btn" type="button" onclick="deleteValue()">삭제</button>
+								<br><div style="display: inline;" class="zzim"></div> / ${list[0].count }
 							</div>
 						</section>
 						<div class="row multi-columns-row post-columns">

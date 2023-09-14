@@ -112,32 +112,33 @@
 			<c:otherwise>
 			<section class="module-small">
 				<div class="container">
-				<button class="btn" onclick="location.href='./comment?cate=0'">전체보기</button>
-				<br>
+					<div class="col-sm-2 mb-sm-20">
+						<button class="btn" onclick="location.href='./comment?cate=0'">전체보기</button>
+					</div>
 					<form action="./comment" method="get" class="row">
-						<div class="mb-sm-20">
+						<div class="col-sm-2 mb-sm-20">
 							<select class="form-control" name="cate" id="cate"
 								onclick="cateChange()">
-								<optgroup label="카테고리">
-									<option value="0">전체</option>
-									<option value="1">1</option>
-									<option value="2">2</option>
-									<option value="3">3</option>
-								</optgroup>
+									<option selected="selected" value="0">전체</option>
+									<option value="1">자유게시판</option>
+									<option value="2">독후감</option>
+									<option value="3">공지사항</option>
 							</select>
 						</div>
-						<div class="mb-sm-20">
+						<div class="col-sm-2 mb-sm-20">
 							<select class="form-control" name="searchN">
-								<option value="ccontent">댓글내용</option>
+								<option selected="selected" value="ccontent">댓글내용</option>
 								<option value="btitle">글제목</option>
 							</select>
 						</div>
+						<div class="col-sm-4">
 						<div class="search-box">
 							<input class="form-control" type="text" name="searchV"
 								required="required" placeholder="Search..">
 							<button class="search-btn" type="submit">
 								<i class="fa fa-search"></i>
 							</button>
+						</div>
 						</div>
 					</form>
 				</div>
@@ -149,8 +150,7 @@
 								<c:forEach items="${list }" var="row">
 							<div class="row"  onclick="cdetail(${row.cno})">
 									<div class="col-sm-8">
-										<div class="menu-detail font-serif">${row.cno}</div>
-										<div class="menu-detail font-serif">글제목 : ${row.btitle}</div>
+										<div class="menu-detail font-serif">${row.cno}&nbsp;${row.btitle}</div>
 										<div class="menu-title font-alt">${row.comment}</div>
 									</div>
 									<div class="col-sm-4 menu-price-detail">
@@ -175,8 +175,6 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<h5 class="modal-title font-alt" id="exampleModalLabel">본문제목</h5>
-					<button type="button" class="btn-close" data-bs-dismiss="modal"
-						aria-label="Close">닫기</button>
 				</div>
 				<div class="modal-body">
 					<div class="detail">
@@ -235,9 +233,10 @@
  			data:{cno:cno},
  			dataType:'json',
  			success:function(data){
- 				$(".modal-title").text("제목 : " + data.btitle);
+ 				$(".modal-title").text(data.btitle);
  				$(".detail-name").text("이름 : " + data.mname);
- 				$(".detail-date").text("날짜 : "+data.bdate);
+ 				var date = new Date(data.bdate).toISOString().split("T")[0];
+ 				$(".detail-date").text("날짜 : "+date);
  				$(".detail-read").text("조회수:"+data.bread);
  				$(".detail-content").html(data.bcontent);
  				$("#exampleModal").modal("show");

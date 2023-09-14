@@ -97,64 +97,44 @@
 			<div class="container">
 				<div class="row">
 					<div class="col-sm-6 col-sm-offset-3">
-						<h1 class="module-title font-alt">재고 관리</h1>
+						<h1 class="module-title font-alt">상품 등록</h1>
 					</div>
 				</div>
 			</div>
 
-			<section class="module-small">
-				<div class="container">
-					<div class="col-sm-2 mb-sm-20">
-						<button class="btn" onclick="location.href='./stock?cate=0'">전체보기</button>
-					</div>
-					<form action="./stock" method="get" class="row">
-						<div class="col-sm-2 mb-sm-20">
-							<select class="form-control" name="cate" id="cate"
-								onclick="cateChange()">
-									<option selected="selected" value="0">전체</option>
-									<option value="1">소설</option>
-									<option value="2">에세이</option>
-									<option value="3">자기계발</option>
-							</select>
-						</div>
-						<div class="col-sm-3 mb-sm-20">
-							<select class="form-control" name="searchN">
-								<option value="title">책제목</option>
-								<option value="writer">저자</option>
-								<option value="publisher">출판사</option>
-							</select>
-						</div>
-						<div class="col-sm-4">
-						<div class="search-box">
-							<input class="form-control" type="text" name="searchV"
-								required="required" placeholder="Search..">
-							<button class="search-btn" type="submit">
-								<i class="fa fa-search"></i>
-							</button>
-						</div>
-						</div>
-					</form>
-				</div>
-			</section>
 			<div class="container">
 				<div class="row multi-columns-row">
-					<div class="col-sm-8">
-						<div class="menu">
-								<c:forEach items="${list }" var="row">
+					<div class="col-sm-10">
+						<div class="search-box">
 							<div class="row">
-									<div class="col-sm-8">
-										<div class="menu-detail font-serif">${row.bkno}</div>
-										<div class="menu-title font-alt">${row.bkname}</div>
-										<div class="menu-title font-alt">${row.bkwrite}</div>
-									</div>
-									<div class="col-sm-4 menu-price-detail">
-										<div class="menu-price font-alt">${row.bkprice}원</div>
-										<div class="menu-price font-alt">${row.bkpublisher}</div>
-										<div onclick="stock('${row.bkno}', '${row.bstock}')" class="menu-price font-alt" data-bkno="${row.bkno}" data-bstock="${row.bstock}">${row.bstock}개</div>
-										<div class="menu-price font-alt">${row.bkcate}</div>
-									</div>
+								<div class="col-sm-4">
+									<input class="name form-control" type="text" required="required" placeholder="책제목">
+								</div>
+								<div class="col-sm-4">
+									<input class="writer form-control" type="text" required="required" placeholder="저자">
+								</div>
+								<div class="col-sm-4">
+									<textarea class="content1 form-control" required="required" placeholder="소개글1">
+									</textarea>
+								</div>
+								<div class="col-sm-4">
+									<textarea class="content2 form-control" required="required" placeholder="소개글2">
+									</textarea>
+								</div>
+								<div class="col-sm-4">
+									<input class="img form-control" type="text" required="required" placeholder="이미지">
+								</div>
+								<div class="col-sm-4">
+									<input class="price form-control" type="text" required="required" placeholder="가격">
+								</div>
+								<div class="col-sm-4">
+									<input class="cate form-control" type="text" required="required" placeholder="카테고리">
+								</div>
+								<div class="col-sm-4">
+									<input class="publisher form-control" type="text" required="required" placeholder="출판사">
+								</div>
+								<button class="search-btn" type="submit">게시</button>
 							</div>
-								</c:forEach>
 						</div>
 					</div>
 				</div>

@@ -112,39 +112,40 @@
 		<c:otherwise>
 			<section class="module-small">
 				<div class="container">
-				<button class="btn" onclick="location.href='./board?cate=0'">전체보기</button>
-				<br>
+					<div class="col-sm-2 mb-sm-20">
+						<button class="btn" onclick="location.href='./board?cate=0'">전체보기</button>
+					</div>
 					<form action="./board" method="get" class="row">
-						<div class="mb-sm-20">
+						<div class="col-sm-2 mb-sm-20">
 							<select class="form-control" name="cate" id="cate"
 								onclick="cateChange()">
-								<optgroup label="카테고리">
-									<option value="0">전체</option>
-									<option value="1">1</option>
-									<option value="2">2</option>
-									<option value="3">3</option>
-								</optgroup>
+									<option selected="selected" value="0">전체</option>
+									<option value="1">자유게시판</option>
+									<option value="2">독후감</option>
+									<option value="3">공지사항</option>
 							</select>
 						</div>
-						<div class="mb-sm-20">
+						<div class="col-sm-3 mb-sm-20">
 							<select class="form-control" name="searchN">
 								<option value="title">글제목</option>
 								<option value="content">글내용</option>
 							</select>
 						</div>
-						<div class="search-box">
-							<input class="form-control" type="text" name="searchV"
-								required="required" placeholder="Search..">
-							<button class="search-btn" type="submit">
-								<i class="fa fa-search"></i>
-							</button>
+						<div class="col-sm-4">
+							<div class="search-box">
+								<input class="form-control" type="text" name="searchV"
+									required="required" placeholder="Search..">
+								<button class="search-btn" type="submit">
+									<i class="fa fa-search"></i>
+								</button>
+							</div>
 						</div>
 					</form>
 				</div>
 			</section>
 			<div class="container">
 				<div class="row multi-columns-row">
-					<div class="col-sm-6">
+					<div class="col-sm-10">
 						<div class="menu">
 								<c:forEach items="${list }" var="row">
 							<div class="row" onclick="detail(${row.bno})">
@@ -231,8 +232,9 @@
  			data:{bno:bno},
  			dataType:'json',
  			success:function(data){
- 				$(".detail-title").text("날짜 : "+data.btitle);
- 				$(".detail-date").text("날짜 : "+data.bdate);
+ 				$(".modal-title").text(data.btitle);
+ 				var date = new Date(data.bdate).toISOString().split("T")[0];
+ 				$(".detail-date").text("날짜 : "+date);
  				$(".detail-read").text("조회수:"+data.bread);
  				$(".detail-content").html(data.bcontent);
  				$("#exampleModal").modal("show");
