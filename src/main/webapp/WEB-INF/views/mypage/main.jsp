@@ -93,7 +93,7 @@
 <style type="text/css">
 .toggle {
 	width: 100%;
-	height: 50px;
+	height: 30px;
 	margin: 0px;
 	display: table;
 }
@@ -141,7 +141,7 @@ label {
 .toggle-switch-inner:after {
 	content: attr(data-off);
 	width: 70px;
-	height: 16px;
+	height: 26px;
 	background: #fff;
 	border-radius: 26px;
 	position: absolute;

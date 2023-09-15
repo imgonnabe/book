@@ -203,6 +203,7 @@
 		                  <li><a href="/admin/rent">대여 관리</a></li>
 		                  <li><a href="/admin/rentalAmount">대여량</a></li>
 	                  	</ul>
+	                  <li><a href="/admin/notice">공지사항</a></li>
 	                </ul>
 	               </li>
                </c:if>

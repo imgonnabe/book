@@ -52,4 +52,16 @@ public class AdminService {
 	public List<Map<String, Object>> rentalAmount(Map<String, Object> map) {
 		return adminDAO.rentalAmount(map);
 	}
+
+	public List<Map<String, Object>> notice() {
+		return adminDAO.notice();
+	}
+
+	public Map<String, Object> ndetail(int bno) {
+		return adminDAO.ndetail(bno);
+	}
+
+	public List<Map<String, Object>> ncomment(int bno) {
+		return adminDAO.ncomment(bno);
+	}
 }

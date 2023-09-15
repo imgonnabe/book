@@ -117,10 +117,10 @@
 					<button class="btn" onclick="location.href='./board?cate=0'">전체보기</button>
 				</div>
 				<div class="col-sm-2 mb-sm-20">
-					<button class="btn gray" onclick="location.href='./board?cate=0'">회원탈퇴</button>
+					<button class="btn gray">회원탈퇴</button>
 				</div>
 				<div class="col-sm-2 mb-sm-20">
-					<button class="btn silver" onclick="location.href='./board?cate=0'">게시글보기</button>
+					<button class="btn silver">삭제된 게시물</button>
 				</div>
 				<br><br>
 					<form action="./board" method="get" class="row">
@@ -151,28 +151,34 @@
 			</section>
 			<div class="container">
 				<div class="row multi-columns-row">
-					<div class="col-sm-6">
-						<div class="menu">
-								<c:forEach items="${list }" var="row">
-							<div class="row <c:if test="${row.m_grade eq 0}">gray</c:if> <c:if test="${row.bdel eq 0}">silver</c:if>" >
-									<div class="col-sm-8">
-										<div class="menu-detail font-serif">${row.bno}</div>
-										<div onclick="detail(${row.bno})" class="menu-title font-alt">${row.btitle}</div>
-										<div class="menu-detail font-serif">${row.mid}(${row.mname})</div>
-									</div>
-									<div class="col-sm-4 menu-price-detail">
-										<div class="menu-price font-alt">${row.bdate}</div>
-										<div class="menu-price font-alt">
-											<select class="form-control" name="punish" id="punish">
-												<option value="0">회원 탈퇴</option>
-												<option value="1">게시물 삭제</option>
-											</select>
-											<button type="button" class="btn punishbtn" data-bno="${row.bno}" data-mid="${row.mid}">등록</button>
-										</div>
-									</div>
+					<div class="col-sm-13">
+					<div class="menu">
+							<div class="row">
+								<span class="menu-detail font-alt col-sm-1">번호</span>
+								<span class="menu-title font-alt col-sm-3">제목</span>
+								<span class="menu-title font-alt col-sm-2">글쓴이</span>
+								<span class="menu-price font-alt col-sm-3">날짜</span>
+								<span class="menu-price font-alt col-sm-3">징계</span>
 							</div>
-							<hr>
-								</c:forEach>
+							<c:forEach items="${list }" var="row">
+								<div class="row <c:if test="${row.m_grade eq 0}">gray</c:if> <c:if test="${row.bdel eq 0}">silver</c:if>">
+									<div class="col-sm-13">
+										<span class="menu-detail font-serif col-sm-1">${row.bno}</span>
+										<span onclick="detail(${row.bno})" class="menu-title font-alt col-sm-3">${row.btitle}</span>
+										<span class="menu-title font-alt col-sm-2">${row.mid}(${row.mname})</span>
+										<span class="menu-price font-alt col-sm-2">${row.bdate}</span>
+										<span class="menu-price font-alt col-sm-4">
+											<span class="col-sm-7">
+												<select class="form-control" name="punish" id="punish">
+													<option value="0">회원 탈퇴</option>
+													<option value="1">게시물 삭제</option>
+												</select>
+											</span>
+											<span><input type="button" class="btn punishbtn" data-bno="${row.bno}" data-mid="${row.mid}" value="등록"></span>
+										</span>
+									</div>
+								</div>
+							</c:forEach>
 						</div>
 					</div>
 				</div>
@@ -263,10 +269,6 @@
 	  }
 	});
 	
-	function memberOut(){
-		
-	}
- 	
  	function detail(bno){
  		$.ajax({
  			url:'./detail',

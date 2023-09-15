@@ -28,4 +28,10 @@ public interface AdminDAO {
 
 	List<Map<String, Object>> rentalAmount(Map<String, Object> map);
 
+	List<Map<String, Object>> notice();
+
+	Map<String, Object> ndetail(int bno);
+
+	List<Map<String, Object>> ncomment(int bno);
+
 }

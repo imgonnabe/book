@@ -163,24 +163,29 @@
 				<div class="form-group">
                   	이메일 : <p style="display: inline" class="menu-title">${info.memail}&nbsp;</p>
                   	<div class="form-group divEmail"  id="divEmail">
-					<span class="form-group"><input type="text" id="email" name="email" value=""/></span>
+					<span class="form-group"><input type="text" id="emailId" name="emailId"/></span>
 					<span class="at">@</span>
 					<span class="menu-title">
 	                  	<select id="selectEmailDomain" name="selectEmailDomain">
-							<option value="0">naver.com</option>
-							<option value="1">kakao.com</option>
-							<option value="2">daum.net</option>
-							<option value="3">nate.com</option>
-							<option value="4">gmail.com</option>
+							<option selected="selected" value="naver.com">naver.com</option>
+							<option value="kakao.com">kakao.com</option>
+							<option value="daum.net">daum.net</option>
+							<option value="nate.com">nate.com</option>
+							<option value="gmail.com">gmail.com</option>
 							<option value="5">직접 입력</option>
 						</select>
 					</span>
 					<!-- 직접 입력시 노출 -->
 					<input type="text" id="emailDomain" name="emailDomain" class="emailInput" value="" style="display: none"/>
+					<div>
+                    	<input name="emailchk" id="emailchk" class="menu-title" type=button value="이메일 중복 확인"/>
+                    	&nbsp;<span style="color: red;" id="emailchkMsg"></span>
+                    	<input id="emailchkhidden" type="hidden"></input>
+                  	</div>
                   </div>
+              	</div>
                   <hr>
                   <button type="submit" class="btn infobtn">회원정보 변경</button>
-              	</div>
               	</div>
 		    </form>
             </div>
@@ -283,7 +288,37 @@
 				}
 			});
   		});
-    
+    	
+    	// 이메일 중복 검사(form 유효성 검사 안으로 들어가면 작동안함)
+    	var isEmailChecked = false; // ID 중복 확인 여부를 저장하는 변수
+	  	$(document).on('click', '#emailchk', function() {
+	    	var emailId = $('#emailId').val();
+	    	var emailDomain = $('#selectEmailDomain').val(); // 도메인 값 업데이트
+	 		if(emailDomain == '5'){
+	 			emailDomain = $('#emailDomain').val();
+			}
+	    	var email = emailId +'@'+ emailDomain;
+	  		$.ajax({
+					url : './emailchk?email=' + email,
+					type : 'post',
+					dataType: 'json',
+					success: function(data){
+						if(data.count >= 1){
+							$('#emailId').val('');
+							$('#emailId').focus();
+							$('#emailchkMsg').text('중복된 이메일이 있습니다. 다시 적으세요.').css('color', 'red');
+							isEmailChecked = false;
+						} else {
+							$('#emailchkMsg').text('사용가능한 이메일입니다.').css('color', 'green');
+							isEmailChecked = true;
+						}
+					},
+					error: function(error){
+						alert('에러');
+					}
+				});
+	  		});
+    	
     	// 비밀번호 입력 필드의 값이 변경될 때 확인
         $(document).on('input', '#pw', function() {
             checkPw();
@@ -306,14 +341,6 @@
             }
         }
      	
-     	// 이메일 사용자 지정
-     	$('#selectEmailDomain').on('click', function(){
-     		var emailDomain = $('#selectEmailDomain').val();
-     		if(emailDomain == '5'){
-     			$('#emailDomain').css('display', 'inline');
-     		}
-     	});
-    
      	// form 유효성 검사
         function validateForm() {
             var id = $('#id').val();
@@ -324,11 +351,7 @@
             var address = $('#address').val().trim();
             var detailAddress = $('#detailAddress').val().trim();
             var extraAddress = $('#extraAddress').val().trim();
-            var email = $('#email').val();
-            var emailDomain;
-            if($('#selectEmailDomain').val() == 5){
-            	emailDomain = $('#emailDomain').val();
-            }
+            var email = $('#emailId').val();
 
             // id 길이
             if (id.length > 0 && id.length < 4) {
@@ -368,28 +391,58 @@
 	          
 	          // 전부 입력 안됐을 때
 	          if(postcode === '' && address === '' && detailAddress === '' && extraAddress === '' &&
-	        		id === '' && pw === '' && birth === ''){
+	        		id === '' && pw === '' && birth === '' && email === ''){
 	        	  alert('회원정보를 수정할 생각이 없으시다면 다른 페이지로 가세요.');
 	        	  return false;
 	          }
 	          
 	          // ID 중복 확인을 하지 않은 경우
-	          if (id == null && !isIdChecked) {
+	          if (id != '' && !isIdChecked) {
 	              alert("ID 중복 확인을 해주세요.");
 	              return false; // 폼 제출 중지
 	          }
 	          
-	        // 이메일 도메인 체크(동적 안됨. 다르게 만들어야함)
-	        if(emailDomain.indexOf('.com') == -1 || emailDomain.indexOf('.net') == -1 || 
-	        		emailDomain.indexOf('.org') == -1 || emailDomain.indexOf('.gov') == -1 ||
-	        		emailDomain.indexOf('.co') == -1 || emailDomain.indexOf('.io') == -1 ||
-	        		emailDomain.indexOf('.edu') == -1){
-	        	alert("이메일 도메인을 체크해주세요.");
-	        	return false;
-	        }
+	          // 이메일 중복 확인을 하지 않은 경우
+	          if (email != '' && !isEmailChecked) {
+	              alert("이메일 중복 확인을 해주세요.");
+	              return false; // 폼 제출 중지
+	          }
 	          
             // 위의 유효성 검사를 모두 통과하면 true를 반환하여 폼 제출을 허용
             return true;
+        }
+     	
+	    // 이메일 사용자 지정
+   		var emailDomain = $('#selectEmailDomain').val();
+    	$(document).on('change', '#selectEmailDomain', function(){
+    		var selectedValue = $(this).val();
+    		if(selectedValue == '5'){
+    			$('#emailDomain').css('display', 'inline');
+    			selectedValue = $('#emailDomain').val();
+    		}
+    	});
+    	
+     	// form으로 보낼 때 이메일 도메인 체크(동적으로)
+     	$(document).on('click', '.infobtn', function(){
+     		var emailDomain = $('#selectEmailDomain').val(); // 도메인 값 업데이트
+     		if(emailDomain == '5'){
+     			emailDomain = $('#emailDomain').val();
+    		}
+            // 도메인 검사 로직 추가
+            if (!isValidDomain(emailDomain)) {
+                alert("올바른 이메일 도메인을 입력해주세요.");
+                return false;
+	        }
+     	});
+     	
+     	// 올바른 이메일 도메인 검사 함수
+        function isValidDomain(domain) {
+            var validDomains = ['com', 'net', 'org', 'gov', 'co', 'io', 'edu'];
+            var domainParts = domain.split('.');
+            if (domainParts.length === 2 && validDomains.includes(domainParts[1])) {
+                return true;
+            }
+            return false;
         }
     
     

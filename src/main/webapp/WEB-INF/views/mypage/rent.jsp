@@ -149,29 +149,39 @@
 	</section>
 	<div class="container">
 	
-		<div class="row multi-columns-row">
-			<div class="col-sm-6">
-				<div class="widget-posts">
-					<c:forEach items="${list }" var="row">
-						<h4 class="widget-posts-title font-serif"><a href="../bookdetail?bkno=${row.bkno}">${row.bkname}</a></h4>
-						<div class="widget-posts-image"><a href="../bookdetail?bkno=${row.bkno}"><img src="${row.bkimg }" alt="Blog-post Thumbnail"/></a></div>
-						<div class="widget-posts-title font-alt">${row.bkwrite}</div>
-						<div class="widget-posts-title font-serif">대여일 : ${row.rsdate}</div>
-						<div class="widget-posts-title font-serif">반납일 : ${row.rddate}</div>
-						<c:choose>
-							<c:when test="${row.rdel eq 1}">
-								<div class="widget-posts-title font-alt">대출중</div>
-								<div><button class="return" type="button" data-bkno="${row.bkno}">반납</button></div>
-							</c:when>
-							<c:otherwise>
-								<div class="widget-posts-title font-alt">반납</div>
-							</c:otherwise>
-						</c:choose>
-						<hr>
-					</c:forEach>
+		<div class="col-sm-15">
+			<div class="menu" style="text-align: center;">
+				<div class="row">
+					<span class="menu-price font-alt col-sm-3">책제목</span>
+					<span class="menu-price font-alt col-sm-2">저자</span>
+					<span class="menu-price font-alt col-sm-2">대여일</span>
+					<span class="menu-price font-alt col-sm-2">반납일</span>
+					<span class="menu-price font-alt col-sm-2">반납여부</span>
 				</div>
-			</div>
+				<hr>
+				<c:forEach items="${list }" var="row">
+					<div class="row" style="margin-bottom: 5px;">
+						<span class="menu-price font-alt col-sm-3">
+							<a href="../bookdetail?bkno=${row.bkno}"><img src="${row.bkimg }" alt="Blog-post Thumbnail"/></a>
+						</span>
+						<span class="menu-price font-alt col-sm-2">${row.bkwrite}</span>
+						<span class="menu-price font-alt col-sm-2">${row.rsdate}</span>
+						<span class="menu-price font-alt col-sm-2">${row.rddate}</span>
+						<span class="menu-price font-alt col-sm-2">
+							<c:choose>
+								<c:when test="${row.rdel eq 1}">
+									<span class="widget-posts-title font-alt">대출중</span>
+									<span><button class="returnBook" type="button" data-rno="${row.rno}">반납</button></span>
+								</c:when>
+								<c:otherwise>
+									<span class="widget-posts-title font-alt">반납완료</span>
+								</c:otherwise>
+							</c:choose>
+						</span>
+					</div>
+				</c:forEach>
 		</div>
+	</div>
 	</div>
 	</c:otherwise>
 	</c:choose>
@@ -226,14 +236,14 @@ $(function() {
     	return urlParams.get(name);
     }
     
-    $(document).on('click','.return', function(){
-    	var bkno = $(this).data('bkno');
+    $(document).on('click','.returnBook', function(){
+    	var rno = $(this).data('rno');
     	$.ajax({
     		url:'./returnBook',
 			type:'post',
-			data:{cate:cate, bkno:bkno},
+			data:{rno:rno},
 			success:function(data){
-				location.href="./rent?cate=" + cate;
+				location.href="./rent";
 			},
 			error:function(error){
 				alert('에러');

@@ -102,6 +102,19 @@ public class MyPageController {
 		}
 	}
 	
+	@ResponseBody
+	@PostMapping("/returnBook")
+	public String returnBook(@RequestParam Map<String, Object> map, HttpSession session) {
+		System.out.println(map);
+		if(session.getAttribute("mid") != null) {
+			map.put("mid", session.getAttribute("mid"));
+			myPageService.returnBook(map);
+			return "/mypage/rent";
+		} else {
+			return "redirect:/login";
+		}
+	}
+	
 	@GetMapping("/board")
 	public String board(Model model, @RequestParam Map<String, Object> map,
 			@RequestParam(name="cate", required = false, defaultValue = "0") int cate, HttpSession session) {
@@ -239,10 +252,26 @@ public class MyPageController {
 		}
 	}
 	
+	@ResponseBody
+	@PostMapping("/emailchk")
+	public String emailchk(@RequestParam(name="email", required = true) String email, HttpSession session) {
+		System.out.println(email);
+		if(session.getAttribute("mid") != null) {
+			String mid = (String)session.getAttribute("mid");
+			Map<String, Object> map = myPageService.emailchk(email, mid);
+			System.out.println(map);
+			JSONObject json = new JSONObject();
+			json.put("count", map.get("count"));
+			return json.toString();
+		} else {
+			return "redirect:/login";
+		}
+	}
+	
 	@PostMapping("/infoChange")
 	public String infoChange(@RequestParam Map<String, Object> map, HttpSession session) {
 		System.out.println(map);// {postcode=0, address=서울, detailAddress=11, extraAddress= (신사동)}
-		// 아무것도 없을 때 : {id=, pw=, postcode=, address=, detailAddress=, extraAddress=, birth=, email=dddd, selectEmailDomain=0, emailDomain=}
+		// 아무것도 없을 때 : {id=, pw=, postcode=, address=, detailAddress=, extraAddress=, birth=, emailId=dddd, selectEmailDomain=0, emailDomain=}
 		if(session.getAttribute("mid") != null) {
 			String address = (String) map.get("address");
 			String postcode = (String) map.get("postcode");
@@ -251,7 +280,7 @@ public class MyPageController {
 			String id = (String) map.get("id");
 			String pw = (String) map.get("pw");
 			String birth = (String) map.get("birth");
-			String emailBefore = (String) map.get("email");
+			String emailBefore = (String) map.get("emailId");
 			String selectEmailDomain = (String) map.get("selectEmailDomain");
 			String emailDomain = (String) map.get("emailDomain");
 			System.out.println(id + " " +pw);
@@ -275,23 +304,16 @@ public class MyPageController {
 				if(emailBefore != null && !emailBefore.isEmpty() &&
 						selectEmailDomain != null && !selectEmailDomain.isEmpty()) {
 					String email = "";
-					if(selectEmailDomain == "0") {
-						email = emailBefore + "@naver.com";
-					} else if(selectEmailDomain == "1") {
-						email = emailBefore + "@kakao.com";
-					} else if(selectEmailDomain == "2") {
-						email = emailBefore + "@daum.net";
-					} else if(selectEmailDomain == "3") {
-						email = emailBefore + "@nate.com";
-					} else if(selectEmailDomain == "4") {
-						email = emailBefore + "@gmail.com";
+					if(selectEmailDomain.equals("5")) {
+						email = emailBefore + "@" + emailDomain;
 					} else {
-						email = emailBefore + emailDomain;
+						email = emailBefore + "@" + selectEmailDomain;
 					}
 					map.put("email", email);
 				}
 				map.put("mno", session.getAttribute("mno"));
-				//myPageService.infoChange(map);
+				System.out.println(map);
+				myPageService.infoChange(map);
 				return "redirect:/mypage/info";
 			}
 			return "redirect:/mypage/info?error=empty";

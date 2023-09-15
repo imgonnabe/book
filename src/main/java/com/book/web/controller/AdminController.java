@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.book.web.service.AdminService;
+import com.book.web.utils.Util;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 @Controller
@@ -23,6 +24,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 public class AdminController {
 	@Autowired
 	private AdminService adminService;
+	@Autowired
+	private Util util;
 	
 	@GetMapping("/stock")
 	public String stock(Model model, @RequestParam Map<String, Object> map, HttpSession session,
@@ -49,8 +52,16 @@ public class AdminController {
 			if(!map.containsKey("cate") || map.get("cate").equals(null) || map.get("cate").equals("")) {
 				map.put("cate", 0);
 			}
+			JSONObject json = new JSONObject();
+			String bstock = (String) map.get("bstock");
+			if(util.strToInt(bstock) == 0) {
+				System.out.println("업데이트" + util.strToInt(bstock));
+				json.put("bstock", 0);
+				return json.toString();
+			}
 			adminService.updateStock(map);
-			return "/admin/stock";
+			json.put("bstock", bstock);
+			return json.toString();
 		} else {
 			return "redirect:/index";
 		}
@@ -165,6 +176,32 @@ public class AdminController {
 		if(session.getAttribute("mid") != null && session.getAttribute("mname").equals("admin")) {
 			
 			return "/admin/product";
+		} else {
+			return "redirect:/index";
+		}
+	}
+	
+	@GetMapping("/notice")
+	public String notice(Model model, HttpSession session) {
+		if(session.getAttribute("mid") != null && session.getAttribute("mname").equals("admin")) {
+			List<Map<String, Object>> list = adminService.notice();
+			model.addAttribute("list", list);		
+			return "/admin/notice";
+		} else {
+			return "redirect:/index";
+		}
+	}
+	
+	@ResponseBody
+	@PostMapping("/ndetail")
+	public String ndetail(@RequestParam(value = "bno", required = true) int bno, HttpSession session) {
+		if(session.getAttribute("mid") != null && session.getAttribute("mname").equals("admin")) {
+			Map<String, Object> detail = adminService.ndetail(bno);
+			List<Map<String, Object>> ncomment = adminService.ncomment(bno);
+			JSONObject json = new JSONObject();
+			json.put("detail", detail);
+			json.put("ncomment", ncomment);
+			return json.toString();
 		} else {
 			return "redirect:/index";
 		}

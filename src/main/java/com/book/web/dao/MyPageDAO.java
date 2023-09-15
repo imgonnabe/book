@@ -38,4 +38,8 @@ public interface MyPageDAO {
 
 	Map<String, Object> idchk(String id);
 
+	Map<String, Object> emailchk(String email, String mid);
+
+	void returnBook(Map<String, Object> map);
+
 }

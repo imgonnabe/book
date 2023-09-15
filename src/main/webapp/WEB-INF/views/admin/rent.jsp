@@ -110,18 +110,16 @@
 			<section class="module-small">
 				<div class="container">
 					<div class="col-sm-2 mb-sm-20">
-						<button class="btn" onclick="location.href='./stock?cate=0'">전체보기</button>
+						<button class="btn" onclick="location.href='./rent?cate=0'">전체보기</button>
 					</div>
-					<form action="./stock" method="get" class="row">
+					<form action="./rent" method="get" class="row">
 						<div class="col-sm-2 mb-sm-20">
 							<select class="form-control" name="cate" id="cate"
 								onclick="cateChange()">
-								<optgroup label="카테고리">
-									<option value="0">전체</option>
+									<option selected="selected" value="0">전체</option>
 									<option value="1">소설</option>
 									<option value="2">에세이</option>
 									<option value="3">자기계발</option>
-								</optgroup>
 							</select>
 						</div>
 						<div class="col-sm-2 mb-sm-20">
@@ -145,22 +143,28 @@
 			</section>
 			<div class="container">
 				<div class="row multi-columns-row">
-					<div class="col-sm-8">
-						<div class="menu">
-								<c:forEach items="${list }" var="row">
-							<div class="row <c:if test="${row.rdel eq 0}">gray</c:if>">
-									<div class="col-sm-8">
-										<div class="menu-detail font-serif">${row.rno}(${row.bkcate})</div>
-										<div class="menu-title font-alt">${row.bkname}</div>
-										<div class="menu-title font-alt">${row.bkwrite}</div>
-									</div>
-									<div class="col-sm-4 menu-price-detail">
-										<div class="menu-price font-alt">${row.bkpublisher}</div>
-										<div class="menu-price font-alt">대여일 : ${row.rsdate}</div>
-										<div class="menu-price font-alt">반납일 : ${row.rddate}</div>
-									</div>
+					<div class="col-sm-15">
+					<div class="menu" style="text-align: center;">
+							<div class="row">
+								<span class="menu-detail font-alt col-sm-1">대여번호</span>
+								<span class="menu-title font-alt col-sm-3">책제목</span>
+								<span class="menu-title font-alt col-sm-2">저자</span>
+								<span class="menu-price font-alt col-sm-2">가격</span>
+								<span class="menu-price font-alt col-sm-2">대여일</span>
+								<span class="menu-price font-alt col-sm-2">반납일</span>
 							</div>
-								</c:forEach>
+							<c:forEach items="${list }" var="row">
+								<div class="row <c:if test="${row.rdel eq 0}">gray</c:if>">
+									<div class="col-sm-15">
+										<span class="menu-detail font-serif col-sm-1">${row.rno}</span>
+										<span class="menu-title font-alt col-sm-3">${row.bkname}</span>
+										<span class="menu-title font-alt col-sm-2">${row.bkwrite}</span>
+										<span class="menu-price font-alt col-sm-2">${row.bkprice}원</span>
+										<span class="menu-price font-alt col-sm-2">${row.rsdate}</span>
+										<span class="menu-price font-alt col-sm-2">${row.rddate}</span>
+									</div>
+								</div>
+							</c:forEach>
 						</div>
 					</div>
 				</div>
@@ -217,83 +221,10 @@
 	
 	<script type="text/javascript">
 	
-	function stock(bkno, bstock) {
-		// alert(bkno +" "+ bstock);
-	    if (confirm(bstock + "개 남은 재고를 바꾸시겠습니까?")) {
-	    	$("#bkno2").val(bkno);
-	        $("#exampleModal").modal("show");
-	    }
-	}
-	
-	$(document).on('click', '#stockbtn', function () {
-		var bkno = $('#bkno2').val();
-		var bstock = $("#stockCnt").val();
-		var cate = getParameterByName('cate');
-		// alert(bkno + " " + bstock);
-		$.ajax({
-            url: './updateStock',
-            type: 'post',
-            data: {bkno: bkno, bstock: bstock, cate:cate},
-            success: function (data) {
-                alert("재고가 업데이트됐습니다.");
-                location.href = "./stock";
-            },
-            error: function (error) {
-                alert('에러');
-            }
-        });
-	});
-	
-	/*function stockChange() {
-		
-	    var adminInputContainer = document.getElementById("adminInputContainer");
-
-	    // "사용자 지정" 옵션이 선택되었을 때
-	    if ($('#stock').val() === "admin") {
-	        // <input> 요소를 생성하여 adminInputContainer에 추가
-	        var adminInput = document.createElement("input");
-	        adminInput.id = "admin";
-	        adminInput.name = "admin";
-	        adminInput.placeholder = "사용자 지정 내용을 입력하세요";
-	        adminInputContainer.innerHTML = ""; // 이전 내용 삭제
-	        adminInputContainer.appendChild(adminInput);
-	    } else {
-	        // 다른 옵션을 선택한 경우, adminInputContainer를 비운다.
-	        adminInputContainer.innerHTML = "";
-	    }
-	    
-	    $(document).on('click', '#stockbtn', function () {
-	    	var bkno = $('#bkno2').val(); // 책 번호 가져오기
-	    	// alert(bkno);
-	    	var bstock = "";
-	    	if ($('#stock').val() == "admin") {
-	            bstock = $('#admin').val(); // 사용자가 정의한 재고 값을 가져오기
-	        } else {
-	            bstock = $('#stock').val(); // 선택한 재고 값을 가져오기
-	        }
-
-	        var cate = getParameterByName('cate');
-	        
-	        $.ajax({
-	            url: './updateStock',
-	            type: 'post',
-	            data: { bkno: bkno, bstock: bstock, cate:cate },
-	            success: function (data) {
-	                // location.href = "./stock?cate=" + cate;
-	                alert("재고가 업데이트됐습니다.");
-	            },
-	            error: function (error) {
-	                alert('에러');
-	            }
-	        });
-	    });
-	}*/
-
 	function getParameterByName(name) {
 	    const urlParams = new URL(location.href).searchParams;
 	    return urlParams.get(name);
 	}
- 	
  	
  	$(function() {
  	// URL에서 cate 매개변수를 가져와서 기본값으로 설정
@@ -304,11 +235,11 @@
 		var cate = $('#cate').val();
 		// alert(cate);
 		$.ajax({
-			url:'./stock',
+			url:'./rent',
 			type:'get',
 			data:{cate:cate},
 			success:function(data){
-				location.href="./stock?cate=" + cate;
+				location.href="./rent?cate=" + cate;
 				
 			},
 			error:function(error){

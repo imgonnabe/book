@@ -145,21 +145,27 @@
 			</section>
 			<div class="container">
 				<div class="row multi-columns-row">
-					<div class="col-sm-6">
-						<div class="menu">
-								<c:forEach items="${list }" var="row">
-							<div class="row"  onclick="cdetail(${row.cno})">
-									<div class="col-sm-8">
-										<div class="menu-detail font-serif">${row.cno}&nbsp;${row.btitle}</div>
-										<div class="menu-title font-alt">${row.comment}</div>
-									</div>
-									<div class="col-sm-4 menu-price-detail">
-										<div class="menu-price font-alt">${row.cdate}</div>
+				<div class="col-sm-15">
+						<div class="menu" style="text-align: center;">
+							<div class="row">
+								<span class="menu-detail font-alt col-sm-1">댓글번호</span>
+								<span class="menu-title font-alt col-sm-3">보드 제목</span>
+								<span class="menu-title font-alt col-sm-4">댓글</span>
+								<span class="menu-price font-alt col-sm-2">날짜</span>
+								<span class="menu-price font-alt col-sm-2"></span>
+							</div>
+							<c:forEach items="${list }" var="row">
+								<div class="row" onclick="cdetail(${row.cno})">
+									<span class="menu-detail font-serif col-sm-1">${row.cno}</span>
+									<span class="menu-title font-alt col-sm-3">${row.btitle}</span>
+									<span class="menu-title font-alt col-sm-4">${row.comment}</span>
+									<span class="menu-price font-alt col-sm-2">${row.cdate}</span>
+									<span class="menu-price font-alt col-sm-2">
 										<button onclick="edit(${row.cno})">수정</button>
 										<button onclick="del(${row.cno})">삭제</button>
-									</div>
-							</div>
-								</c:forEach>
+									</span>
+								</div>
+							</c:forEach>
 						</div>
 					</div>
 				</div>

@@ -72,6 +72,14 @@ public class MyPageService {
 	public Map<String, Object> idchk(String id) {
 		return myPageDAO.idchk(id);
 	}
+
+	public Map<String, Object> emailchk(String email, String mid) {
+		return myPageDAO.emailchk(email, mid);
+	}
+
+	public void returnBook(Map<String, Object> map) {
+		myPageDAO.returnBook(map);
+	}
 	
 
 }

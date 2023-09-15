@@ -58,6 +58,11 @@
 		order by r.rsdate desc
 	</select>
 	
+	<update id="returnBook" parameterType="Map">
+		update rental set rdel = 0
+		where mid = #{mid} and rno = #{rno}
+	</update>
+	
 	<select id="boardlist" parameterType="Map" resultType="Map">
 		select b.bno, b.btitle, b.bcontent, DATE_FORMAT(b.bdate, '%y-%m-%d %h:%m') AS bdate, b.bcate,
 			(select count(*) from board where mid = #{mid}) as count
@@ -138,6 +143,12 @@
 		select mid, count(*) as count
 		from members
 		where mid = #{id}
+	</select>
+	
+	<select id="emailchk" parameterType="String" resultType="Map">
+		select count(*) as count
+		from members
+		where memail = #{arg0} and mid = #{arg1} 
 	</select>
 	
 </mapper>

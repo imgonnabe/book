@@ -84,6 +84,15 @@
 <link href="../assets/css/style.css" rel="stylesheet">
 <link id="color-scheme" href="../assets/css/colors/default.css"
 	rel="stylesheet">
+<style type="text/css">
+.gray{
+	background-color: gray;
+}
+
+.silver{
+	background-color: silver;
+}
+</style>
 </head>
 <body data-spy="scroll" data-target=".onpage-navigation"
 	data-offset="60">
@@ -97,79 +106,71 @@
 			<div class="container">
 				<div class="row">
 					<div class="col-sm-6 col-sm-offset-3">
-						<h1 class="module-title font-alt">글관리</h1>
+						<h1 class="module-title font-alt">게시물 관리</h1>
 					</div>
 				</div>
 			</div>
-		<c:choose>
-			<c:when test="${list[0].count eq null}">
-				<section class="module-small">
-					<div class="container">
-						<h2 style="text-align: center;">게시물이 없습니다.</h2>
-					</div>
-				</section>
-			</c:when>
-		<c:otherwise>
+
 			<section class="module-small">
 				<div class="container">
-					<div class="col-sm-2 mb-sm-20">
-						<button class="btn" onclick="location.href='./board?cate=0'">전체보기</button>
-					</div>
-					<form action="./board" method="get" class="row">
-						<div class="col-sm-2 mb-sm-20">
-							<select class="form-control" name="cate" id="cate"
-								onclick="cateChange()">
-									<option selected="selected" value="0">전체</option>
-									<option value="1">자유게시판</option>
-									<option value="2">독후감</option>
-									<option value="3">공지사항</option>
-							</select>
-						</div>
-						<div class="col-sm-3 mb-sm-20">
+				<span class="col-sm-2 mb-sm-20">
+					<button class="btn" onclick="location.href='./notice?cate=0'">전체보기</button>
+				</span>
+				<span class="col-sm-2 mb-sm-20">
+					<button class="btn" type="button">글쓰기</button>
+				</span>
+				<br><br>
+					<form action="./notice" method="get" class="row">
+						<span class="col-sm-3 mb-sm-20">
 							<select class="form-control" name="searchN">
 								<option value="title">글제목</option>
 								<option value="content">글내용</option>
 							</select>
-						</div>
-						<div class="col-sm-4">
-							<div class="search-box">
-								<input class="form-control" type="text" name="searchV"
-									required="required" placeholder="Search..">
-								<button class="search-btn" type="submit">
-									<i class="fa fa-search"></i>
-								</button>
-							</div>
-						</div>
+						</span>
+						<span class="col-sm-4 search-box">
+							<input class="form-control" type="text" name="searchV"
+								required="required" placeholder="Search..">
+							<button class="search-btn" type="submit">
+								<i class="fa fa-search"></i>
+							</button>
+						</span>
 					</form>
 				</div>
 			</section>
 			<div class="container">
 				<div class="row multi-columns-row">
-				<div class="col-sm-10">
-						<div class="menu" style="text-align: center;">
+					<div class="col-sm-13">
+					<div class="menu">
 							<div class="row">
 								<span class="menu-detail font-alt col-sm-1">번호</span>
 								<span class="menu-title font-alt col-sm-3">제목</span>
 								<span class="menu-price font-alt col-sm-2">날짜</span>
-								<span class="menu-price font-alt col-sm-3"></span>
+								<span class="menu-price font-alt col-sm-1">조회수</span>
+								<span class="menu-price font-alt col-sm-5"></span>
 							</div>
 							<c:forEach items="${list }" var="row">
-								<div class="row" onclick="detail(${row.bno})">
-									<span class="menu-detail font-serif col-sm-1">${row.bno}</span>
-									<span class="menu-title font-alt col-sm-3">${row.btitle}</span>
-									<span class="menu-price font-alt col-sm-2">${row.bdate}</span>
-									<span class="menu-price font-alt col-sm-3">
-										<button onclick="edit(${row.bno})">수정</button>
-										<button onclick="del(${row.bno})">삭제</button>
-									</span>
+								<div class="row">
+									<div class="col-sm-13">
+										<span class="menu-detail font-serif col-sm-1">${row.bno}</span>
+										<span onclick="ndetail(${row.bno})" class="menu-title font-alt col-sm-3">${row.btitle}</span>
+										<span class="menu-price font-alt col-sm-2">${row.bdate}</span>
+										<span class="menu-price font-alt col-sm-1">${row.bread}</span>
+										<span class="menu-price font-alt col-sm-5">
+											<span class="col-sm-3">
+												<select class="form-control" name="noticeChange" id="noticeChange">
+													<option value="0">수정</option>
+													<option value="1">삭제</option>
+												</select>
+											</span>
+											<span><input type="button" class="btn punishbtn" data-bno="${row.bno}" value="등록"></span>
+										</span>
+									</div>
 								</div>
 							</c:forEach>
 						</div>
 					</div>
 				</div>
 			</div>
-		</c:otherwise>
-		</c:choose>
 		</div>
 	</main>
 	<!-- Modal -->
@@ -182,11 +183,9 @@
 				</div>
 				<div class="modal-body">
 					<div class="detail">
-						<div class="detail-date-read">    		
-							<div class="detail-date">날짜</div>     		
-							<div class="detail-read">조회수</div>	      		
-						</div> 
 						<div style="font-weight: bold; font-size: larger;" class="detail-content">본문내용</div>
+						<div class="comment">
+						</div>
 					</div>
 				</div>
 			</div>
@@ -214,33 +213,28 @@
 	<script src="../assets/js/main.js"></script>
 	
 	<script type="text/javascript">
-	// 수정
-    function edit(bno){
-    	if(confirm("수정하시겠습니까?")){
-    		location.href = "./edit?bno=" + bno;
-    	}
-    }
-    
- 	// 삭제
-    function del(bno){
- 		// alert(bno);
-    	if(confirm("삭제하시겠습니까?")){
-    		location.href = "./delete?bno=" + bno;
-    	}
-    }
- 	
- 	function detail(bno){
+	
+ 	function ndetail(bno){
  		$.ajax({
- 			url:'./detail',
+ 			url:'./ndetail',
  			type:'post',
  			data:{bno:bno},
  			dataType:'json',
  			success:function(data){
- 				$(".modal-title").text(data.btitle);
- 				var date = new Date(data.bdate).toISOString().split("T")[0];
- 				$(".detail-date").text("날짜 : "+date);
- 				$(".detail-read").text("조회수:"+data.bread);
- 				$(".detail-content").html(data.bcontent);
+ 				var detail = data.detail;
+ 				var comment = data.ncomment;
+ 				$(".modal-title").text(detail.btitle);
+ 				$(".detail-content").html(detail.bcontent + "<hr>");
+ 				
+ 				var commentHtml = "";
+ 	            for(var i = 0; i < comment.length; i++){
+ 	                commentHtml += "<div class='comment-item'>";
+ 	                commentHtml += comment[i].mid + "(" + comment[i].mname + ")&nbsp;&nbsp;&nbsp;";
+ 	                commentHtml += comment[i].cdate + "<br>";
+ 	                commentHtml += "<div style='font-weight: bold; font-size: larger;'>" + comment[i].comment + "</div>";
+ 	                commentHtml += "</div><hr>";
+ 	            }
+ 	            $(".comment").html(commentHtml);
  				$("#exampleModal").modal("show");
  			},
  			error:function(error){
@@ -249,48 +243,7 @@
  		});
  	}
  	
- 	$(function() {
- 	// URL에서 cate 매개변수를 가져와서 기본값으로 설정
-    var defaultCate = getParameterByName('cate');
-    $('#cate').val(defaultCate);
-    
-	$('#cate').on('change', function(){
-		var cate = $('#cate').val();
-		// alert(cate);
-		$.ajax({
-			url:'./board',
-			type:'get',
-			data:{cate:cate},
-			success:function(data){
-				location.href="./board?cate=" + cate;
-				
-			},
-			error:function(error){
-				alert('에러');
-			}
-		});
-	});
-	
-	// URL에서 매개변수를 추출하는 함수
-    /*function getParameterByName(name, url) {
-        if (!url) {
-        	url = window.location.href;
-        }
-        name = name.replace(/[\[\]]/g, '\\$&');
-        var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)');
-        var results = regex.exec(url);
-        if (!results) return null;
-        if (!results[2]) return '';
-        return decodeURIComponent(results[2].replace(/\+/g, ' '));
-    }*/
-    function getParameterByName(name, url) {
-    	const urlParams = new URL(location.href).searchParams;
-    	return urlParams.get(name);
-    }
-    
-    
-	});
  	</script>
-
+ 	
 </body>
 </html>

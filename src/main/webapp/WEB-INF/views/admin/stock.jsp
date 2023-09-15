@@ -138,23 +138,28 @@
 			</section>
 			<div class="container">
 				<div class="row multi-columns-row">
-					<div class="col-sm-8">
+					<div class="col-sm-15">
 						<div class="menu">
-								<c:forEach items="${list }" var="row">
 							<div class="row">
-									<div class="col-sm-8">
-										<div class="menu-detail font-serif">${row.bkno}</div>
-										<div class="menu-title font-alt">${row.bkname}</div>
-										<div class="menu-title font-alt">${row.bkwrite}</div>
-									</div>
-									<div class="col-sm-4 menu-price-detail">
-										<div class="menu-price font-alt">${row.bkprice}원</div>
-										<div class="menu-price font-alt">${row.bkpublisher}</div>
-										<div onclick="stock('${row.bkno}', '${row.bstock}')" class="menu-price font-alt" data-bkno="${row.bkno}" data-bstock="${row.bstock}">${row.bstock}개</div>
-										<div class="menu-price font-alt">${row.bkcate}</div>
-									</div>
+								<span class="menu-detail font-alt col-sm-1">책번호</span>
+								<span class="menu-title font-alt col-sm-3">책제목</span>
+								<span class="menu-title font-alt col-sm-2">저자</span>
+								<span class="menu-price font-alt col-sm-2">가격</span>
+								<span class="menu-price font-alt col-sm-2">출판사</span>
+								<span class="menu-price font-alt col-sm-2">재고</span>
 							</div>
-								</c:forEach>
+							<c:forEach items="${list }" var="row">
+								<div class="row">
+									<div class="col-sm-15">
+										<span class="menu-detail font-serif col-sm-1">${row.bkno}</span>
+										<span class="menu-title font-alt col-sm-3">${row.bkname}</span>
+										<span class="menu-title font-alt col-sm-2">${row.bkwrite}</span>
+										<span class="menu-price font-alt col-sm-2">${row.bkprice}원</span>
+										<span class="menu-price font-alt col-sm-2">${row.bkpublisher}</span>
+										<input onclick="stock('${row.bkno}', '${row.bstock}', '${row.bkprice}')" class="menu-price font-alt col-sm-2" data-bkno="${row.bkno}" data-bkprice="${row.bkprice}" data-bstock="${row.bstock}" value="${row.bstock}개">
+									</div>
+								</div>
+							</c:forEach>
 						</div>
 					</div>
 				</div>
@@ -171,6 +176,7 @@
 				</div>
 				<div class="modal-body">
 					<input id="bkno2" type="hidden">
+					<input id="bkprice2" type="hidden">
 					<div class="detail">
 						<!-- <select class="form-control" name="stock" id="stock" onclick="stockChange()">
 								<option value="10">10</option>
@@ -183,6 +189,7 @@
 						<div id="adminInputContainer"></div>-->
 						<input id="stockCnt" type="text" placeholder="수량을 입력하세요...">
 						<button id="stockbtn">재고 업데이트</button>
+						<br><input id="stockAmount" style="display: none"></input>
 					</div>
 				</div>
 			</div>
@@ -211,15 +218,28 @@
 	
 	<script type="text/javascript">
 	
-	function stock(bkno, bstock) {
+	function stock(bkno, bstock, bkprice) {
 		// alert(bkno +" "+ bstock);
 	    if (confirm(bstock + "개 남은 재고를 바꾸시겠습니까?")) {
 	    	$("#bkno2").val(bkno);
+	    	$("#bkprice2").val(bkprice);
 	        $("#exampleModal").modal("show");
 	    }
 	}
 	
-	$(document).on('click', '#stockbtn', function () {
+	$(document).on('input', '#stockCnt', function() {
+		$('#stockAmount').css('display', 'inline');
+		var bkprice = $('#bkprice2').val();
+		var stockCnt = $('#stockCnt').val();
+		var stockAmount = bkprice * stockCnt;
+		$('#stockAmount').val("총 " + stockAmount + "원");
+		$('#stockAmount').css('color','green');
+		if($('#stockAmount').val().indexOf("NaN") >= 0){
+			alert("문자가 포함되어 있습니다.");
+		}
+	});
+	
+	$(document).on('click', '#stockbtn', function() {
 		var bkno = $('#bkno2').val();
 		var bstock = $("#stockCnt").val();
 		var cate = getParameterByName('cate');
@@ -227,10 +247,15 @@
 		$.ajax({
             url: './updateStock',
             type: 'post',
+            dataType:'json',
             data: {bkno: bkno, bstock: bstock, cate:cate},
             success: function (data) {
-                alert("재고가 업데이트됐습니다.");
-                location.href = "./stock";
+            	if(data.bstock == 0){
+            		alert("재고에 문자가 포함되어 있습니다.");
+            	} else {
+	                alert("재고가 " + data.bstock + "개 업데이트됐습니다.");
+	                location.href = "./stock";
+            	}
             },
             error: function (error) {
                 alert('에러');

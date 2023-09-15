@@ -60,7 +60,7 @@
 	</update>
 	
 	<select id="rentlist" parameterType="Map" resultType="Map">
-		select b.bkno, b.bkname, b.bkwrite, b.bkpublisher, b.bkcate, r.rsdate, r.rddate, r.rdel, r.rno, r.mid
+		select b.bkno, b.bkname, b.bkwrite, b.bkprice, b.bkcate, r.rsdate, r.rddate, r.rdel, r.rno, r.mid
 		from books b join rental r
 		<where>
 		b.bkno = r.bkno
@@ -90,6 +90,23 @@
 		where r.bkno = b.bkno
 			<if test="cate gt 0">and b.bkcate = #{cate}</if>
 		group by r.rsdate, b.bkcate
+	</select>
+	
+	<select id="notice" resultType="Map">
+		select * from board
+		where bcate = 3
+	</select>
+	
+	<select id="ndetail" parameterType="Integer" resultType="Map">
+		select btitle, bcontent
+		FROM board
+		where bno = #{bno}
+	</select>
+	
+	<select id="ncomment" parameterType="Integer" resultType="Map">
+		select c.comment, c.cdate, c.cdel, m.mid, m.mname
+		FROM comments c join members m on c.mno = m.mno
+		where c.bno = #{bno}
 	</select>
 	
 </mapper>
