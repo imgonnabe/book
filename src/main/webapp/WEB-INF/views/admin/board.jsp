@@ -130,7 +130,7 @@
 									<option selected="selected" value="0">전체</option>
 									<option value="1">자유게시판</option>
 									<option value="2">독후감</option>
-									<option value="3">공지사항</option>
+									<option value="3">모임&amp;스터디</option>
 							</select>
 						</div>
 						<div class="col-sm-3 mb-sm-20">
@@ -152,7 +152,7 @@
 			<div class="container">
 				<div class="row multi-columns-row">
 					<div class="col-sm-13">
-					<div class="menu">
+					<div class="menu" id="menu">
 							<div class="row">
 								<span class="menu-detail font-alt col-sm-1">번호</span>
 								<span class="menu-title font-alt col-sm-3">제목</span>
@@ -229,6 +229,8 @@
 	<script src="../assets/js/main.js"></script>
 	
 	<script type="text/javascript">
+$(function(){
+	
 	
    $(".punishbtn").click(function(){
 	  var selected = $("#punish").val();
@@ -268,7 +270,8 @@
 		  return false;
 	  }
 	});
-	
+});   
+   
  	function detail(bno){
  		$.ajax({
  			url:'./detail',
@@ -323,18 +326,6 @@
 		});
 	});
 	
-	// URL에서 매개변수를 추출하는 함수
-    /*function getParameterByName(name, url) {
-        if (!url) {
-        	url = window.location.href;
-        }
-        name = name.replace(/[\[\]]/g, '\\$&');
-        var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)');
-        var results = regex.exec(url);
-        if (!results) return null;
-        if (!results[2]) return '';
-        return decodeURIComponent(results[2].replace(/\+/g, ' '));
-    }*/
     function getParameterByName(name, url) {
     	const urlParams = new URL(location.href).searchParams;
     	return urlParams.get(name);

@@ -106,7 +106,7 @@
 			<div class="container">
 				<div class="row">
 					<div class="col-sm-6 col-sm-offset-3">
-						<h1 class="module-title font-alt">게시물 관리</h1>
+						<h1 class="module-title font-alt">공지 관리</h1>
 					</div>
 				</div>
 			</div>
@@ -121,6 +121,14 @@
 				</span>
 				<br><br>
 					<form action="./notice" method="get" class="row">
+					<span class="col-sm-3 mb-sm-20">
+							<select class="form-control" name="cate" id="cate">
+									<option selected="selected" value="0">전체</option>
+									<option value="1">공지사항</option>
+									<option value="2">Q&amp;A</option>
+									<option value="3">1대1 문의</option>
+							</select>
+						</span>
 						<span class="col-sm-3 mb-sm-20">
 							<select class="form-control" name="searchN">
 								<option value="title">글제목</option>
@@ -151,10 +159,10 @@
 							<c:forEach items="${list }" var="row">
 								<div class="row">
 									<div class="col-sm-13">
-										<span class="menu-detail font-serif col-sm-1">${row.bno}</span>
-										<span onclick="ndetail(${row.bno})" class="menu-title font-alt col-sm-3">${row.btitle}</span>
-										<span class="menu-price font-alt col-sm-2">${row.bdate}</span>
-										<span class="menu-price font-alt col-sm-1">${row.bread}</span>
+										<span class="menu-detail font-serif col-sm-1">${row.nno}</span>
+										<span onclick="ndetail(${row.nno})" class="menu-title font-alt col-sm-3">${row.ntitle}</span>
+										<span class="menu-price font-alt col-sm-2">${row.ndate}</span>
+										<span class="menu-price font-alt col-sm-1">${row.nread}</span>
 										<span class="menu-price font-alt col-sm-5">
 											<span class="col-sm-3">
 												<select class="form-control" name="noticeChange" id="noticeChange">
@@ -242,6 +250,36 @@
  			}
  		});
  	}
+ 	
+ 	$(function() {
+ 	 	// URL에서 cate 매개변수를 가져와서 기본값으로 설정
+ 	    var defaultCate = getParameterByName('cate');
+ 	    $('#cate').val(defaultCate);
+ 	    
+ 		$('#cate').on('change', function(){
+ 			var cate = $('#cate').val();
+ 			// alert(cate);
+ 			$.ajax({
+ 				url:'./notice',
+ 				type:'get',
+ 				data:{cate:cate},
+ 				success:function(data){
+ 					location.href="./notice?cate=" + cate;
+ 					
+ 				},
+ 				error:function(error){
+ 					alert('에러');
+ 				}
+ 			});
+ 		});
+ 		
+ 	    function getParameterByName(name, url) {
+ 	    	const urlParams = new URL(location.href).searchParams;
+ 	    	return urlParams.get(name);
+ 	    }
+ 	    
+ 	    
+ 		});
  	
  	</script>
  	

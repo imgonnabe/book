@@ -92,9 +92,16 @@
 		group by r.rsdate, b.bkcate
 	</select>
 	
-	<select id="notice" resultType="Map">
-		select * from board
-		where bcate = 3
+	<select id="notice" parameterType="Map" resultType="Map">
+		select * from notice
+		<where>
+			<if test="cate gt 0">and ncate = #{cate}</if>
+			<choose>
+				<when test="searchN == 'title'">and ntitle like concat('%', #{searchV},'%')</when>
+				<when test="searchN == 'content'">and ncontent like concat('%', #{searchV},'%')</when>
+			</choose>
+		</where>
+		order by nno desc
 	</select>
 	
 	<select id="ndetail" parameterType="Integer" resultType="Map">
