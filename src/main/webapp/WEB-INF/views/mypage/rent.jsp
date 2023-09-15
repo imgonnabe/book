@@ -162,7 +162,7 @@
 				<c:forEach items="${list }" var="row">
 					<div class="row" style="margin-bottom: 5px;">
 						<span class="menu-price font-alt col-sm-3">
-							<a href="../bookdetail?bkno=${row.bkno}"><img src="${row.bkimg }" alt="Blog-post Thumbnail"/></a>
+							<a href="../bookdetail?bkno=${row.bkno}"><img src="/img/bookimg/${row.bkimg }" alt="Blog-post Thumbnail"/></a>
 						</span>
 						<span class="menu-price font-alt col-sm-2">${row.bkwrite}</span>
 						<span class="menu-price font-alt col-sm-2">${row.rsdate}</span>

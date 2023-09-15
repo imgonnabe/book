@@ -119,6 +119,7 @@
 		<div class="col-sm-2 mb-sm-20">
 			<button class="btn" onclick="location.href='./buy'">전체보기</button>
 		</div>
+		<div class="col-sm-10">
 			<form action="./buy" method="get" class="row">
 				<div class="col-sm-3 mb-sm-20">
 					<select class="form-control" name="searchN">
@@ -137,27 +138,33 @@
 				</div>
 				</div>
 			</form>
+			</div>
 		</div>
 	</section>
 	<div class="container">
-	
 		<div class="row multi-columns-row">
-			<div class="col-sm-6">
-				<div class="widget-posts">
+			<div class="col-sm-15">
+				<div class="menu">
+				<div class="row">
+					<span class="menu-detail font-alt col-sm-5">주문번호<br>
+					총 주문금액<br>
+					날짜</span>
+					<span class="menu-price font-alt col-sm-3">책</span>
+				</div>
+				<div class="row">
 					<c:forEach items="${list }" var="row"  varStatus="loop">
 						<c:if test="${loop.first || row.tgroup ne list[loop.index - 1].tgroup}">
-							<div class="col-sm-8">
-								<h3 class="widget-posts-title font-serif">${row.tgroup} <br> <fmt:formatNumber value="${row.total}" pattern="#,###"/>원</h3>
-								<hr>
-							</div>
+							<span class="col-sm-5">
+								<span class="menu-title font-alt col-sm-3">${row.tgroup} <br> <fmt:formatNumber value="${row.total}" pattern="#,###"/>원
+								${row.tdate }</span>
+							</span>
 						</c:if>
-						<div class="widget-posts" style="display: inline;">
-							<h4 class="widget-posts-title font-serif"><a href="../bookdetail?bkno=${row.bkno}">${row.bkname}</a></h4>
-							<div class="gallery-image"><a href="../bookdetail?bkno=${row.bkno}"><img src="${row.bkimg }" alt="Blog-post Thumbnail"/></a></div>
-							<div class="widget-posts-title font-alt"><fmt:formatNumber value="${row.bkprice}" pattern="#,###"/>원</div>
-							<div class="widget-posts-title font-serif">${row.tamount}개</div>
-						</div>	
+						<span class="menu-title font-alt col-sm-3 font-alt"><a href="../bookdetail?bkno=${row.bkno}">${row.bkname}</a><br>
+						<a href="../bookdetail?bkno=${row.bkno}"><img src="/img/bookimg/${row.bkimg }" alt="Blog-post Thumbnail"/></a><br>
+						<fmt:formatNumber value="${row.bkprice}" pattern="#,###"/>원<br>
+						${row.tamount}개</span>
 					</c:forEach>
+					</div>
 				</div>
 			</div>
 		</div>

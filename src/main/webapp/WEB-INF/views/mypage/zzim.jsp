@@ -113,21 +113,20 @@
 							<div style="text-align: center;" class="row">
 								<input name="allCheck" type="checkbox">&nbsp;
 								<h3 style="display: inline;">찜한 상품 </h3>
+								<h4><span class="zzim"></span> / ${list[0].count }</h4>
 								<button class="delbtn btn" type="button" onclick="deleteValue()">삭제</button>
-								<br><div style="display: inline;" class="zzim"></div> / ${list[0].count }
 							</div>
 						</section>
 						<div class="row multi-columns-row post-columns">
 							<c:forEach items="${list }" var="row">
-								<div class="row" style="display: inline; width: 100px;">
-									<div class="gallery-item">
-										<div class="col-sm-6 col-md-3 col-lg-3">
+								<div class="col-sm-3 col-md-3 col-lg-3">
+                						<div class="shop-item">
 											<div>
 												<input name="rowCheck" type="checkbox" value="${row.zno }">
 											</div>
 											<div class="post-image">
 												<a href="../bookdetail?bkno=${row.bkno}"><img
-													src="${row.bkimg }" alt="Blog-post Thumbnail" /></a>
+													src="/img/bookimg/${row.bkimg }" alt="Blog-post Thumbnail" /></a>
 											</div>
 											<div class="post-title">
 												<a href="../bookdetail?bkno=${row.bkno}">${row.bkname}</a>
@@ -135,7 +134,6 @@
 											<div class="post-entry">${row.bkwrite}</div>
 										</div>
 									</div>
-								</div>
 							</c:forEach>
 						</div>
 					</c:otherwise>

@@ -123,28 +123,6 @@ function uncomma(str) {
       <h1>책추가</h1>
         <hr class="divider-w">
           <div class="container">
-          <div class="notice-write-form">
-			<form action="./bookWrite" method="post"
-				enctype="multipart/form-data">
-				<input type="text" name="name" placeholder="책이름"> <input
-					type="text" name="write" placeholder="저자"> <input
-					type="number" name="price" placeholder="가격"> <input
-					type="number" name="bstock" placeholder="구매재고"> <input
-					type="number" name="rstock" placeholder="대여재고"> <select
-					class="form-control" name="cate">
-					<option selected="selected" value="0">장르선택</option>
-					<option value="1">소설</option>
-					<option value="2">에세이</option>
-					<option value="3">자기개발</option>
-				</select>
-
-				<textarea name="scontent"></textarea>
-				<textarea name="content"></textarea>
-				<input type="file" name="upFile">
-				<button type="submit">글쓰기</button>
-			</form>
-		</div>
-
                     <div class="comment-form mt-30">
                       <h4 class="comment-form-title font-alt">책 추가</h4>
                       <form action="./bookWrite" method="post" enctype="multipart/form-data">
@@ -177,8 +155,11 @@ function uncomma(str) {
                           </div>
                           <div class="col-sm-4">
                             <div class="form-group">
-                                 대여재고
-                               <input class="form-control" id=rstock type="number" name="rstock"  placeholder="재고"/>
+                                 대여가능여부
+                               <select class="form-control" name="rdel">
+					             <option selected="selected" value="0">대여가능</option>
+					             <option value="1">대여불가</option>
+				                </select>
                             </div>
                           </div>
                           <div class="col-sm-4">

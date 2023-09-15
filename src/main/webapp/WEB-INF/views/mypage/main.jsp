@@ -209,8 +209,8 @@ label {
               <c:forEach items="${list }" var="row">
                 <div class="owl-item">
                   <div class="col-sm-12">
-                    <div class="ex-product"><a href="./bookdetail?bkno=${row.bkno}"><img src="${row.bkimg}" alt="Leather belt"/></a>
-                      <h4 class="shop-item-title font-alt"><a href="./bookdetail?bkno=${row.bkno}">${row.bkname}</a></h4><fmt:formatNumber value="${row.bkprice}" pattern="#,###"/>원
+                    <div class="ex-product"><a href="../bookdetail?bkno=${row.bkno}"><img src="/img/bookimg/${row.bkimg}" alt="Leather belt"/></a>
+                      <h4 class="shop-item-title font-alt"><a href="../bookdetail?bkno=${row.bkno}">${row.bkname}</a></h4><fmt:formatNumber value="${row.bkprice}" pattern="#,###"/>원
                     </div>
                   </div>
                 </div>

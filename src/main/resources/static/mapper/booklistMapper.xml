@@ -75,7 +75,7 @@
 		FROM books WHERE bkno=#{bkno }
 	</select>
 
-	<select id="booktop" resultType="BooklistDTO">
+	<select id="booktop" resultType="com.book.web.booklist.BooklistDTO">
 		SELECT *
 		FROM books
 		ORDER BY bcnt
@@ -83,7 +83,7 @@
 		LIMIT 1, 10
 	</select>
 	
-	<select id="bookrtop" resultType="BooklistDTO">
+	<select id="bookrtop" resultType="com.book.web.booklist.BooklistDTO">
 		SELECT *
 		FROM books
 		ORDER BY rcnt
@@ -112,13 +112,13 @@
 	
 	
  <!-- SM -->	
-	<insert id="detail2" parameterType="CartDTO">
+	<insert id="detail2" parameterType="com.book.web.booklist.CartDTO">
     INSERT INTO cart(bkno,bkimg, bkscontent, price, total, amount, mid) VALUES(#{bkno},#{bkimg}, #{bkscontent}, #{price}, #{price}*#{amount}, #{amount}, #{mid})
 
 
     </insert>
 
-<select id="cart" parameterType="CartDTO"  resultType="Map">
+<select id="cart" parameterType="com.book.web.booklist.CartDTO"  resultType="Map">
 SELECT *
 FROM cart
 WHERE amount > 0 AND mid=#{mid} 
@@ -140,7 +140,7 @@ UPDATE cart SET amount = amount - #{mod}, total = (SELECT price FROM cart WHERE 
 </delete>
  
 
-<update id="cart2" parameterType="CartDTO">
+<update id="cart2" parameterType="com.book.web.booklist.CartDTO">
 UPDATE cart SET amount = amount + #{amount} , total = total + #{price} * #{amount} WHERE bkno = #{bkno} AND mid = #{mid}
 </update>
  
@@ -182,7 +182,7 @@ WHERE c.mid = #{mid};
  DELETE FROM cart WHERE mid =#{mid} 
  </delete>
  
- <select id="coupon" parameterType="CartDTO"  resultType="Map">
+ <select id="coupon" parameterType="com.book.web.booklist.CartDTO"  resultType="Map">
 SELECT *
 FROM coupons
 WHERE mid=#{mid} AND cdel = 1
@@ -204,10 +204,10 @@ WHERE mid=#{mid} AND cdel = 1
 	
 	
 <!-- SH -->
-	<update id="rental" parameterType="Map">
+	<!-- <update id="rental" parameterType="Map">
 		INSERT INTO rental (rsdate, rddate, bkno, rdel, mid)
 		VALUES (#{rsdate}, #{rddate}, #{bkno}, 1, #{mid})
-	</update>	
+	</update>	 -->
 	
 	
 

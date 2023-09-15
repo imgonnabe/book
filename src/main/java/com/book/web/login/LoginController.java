@@ -19,13 +19,6 @@ public class LoginController {
 	@Autowired
 	private LoginService loginService;
 
-	
-	@GetMapping({"/", "/index"})
-	public String index() {
-		return "index";
-	}
-	
-	
 	@GetMapping("/login")
 	public String login(HttpSession session) {
 		

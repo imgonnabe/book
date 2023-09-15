@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.book.web.dao.MyPageDAO">
+<mapper namespace="com.book.web.mypage.MyPageDAO">
 	
 	<select id="booklist" parameterType="String" resultType="Map">
 		select bkno, bkname, bkimg, bkwrite, bkprice, bkcate
@@ -22,7 +22,9 @@
 	</delete>
 	
 	<select id="buylist" parameterType="Map" resultType="Map">
-		SELECT t.tno, t.bkno, b.bkimg, b.bkname, b.bkprice, t.tamount, t.tdate, t.tgroup,
+		SELECT t.tno, t.bkno, b.bkimg, b.bkname, b.bkprice, t.tamount, 
+		DATE_FORMAT(t.tdate, '%y-%m-%d %h:%m') AS tdate, 
+		t.tgroup,
 			SUM(t.ttotal) OVER (PARTITION BY t.tgroup) AS total,
 			(SELECT COUNT(DISTINCT tgroup) FROM trade WHERE mid = #{mid}) AS count
 			FROM trade t
