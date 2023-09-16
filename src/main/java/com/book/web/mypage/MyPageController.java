@@ -197,7 +197,7 @@ public class MyPageController {
 	@GetMapping("/info")
 	public String info(Model model, @RequestParam Map<String, Object> map, HttpSession session) {
 		if(session.getAttribute("mid") != null) {
-			map.put("mno", session.getAttribute("mno"));
+			map.put("mname", session.getAttribute("mname"));
 			Map<String, Object> info = myPageService.info(map);
 			model.addAttribute("info", info);
 			return "/mypage/info";
@@ -227,7 +227,7 @@ public class MyPageController {
 			System.out.println("phonSave : " + phone);
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("phone", phone);
-			map.put("mno", session.getAttribute("mno"));
+			map.put("mname", session.getAttribute("mname"));
 			myPageService.phoneSave(map);
 			return "redirect:/mypage/info";
 		} else {
@@ -309,7 +309,7 @@ public class MyPageController {
 					}
 					map.put("email", email);
 				}
-				map.put("mno", session.getAttribute("mno"));
+				map.put("mname", session.getAttribute("mname"));
 				System.out.println(map);
 				myPageService.infoChange(map);
 				return "redirect:/mypage/info";

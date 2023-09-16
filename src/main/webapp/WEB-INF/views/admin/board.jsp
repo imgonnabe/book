@@ -151,7 +151,7 @@
 			</section>
 			<div class="container">
 				<div class="row multi-columns-row">
-					<div class="col-sm-13">
+					<div class="col-sm-15">
 					<div class="menu" id="menu">
 							<div class="row">
 								<span class="menu-detail font-alt col-sm-1">번호</span>

@@ -143,26 +143,23 @@
 	</section>
 	<div class="container">
 		<div class="row multi-columns-row">
-			<div class="col-sm-15">
+			<div class="col-sm-12">
 				<div class="menu">
-				<div class="row">
-					<span class="menu-detail font-alt col-sm-5">주문번호<br>
-					총 주문금액<br>
-					날짜</span>
-					<span class="menu-price font-alt col-sm-3">책</span>
-				</div>
 				<div class="row">
 					<c:forEach items="${list }" var="row"  varStatus="loop">
 						<c:if test="${loop.first || row.tgroup ne list[loop.index - 1].tgroup}">
-							<span class="col-sm-5">
-								<span class="menu-title font-alt col-sm-3">${row.tgroup} <br> <fmt:formatNumber value="${row.total}" pattern="#,###"/>원
-								${row.tdate }</span>
-							</span>
+							<div style="font-size: large;font-weight: bolder;" class="row">
+								<span class="menu-title font-alt col-sm-5">${row.tdate }(${row.tgroup})</span>
+								<span class="menu-title font-alt col-sm-3"></span>
+								<span class="menu-title font-alt col-sm-3"><fmt:formatNumber value="${row.total}" pattern="#,###"/>원</span>
+							</div>
 						</c:if>
-						<span class="menu-title font-alt col-sm-3 font-alt"><a href="../bookdetail?bkno=${row.bkno}">${row.bkname}</a><br>
-						<a href="../bookdetail?bkno=${row.bkno}"><img src="/img/bookimg/${row.bkimg }" alt="Blog-post Thumbnail"/></a><br>
-						<fmt:formatNumber value="${row.bkprice}" pattern="#,###"/>원<br>
-						${row.tamount}개</span>
+						<div class="row">
+							<div class="menu-title font-alt col-sm-2"><a href="../bookdetail?bkno=${row.bkno}"><img src="/img/bookimg/${row.bkimg }" alt="Blog-post Thumbnail"/></a></div>
+							<div class="menu-title font-alt col-sm-3"><a href="../bookdetail?bkno=${row.bkno}">${row.bkname}</a></div>
+							<div class="menu-title font-alt col-sm-3">${row.tamount}개</div>
+							<div class="menu-title font-alt col-sm-3"><fmt:formatNumber value="${row.bkprice}" pattern="#,###"/>원</div>
+						</div>
 					</c:forEach>
 					</div>
 				</div>

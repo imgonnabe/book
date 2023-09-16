@@ -119,12 +119,12 @@
 	<select id="info" parameterType="Map" resultType="Map">
 		select mid, mname, maddr, mbirth, mphone, memail
 		from members
-		where mno = #{mno}
+		where mname = #{mname}
 	</select>
 	
 	<update id="phoneSave" parameterType="Map">
 		update members set mphone = #{phone}
-		where mno = #{mno}
+		where mname = #{mname}
 	</update>
 	
 	<update id="infoChange" parameterType="Map">
@@ -137,7 +137,7 @@
 				<when test="email != null and email != ''">memail = #{email}</when>
 			</choose>
 		<where>
-			mno = #{mno}
+			mname = #{mname}
 		</where>
 	</update>
 	

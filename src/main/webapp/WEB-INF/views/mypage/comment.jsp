@@ -122,7 +122,7 @@
 									<option selected="selected" value="0">전체</option>
 									<option value="1">자유게시판</option>
 									<option value="2">독후감</option>
-									<option value="3">공지사항</option>
+									<option value="3">모임&amp;스터디</option>
 							</select>
 						</div>
 						<div class="col-sm-2 mb-sm-20">

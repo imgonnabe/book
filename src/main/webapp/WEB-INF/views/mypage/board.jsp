@@ -122,7 +122,7 @@
 									<option selected="selected" value="0">전체</option>
 									<option value="1">자유게시판</option>
 									<option value="2">독후감</option>
-									<option value="3">공지사항</option>
+									<option value="3">모임&amp;스터디</option>
 							</select>
 						</div>
 						<div class="col-sm-3 mb-sm-20">
@@ -145,19 +145,19 @@
 			</section>
 			<div class="container">
 				<div class="row multi-columns-row">
-				<div class="col-sm-10">
+				<div class="col-sm-15">
 						<div class="menu" style="text-align: center;">
 							<div class="row">
-								<span class="menu-detail font-alt col-sm-1">번호</span>
+								<span class="menu-detail font-alt col-sm-2">번호</span>
 								<span class="menu-title font-alt col-sm-3">제목</span>
-								<span class="menu-price font-alt col-sm-2">날짜</span>
+								<span class="menu-price font-alt col-sm-3">날짜</span>
 								<span class="menu-price font-alt col-sm-3"></span>
 							</div>
 							<c:forEach items="${list }" var="row">
 								<div class="row" onclick="detail(${row.bno})">
-									<span class="menu-detail font-serif col-sm-1">${row.bno}</span>
+									<span class="menu-detail font-serif col-sm-2">${row.bno}</span>
 									<span class="menu-title font-alt col-sm-3">${row.btitle}</span>
-									<span class="menu-price font-alt col-sm-2">${row.bdate}</span>
+									<span class="menu-price font-alt col-sm-3">${row.bdate}</span>
 									<span class="menu-price font-alt col-sm-3">
 										<button onclick="edit(${row.bno})">수정</button>
 										<button onclick="del(${row.bno})">삭제</button>
