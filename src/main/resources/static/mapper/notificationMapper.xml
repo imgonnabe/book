@@ -14,7 +14,7 @@
 	
 	<insert id="save" parameterType="Map">
 		INSERT INTO alarm (mid, acontent)
-		VALUES (#{id}, #{emitter})
+		VALUES (#{arg0}, #{arg1})
 	</insert>
 	
 </mapper>

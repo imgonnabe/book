@@ -29,7 +29,7 @@ public class MyPageController {
 	@Autowired
 	private SmsUtil smsUtil;
 	
-	@GetMapping({"/", "/main"})
+	@GetMapping({"/@{id}", "/main@{id}"})
 	public String main(Model model, HttpSession session) {
 		if(session.getAttribute("mid") != null) {
 			String mid = (String) session.getAttribute("mid");

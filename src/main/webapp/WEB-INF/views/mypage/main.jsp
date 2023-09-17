@@ -196,7 +196,9 @@ label {
 					</label>
 				</div>
 			</div>
-			
+		<div class="alarm" id="notification-area">
+	        <!-- 알림이 표시될 영역 -->
+	    </div>	
 		<section class="module recommend">
           <div class="container">
             <div class="row">
@@ -254,8 +256,10 @@ label {
 		function colorModePreview(event) {
 			if ($(event).prop("checked") == true) {
 				$(".recommend").show();
+				$(".alarm").hide();
 			} else if ($(event).prop("checked") == false) {
 				$(".recommend").hide();
+				$(".alarm").show();
 			}
 		}
 	</script>

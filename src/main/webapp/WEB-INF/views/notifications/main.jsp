@@ -7,12 +7,20 @@
 <title>Insert title here</title>
 </head>
 <body>
-<script type="text/javascript">
-const eventSource = new EventSource('http://localhost:80/notifications/main/1');
+<h1>알림</h1>
+    
+    <script>
+        // SSE 연결 및 알림 표시 로직
+        const eventSource = new EventSource('/mypage/main/${userId}'); // userId는 JSP에서 파라미터로 받아와야 합니다.
 
-eventSource.addEventListener('sse', event => {
-    console.log(event);
-});
-</script>
+        eventSource.onmessage = function(event) {
+            const notification = event.data;
+            // 알림을 notification-area에 추가하는 코드 작성
+            const notificationArea = document.getElementById('notification-area');
+            const notificationElement = document.createElement('p');
+            notificationElement.textContent = notification;
+            notificationArea.appendChild(notificationElement);
+        };
+    </script>
 </body>
 </html>
