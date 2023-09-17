@@ -14,13 +14,13 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 public class NotificationController {
     private NotificationService notificationService;
 
-    @GetMapping(value = "/mypage/main/{id}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public SseEmitter subscribe(@PathVariable Long id) {
+    @GetMapping(value = "/main/{id}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public SseEmitter subscribe(@PathVariable String id) {
         return notificationService.main(id);
     }
 
     @PostMapping("/send-data/{id}")
-    public void sendDataTEst(@PathVariable Long id) {
+    public void sendDataTEst(@PathVariable String id) {
         notificationService.notify(id, "data");
     }
 }

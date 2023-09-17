@@ -19,7 +19,7 @@ public class NotificationService {
      * @param userId - 구독하는 클라이언트의 사용자 아이디.
      * @return SseEmitter - 서버에서 보낸 이벤트 Emitter
      */
-    public SseEmitter main(Long id) {
+    public SseEmitter main(String id) {
     	SseEmitter emitter = createEmitter(id);
     	sendToClient(id, "EventStream Created. [userId=" + id + "]");
         return emitter;
@@ -28,11 +28,11 @@ public class NotificationService {
     /**
      * 서버의 이벤트를 클라이언트에게 보내는 메서드
      *
-     * @param userId - 메세지를 전송할 사용자의 아이디.
+     * @param id - 메세지를 전송할 사용자의 아이디.
      * @param event  - 전송할 이벤트 객체.
      */
-    public void notify(Long userId, Object event) {
-        sendToClient(userId, event);
+    public void notify(String id, Object event) {
+        sendToClient(id, event);
     }
 
     /**
@@ -41,7 +41,7 @@ public class NotificationService {
      * @param id   - 데이터를 받을 사용자의 아이디.
      * @param data - 전송할 데이터.
      */
-    private void sendToClient(Long id, Object data) {
+    private void sendToClient(String id, Object data) {
         SseEmitter emitter = notificationDAO.get(id);
         if (emitter != null) {
             try {
@@ -59,7 +59,7 @@ public class NotificationService {
      * @param id - 사용자 아이디.
      * @return SseEmitter - 생성된 이벤트 Emitter.
      */
-    private SseEmitter createEmitter(Long id) {
+    private SseEmitter createEmitter(String id) {
         SseEmitter emitter = new SseEmitter(DEFAULT_TIMEOUT);
         notificationDAO.save(id, emitter);
 

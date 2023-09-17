@@ -12,4 +12,9 @@
 		where mid = #{id}
 	</update>
 	
+	<insert id="save" parameterType="Map">
+		INSERT INTO alarm (mid, acontent)
+		VALUES (#{id}, #{emitter})
+	</insert>
+	
 </mapper>

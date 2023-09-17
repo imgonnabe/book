@@ -6,10 +6,10 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 @Mapper
 public interface NotificationDAO {
 
-	SseEmitter get(Long id);
+	SseEmitter get(String id);
 
-	void deleteById(Long id);
+	void deleteById(String id);
 
-	void save(Long id, SseEmitter emitter);
+	void save(String id, SseEmitter emitter);
 	
 }
