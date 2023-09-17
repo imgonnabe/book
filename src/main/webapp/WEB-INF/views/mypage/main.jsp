@@ -247,6 +247,7 @@ label {
 	<script type="text/javascript">
 		$(document).ready(function() {
 			$(".recommend").hide();
+			$(".alarm").show();
 
 			$(document).on("change", "#color_mode", function() {
 				colorModePreview(this);
