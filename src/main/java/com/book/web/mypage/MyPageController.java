@@ -143,17 +143,32 @@ public class MyPageController {
 	}
 	
 	@GetMapping("/board")
-	public String board(Model model, @RequestParam Map<String, Object> map,
+	public String board(Model model, @RequestParam Map<String, Object> map, @RequestParam(value = "pageNo", required = false, defaultValue = "1") int pageNo,
 			@RequestParam(name="cate", required = false, defaultValue = "0") int cate, HttpSession session) {
 		if(session.getAttribute("mid") != null) {
 			if(!map.containsKey("cate") || map.get("cate").equals(null) || map.get("cate").equals("")) {
 				map.put("cate", 0);
 			}
-			System.out.println(cate);
-			System.out.println(map);
+			PaginationInfo paginationInfo = new PaginationInfo();
+			paginationInfo.setCurrentPageNo(pageNo);// 현재 페이지 번호
+			paginationInfo.setRecordCountPerPage(10);// 한페이지에 게시되는 게시물 건수
+			paginationInfo.setPageSize(10);// 페이징 리스트의 사이즈
+			// 전체 글수 가져오는 명령문장
+			int totalCount = myPageService.totalCount();
+			paginationInfo.setTotalRecordCount(totalCount);// 전체 게시물 건수
+
+			int firstRecordIndex = paginationInfo.getFirstRecordIndex();// 시작위치
+			int recordCountPerPage = paginationInfo.getRecordCountPerPage();// 페이지당 글수
+
+			PageDTO page = new PageDTO();
+			page.setFirstRecordIndex(firstRecordIndex);
+			page.setRecordCountPerPage(recordCountPerPage);
+
 			map.put("mid", session.getAttribute("mid"));
-			List<Map<String, Object>> list = myPageService.boardlist(map);
+			List<Map<String, Object>> list = myPageService.boardlist(page);
+			// 페이징 관련 정보가 있는 PaginationInfo 객체를 모델에 넣어준다.
 			model.addAttribute("list", list);
+			model.addAttribute("paginationInfo", paginationInfo);
 			return "/mypage/board";
 		} else {
 			return "redirect:/login";

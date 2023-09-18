@@ -154,7 +154,7 @@
 								<span class="menu-price font-alt col-sm-3"></span>
 							</div>
 							<c:forEach items="${list }" var="row">
-								<div class="row" onclick="detail(${row.bno})">
+								<div class="row rowbody" onclick="detail(${row.bno})">
 									<span class="menu-detail font-serif col-sm-2">${row.bno}</span>
 									<span class="menu-title font-alt col-sm-3">${row.btitle}</span>
 									<span class="menu-price font-alt col-sm-3">${row.bdate}</span>
@@ -291,6 +291,107 @@
     
 	});
  	</script>
+ 	<script type="text/javascript">
+	$(function() {
+		let totalCount = 0;
+		let pageNo = 1;
+		ajax_call(1);
+		function ajax_call(pageNo) {
+			// alert(pageNo);
+			$.ajax({
+				url : "./boardList",
+				type : "get",
+				data : {"pageNo" : pageNo},
+				dataType : "json",
+				success : function(data) {
+					totalCount = data.totalCount;
+					pageNo = data.pageNo;
+					let startPage = pageNo;
+					let endPage = pageNo + 9;
+					
+					let list = data.list;
+					$(".rowbody").empty();
+					$(".paging").empty();
+					let html = "";
+					$.each(list, function(index) {// jQuery for문
+						html += "<div class='row rowbody' onclick='detail(${row.bno})'>";
+						html +=	"<span class='menu-detail font-serif col-sm-2'>" + list[index].bno + "</span>";
+						html +=	"<span class='menu-title font-alt col-sm-3'>" + list[index].btitle + "</span>";
+						html +=	"<span class='menu-title font-alt col-sm-3'>" + list[index].bdate + "</span>";
+						html +=	"<span class='menu-title font-alt col-sm-3'><button onclick='edit(${row.bno})'>수정</button><button onclick='del(${row.bno})'>삭제</button></span>";
+						html += "</div>";
+					});
+					$(".rowbody").append(html);
+					
+					// 페이징하기
+					let pages = totalCount / 10;// let 안쓰면 오류
+					if (totalCount % 10 != 0){
+						pages += 1;
+					}
+					startPage = pageNo;
+					endPage = startPage + 10 < pages ? startPage + 9 : pages;
+					
+					// 페이지 버튼
+					// ◀◀
+					if (pageNo - 10 > 0) {
+						$(".paging").append("<button class='begin'>◀◀</button>");
+					} else {
+						$(".paging").append("<button disable='disabled'>◀◀</button>");
+					}
+					// ◀
+					if (pageNo - 1 > 0) {
+						$(".paging").append("<button class='backward'>◀</button>");
+					} else{
+						$(".paging").append("<button disabled='disabled'>◀</button>");
+					}
+					// 1 2 3 4 5 6 7 8 9 10
+					for (let i = startPage; i <= endPage; i++) {
+						$(".paging").append(
+								"<button type='button' class='page'>" + i
+										+ "</button>");// 동적으로 생성
+					}
+					// ▶
+					if(pageNo + 1 < pages){
+						$(".paging").append("<button class='forward'>▶</button>");
+					} else {
+						$(".paging").append("<button disabled='disabled'>▶</button>");
+					}
+					// ▶▶
+					if (pageNo + 10 < pages) {
+						$(".paging").append("<button class='end'>▶▶</button>");
+					} else {
+						$(".paging").append("<button disabled='disabled'>▶▶</button>");
+					}
+				},
+				error : function(error) {
+					alert("에러가 발생했습니다" + error);
+				}
+			});
+
+		$(document).on("click", ".page", function() {// 동적으로 생성된 버튼 클릭
+			let pageNo = $(this).text();
+			// alert(pageNo);
+			ajax_call(pageNo);
+		});
+		$(document).on("click", ".begin", function() {// ▶▶
+			pageNo = pageNo - 10;
+			ajax_call(pageNo);
+		});
+		$(document).on("click", ".backward", function() {// ▶
+			pageNo = pageNo - 1;
+			ajax_call(pageNo);
+		});
+		$(document).on("click", ".forward", function() {// ▶
+			pageNo = pageNo + 1;
+			ajax_call(pageNo);
+		});
+		$(document).on("click", ".end", function() {// ▶▶
+			pageNo = pageNo + 10;
+			ajax_call(pageNo);
+		});
+		
+	});
+</script>
 
 </body>
 </html>
