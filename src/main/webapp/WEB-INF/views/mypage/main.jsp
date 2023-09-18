@@ -266,6 +266,7 @@ label {
 	</script>
 	<script>
         // SSE 연결 및 알림 표시 로직
+        const eventSource = new EventSource('/notifications/main');
         const eventSource = new EventSource('/mypage/main/sse');
 
         eventSource.onmessage = function(event) {
