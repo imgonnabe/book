@@ -93,7 +93,7 @@
 <style type="text/css">
 .toggle {
 	width: 100%;
-	height: 30px;
+	height: 50px;
 	margin: 0px;
 	display: table;
 }
@@ -154,7 +154,6 @@ label {
 }
 
 .toggle-switch input[type="checkbox"] {
-	cursor: pointer;
 	width: 50px;
 	height: 25px;
 	opacity: 0;
@@ -196,14 +195,17 @@ label {
 					</label>
 				</div>
 			</div>
-		<div class="alarm" id="notification-area">
-	        <!-- 알림이 표시될 영역 -->
-	    </div>	
-		<section class="module recommend">
-          <div class="container">
+			<!-- 알림이 표시될 영역 -->
+	        <div class="alarm">
+	             <div id ="notification-area">
+	             </div>
+	        </div>
+        
+        <!-- 추천 -->
+          <div class="container recommend">
             <div class="row">
               <div class="col-sm-6 col-sm-offset-3">
-                <h2 class="module-title font-alt">구매했던 책 카테고리 추천</h2>
+                <div class="module-title font-alt">구매했던 책 카테고리 추천</div>
               </div>
             </div>
             <div class="row">
@@ -220,7 +222,6 @@ label {
               </div>
             </div>
           </div>
-        </section>
 		</div>
 	</main>
 	<!--  
@@ -246,8 +247,7 @@ label {
 
 	<script type="text/javascript">
 		$(document).ready(function() {
-			$(".recommend").hide();
-			$(".alarm").show();
+	        $(".recommend").hide();
 
 			$(document).on("change", "#color_mode", function() {
 				colorModePreview(this);
@@ -264,6 +264,20 @@ label {
 			}
 		}
 	</script>
+	<script>
+        // SSE 연결 및 알림 표시 로직
+        const eventSource = new EventSource('/mypage/main/sse');
+
+        eventSource.onmessage = function(event) {
+            const notification = event.data;
+            // 알림을 notification-area에 추가하는 코드 작성
+            const notificationArea = document.getElementById('notification-area');
+            const notificationElement = document.createElement('p');
+            notificationElement.textContent = notification;
+            notificationElement.classList.add('menu-title');
+            notificationArea.appendChild(notificationElement);
+        };
+    </script>
 
 </body>
 </html>

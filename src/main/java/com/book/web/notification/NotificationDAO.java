@@ -1,15 +1,12 @@
 package com.book.web.notification;
 
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Mapper;
-import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 @Mapper
 public interface NotificationDAO {
 
-	SseEmitter get(String id);
+	Map<String, Object> findMidById(String mid);
 
-	void deleteById(String id);
-
-	void save(String id, SseEmitter emitter);
-	
 }

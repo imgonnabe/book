@@ -2,19 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.book.web.notification.NotificationDAO">
 
-	<select id="get" parameterType="String">
-	    select * from alarm
-	    where mid = #{id}
+	<select id="findMidById" parameterType="String" resultType="Map">
+	    SELECT b.btitle as btitle, c.comment as comment, (select mid from members where mno = c.mno) as id
+        FROM members m join board b
+        on m.mno = b.mno and m.mid = #{mid}
+        JOIN comments c ON c.bno = b.bno
+        WHERE DATE_FORMAT(c.cdate, '%Y-%m-%d') = DATE_FORMAT(NOW(), '%Y-%m-%d')
+		AND c.cno = (SELECT MAX(cno) FROM comments WHERE mid = #{mid});
 	</select>
-	
-	<update id="deleteById" parameterType="String">
-		update alarm set adel = 0
-		where mid = #{id}
-	</update>
-	
-	<insert id="save" parameterType="Map">
-		INSERT INTO alarm (mid, acontent)
-		VALUES (#{arg0}, #{arg1})
-	</insert>
 	
 </mapper>

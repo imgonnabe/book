@@ -9,6 +9,8 @@ import javax.servlet.http.HttpSession;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,7 +18,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
+import com.book.web.notification.NotificationService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -28,8 +32,10 @@ public class MyPageController {
 	
 	@Autowired
 	private SmsUtil smsUtil;
+	@Autowired
+	private NotificationService notificationService;
 	
-	@GetMapping({"/@{id}", "/main@{id}"})
+	@GetMapping({"/", "/main"})
 	public String main(Model model, HttpSession session) {
 		if(session.getAttribute("mid") != null) {
 			String mid = (String) session.getAttribute("mid");
@@ -39,6 +45,29 @@ public class MyPageController {
 		} else {
 			return "redirect:/login";
 		}
+	}
+	
+	@ResponseBody
+	@GetMapping(value = "/main/sse", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+	public SseEmitter myPageSSE(HttpSession session) {
+	    // 현재 세션의 사용자 ID를 가져오는 로직을 사용하여 사용자별 SSE 알림을 처리합니다.
+	    String mid = (String) session.getAttribute("mid");
+	    System.out.println("----------------------------------");
+	    System.out.println(mid);
+	    
+	    // SseEmitter 생성
+	    SseEmitter emitter = notificationService.createSseEmitter(mid);
+	    Map<String, Object> map = notificationService.findMidById(mid);
+	    String btitle = (String) map.get("btitle");
+	    String id = (String) map.get("id");
+	    String comment = (String) map.get("comment");
+	    System.out.println(comment);
+
+	    // 예를 들어, 어떤 이벤트가 발생할 때 알림을 보낼 경우
+	    notificationService.sendNotification(mid, id + "님이 '" + btitle + "'의 게시물에 새로운 댓글이 달았습니다.\n");
+	    notificationService.sendNotification(mid, comment);
+	    
+	    return emitter;
 	}
 	
 	@GetMapping("/zzim")

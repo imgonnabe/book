@@ -210,7 +210,7 @@
                <c:if test="${sessionScope.mname ne null && sessionScope.mname ne 'admin'}">
 	              <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown">마이페이지</a>
 	                <ul class="dropdown-menu" role="menu">
-	                  <li><a href="/mypage/main@${sessionScope.mid}">메인</a></li>
+	                  <li><a href="/mypage/main">메인</a></li>
 	                  <li><a href="/mypage/zzim">찜목록</a></li>
 	                  <li><a href="/mypage/buy">구매목록</a></li>
 	                  <li><a href="/mypage/rent">대여내역</a></li>
@@ -250,5 +250,6 @@
     <script src="assets/lib/simple-text-rotator/jquery.simple-text-rotator.min.js"></script>
     <script src="assets/js/plugins.js"></script>
     <script src="assets/js/main.js"></script>
+    
   </body>
 </html>
