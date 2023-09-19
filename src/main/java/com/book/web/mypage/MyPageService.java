@@ -78,6 +78,18 @@ public class MyPageService {
 	public void returnBook(Map<String, Object> map) {
 		myPageDAO.returnBook(map);
 	}
+
+	public int boardlistCnt(Map<String, Object> map) {
+		return myPageDAO.boardlistCnt(map);
+	}
+
+	public int commentlistCnt(Map<String, Object> map) {
+		return myPageDAO.commentlistCnt(map);
+	}
+
+	public void cdelete(Map<String, Object> map) {
+		myPageDAO.cdelete(map);
+	}
 	
 
 }

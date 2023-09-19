@@ -3,7 +3,17 @@
 <mapper namespace="com.book.web.admin.AdminDAO">
 	
 	<select id="stocklist" parameterType="Map" resultType="Map">
-		select b.bkno, b.bkname, b.bkwrite, b.bkpublisher, b.bkprice, b.bstock, b.bkcate
+		select b.bkno, b.bkname, b.bkwrite, b.bkpublisher, b.bkprice, b.bstock, b.bkcate,
+		(select count(*)
+			<where>
+				<if test="cate gt 0">and b.bkcate = #{cate}</if>
+				<choose>
+					<when test="searchN == 'title'">and b.bkname like concat('%', #{searchV},'%')</when>
+					<when test="searchN == 'writer'">and b.bkwrite like concat('%', #{searchV},'%')</when>
+					<when test="searchN == 'publisher'">and b.bkpubilsher like concat('%', #{searchV},'%')</when>
+				</choose>
+			</where>
+		) as count
 		from books b
 		<where>
 			<if test="cate gt 0">and b.bkcate = #{cate}</if>
@@ -16,6 +26,19 @@
 		order by b.bkno desc
 	</select>
 	
+	<select id="stocklistCnt" parameterType="Map" resultType="Integer">
+        SELECT count(*)
+        FROM books
+		<where>
+			<if test="cate gt 0">and bkcate = #{cate}</if>
+			<choose>
+				<when test="searchN == 'title'">and bkname like concat('%', #{searchV},'%')</when>
+				<when test="searchN == 'writer'">and bkwrite like concat('%', #{searchV},'%')</when>
+				<when test="searchN == 'publisher'">and bkpubilsher like concat('%', #{searchV},'%')</when>
+			</choose>
+		</where>
+	</select>
+	
 	<update id="updateStock" parameterType="Map">
 		update books set bstock = bstock + #{bstock}
 		where bkno=#{bkno}
@@ -24,7 +47,18 @@
 	
 	<select id="boardlist" parameterType="Map" resultType="Map">
 		select b.bno, b.btitle, b.bcontent, DATE_FORMAT(b.bdate, '%y-%m-%d %h:%m') AS bdate, b.bcate,
-		m.mid, m.mname, b.bdel
+		m.mid, m.mname, b.bdel, m.mgrade,
+		(select count(*)
+			from board b, members m
+			<where>
+			b.mno = m.mno
+				<if test="cate gt 0">and b.bcate = #{cate}</if>
+				<choose>
+					<when test="searchN == 'title'">and b.btitle like concat('%', #{searchV},'%')</when>
+					<when test="searchN == 'content'">and b.bcontent like concat('%', #{searchV},'%')</when>
+				</choose>
+			</where>
+		) as count
 		from board b, members m
 		<where>
 		b.mno = m.mno
@@ -35,6 +69,19 @@
 			</choose>
 		</where>
 		order by b.bno desc
+		LIMIT #{cri.pageStart}, #{cri.perPageNum}
+	</select>
+	
+	<select id="boardlistCnt" parameterType="Map" resultType="Integer">
+        SELECT count(*)
+        FROM board
+		<where>
+			<if test="cate gt 0">and bcate = #{cate}</if>
+			<choose>
+				<when test="searchN == 'title'">and btitle like concat('%', #{searchV},'%')</when>
+				<when test="searchN == 'content'">and bcontent like concat('%', #{searchV},'%')</when>
+			</choose>
+		</where>
 	</select>
 	
 	<select id="bdetail" parameterType="Integer" resultType="Map">
@@ -60,7 +107,18 @@
 	</update>
 	
 	<select id="rentlist" parameterType="Map" resultType="Map">
-		select b.bkno, b.bkname, b.bkwrite, b.bkprice, b.bkcate, r.rsdate, r.rddate, r.rdel, r.rno, r.mid
+		select b.bkno, b.bkname, b.bkwrite, b.bkprice, b.bkcate, r.rsdate, r.rddate, r.rdel, r.rno, r.mid,
+		(select count(*) from books b join rental r
+			<where>
+			b.bkno = r.bkno
+				<if test="cate gt 0">and b.bkcate = #{cate}</if>
+				<choose>
+					<when test="searchN == 'title'">and b.bkname like concat('%', #{searchV},'%')</when>
+					<when test="searchN == 'writer'">and b.bkwrite like concat('%', #{searchV},'%')</when>
+					<when test="searchN == 'publisher'">and b.bkpubilsher like concat('%', #{searchV},'%')</when>
+				</choose>
+			</where>
+			) as count
 		from books b join rental r
 		<where>
 		b.bkno = r.bkno
@@ -74,26 +132,81 @@
 		order by r.rno desc
 	</select>
 	
+	<select id="rentlistCnt" parameterType="Map" resultType="Integer">
+        SELECT count(*)
+        from books b join rental r
+		<where>
+		b.bkno = r.bkno
+			<if test="cate gt 0">and b.bkcate = #{cate}</if>
+			<choose>
+				<when test="searchN == 'title'">and b.bkname like concat('%', #{searchV},'%')</when>
+				<when test="searchN == 'writer'">and b.bkwrite like concat('%', #{searchV},'%')</when>
+				<when test="searchN == 'publisher'">and b.bkpubilsher like concat('%', #{searchV},'%')</when>
+			</choose>
+		</where>
+	</select>
+	
 	<select id="tradelist" parameterType="Map" resultType="Map">
-		select DATE_FORMAT(t.tdate, '%y-%m-%d') AS ttdate, b.bkcate,
-			SUM(t.ttotal) AS total
+		select DATE_FORMAT(t.tdate, '%y-%m-%d') AS ttdate, b.bkcate, SUM(t.ttotal) AS total,
+		(select count(*)
+			from trade t, books b
+			where t.bkno = b.bkno
+				<if test="cate gt 0">and b.bkcate = #{cate}</if>
+		) as count
 		from trade t, books b
 		where t.bkno = b.bkno
 			<if test="cate gt 0">and b.bkcate = #{cate}</if>
 		group by ttdate, b.bkcate
+		LIMIT #{cri.pageStart}, #{cri.perPageNum}
+	</select>
+	
+	<select id="tradelistCnt" parameterType="Map" resultType="Integer">
+        SELECT COUNT(*)
+		FROM (select DATE_FORMAT(t.tdate, '%y-%m-%d') AS ttdate, b.bkcate
+		        from trade t, books b
+				where t.bkno = b.bkno
+				group by ttdate, b.bkcate) AS sub
+		<where>
+			<if test="cate gt 0">and sub.bkcate = #{cate}</if>
+		</where>
 	</select>
 	
 	<select id="rentalAmount" parameterType="Map" resultType="Map">
 		select DATE_FORMAT(r.rsdate, '%y-%m-%d') AS rsdate, b.bkcate,
-			count(r.rno) AS count
+			count(r.rno) AS count,
+			(select count(*) 
+				from rental r, books b
+				where r.bkno = b.bkno
+					<if test="cate gt 0">and b.bkcate = #{cate}</if>
+				) as ccount
 		from rental r, books b
 		where r.bkno = b.bkno
 			<if test="cate gt 0">and b.bkcate = #{cate}</if>
 		group by r.rsdate, b.bkcate
+		LIMIT #{cri.pageStart}, #{cri.perPageNum}
 	</select>
 	
-	<select id="notice" parameterType="Map" resultType="Map">
-		select * from notice
+	<select id="rentalAmountCnt" parameterType="Map" resultType="Integer">
+        SELECT count(*)
+		  FROM (select DATE_FORMAT(r.rsdate, '%y-%m-%d') AS rsdate, b.bkcate
+				        from rental r, books b
+						where r.bkno = b.bkno
+						group by rsdate, b.bkcate) AS sub
+		<where>
+			<if test="cate gt 0">and sub.bkcate = #{cate}</if>
+		</where>
+	</select>
+	
+	<select id="noticelist" parameterType="Map" resultType="Map">
+		select *, (select count(*) from notice
+			<where>
+				<if test="cate gt 0">and ncate = #{cate}</if>
+				<choose>
+					<when test="searchN == 'title'">and ntitle like concat('%', #{searchV},'%')</when>
+					<when test="searchN == 'content'">and ncontent like concat('%', #{searchV},'%')</when>
+				</choose>
+			</where>
+		) as count from notice
 		<where>
 			<if test="cate gt 0">and ncate = #{cate}</if>
 			<choose>
@@ -102,6 +215,19 @@
 			</choose>
 		</where>
 		order by nno desc
+		LIMIT #{cri.pageStart}, #{cri.perPageNum}
+	</select>
+	
+	<select id="noticelistCnt" parameterType="Map" resultType="Integer">
+        SELECT count(*)
+        FROM notice
+		<where>
+			<if test="cate gt 0">and ncate = #{cate}</if>
+			<choose>
+				<when test="searchN == 'title'">and ntitle like concat('%', #{searchV},'%')</when>
+				<when test="searchN == 'content'">and ncontent like concat('%', #{searchV},'%')</when>
+			</choose>
+		</where>
 	</select>
 	
 	<select id="ndetail" parameterType="Integer" resultType="Map">

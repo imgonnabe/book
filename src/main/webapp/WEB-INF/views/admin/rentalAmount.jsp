@@ -112,13 +112,14 @@
 			
   			<section class="module-small">
 				<div class="container">
-				<button class="btn" onclick="location.href='./sales?cate=0'">전체보기</button>
-				<br>
-				<form action="./main" method="get" class="row">
-					<div class="mb-sm-20">
+					<div class="col-sm-2 mb-sm-20">
+						<button class="btn" onclick="location.href='./rentalAmount?cate=0'">전체보기</button>
+					</div>
+				<form action="./rentalAmount" method="get" class="row">
+					<div class="col-sm-2 mb-sm-20">
 						<select class="form-control" name="cate" id="cate"
 							onclick="cateChange()">
-								<option value="0">전체</option>
+								<option selected="selected" value="0">전체</option>
 								<option value="1">소설</option>
 								<option value="2">에세이</option>
 								<option value="3">자기계발</option>
@@ -127,6 +128,15 @@
 				</form>
 				</div>
 			</section>
+  			<c:choose>
+				<c:when test="${list[0].ccount eq null}">
+					<section class="module-small">
+						<div class="container">
+							<h2 style="text-align: center;">대여도서가 없습니다.</h2>
+						</div>
+					</section>
+				</c:when>
+				<c:otherwise>
 			<div class="container">
 				<div class="row">
   					<div id="chart_div" style="height: 500px;"></div>
@@ -134,21 +144,39 @@
   			</div>
 			<div class="container">
 				<div class="row multi-columns-row">
-					<div class="col-sm-6">
-						<div class="menu">
+					<div class="col-sm-9">
+						<div style="text-align: center;" class="menu">
 							<div class="row">
-							<c:forEach items="${list }" var="row">
-									<div class="col-sm-8">
-										<div class="menu-detail font-serif">${row.bkcate}</div>
-										<div class="menu-title font-alt">${row.rsdate}</div>
-										<div class="menu-title font-alt">${row.count }개</div>
-									</div>
-							</c:forEach>
+								<span class="menu-detail font-alt col-sm-3">카테고리</span>
+								<span class="menu-title font-alt col-sm-3">대여날짜</span>
+								<span class="menu-title font-alt col-sm-3">대여수</span>
 							</div>
-						</div>
+							<c:forEach items="${list }" var="row">
+								<div class="row">
+									<span class="menu-detail font-serif col-sm-3">${row.bkcate}</span>
+									<span class="menu-title font-alt col-sm-3">${row.rsdate}</span>
+									<span class="menu-title font-alt col-sm-3">${row.count }개</span>
+								</div>
+							</c:forEach>
 					</div>
 				</div>
 			</div>
+			<ul class="paging">
+				    <c:if test="${paging.prev}">
+				        <span><a href='<c:url value="/admin/stock?page=${paging.startPage-1}"/>'>이전</a></span>
+				    </c:if>
+				    <c:if test="${paging.endPage gt 1}">
+						<c:forEach begin="${paging.startPage}" end="${paging.endPage}" var="num">
+					        <span><input class="page" type="button" value="${num}"></input></span>
+						</c:forEach>
+				    </c:if>
+				    <c:if test="${paging.next && paging.endPage>0}">
+				        <span><a href='<c:url value="/admin/stock?page=${paging.endPage+1}"/>'>다음</a></span>
+				    </c:if>
+				</ul>
+			</div>
+			</c:otherwise>
+		</c:choose>
 		</div>
 	</main>
 	<!--  
@@ -178,21 +206,43 @@
 	    var defaultCate = getParameterByName('cate');
 	    $('#cate').val(defaultCate);
 	    
-		$('#cate').on('change', function(){
+	    $(document).on('change', '#cate', function(){
 			var cate = $('#cate').val();
-			// alert(cate);
+			var page = $('.page').val();
+			if(page == null){
+ 				page = 1;
+ 			}
 			$.ajax({
 				url:'./rentalAmount',
 				type:'get',
 				data:{cate:cate},
 				success:function(data){
-					location.href="./rentalAmount?cate=" + cate;
+					location.href="./rentalAmount?cate=" + cate + "&page=" + page;
 					
 				},
 				error:function(error){
 					alert('에러');
 				}
 			});
+		});
+		
+		$(document).on('click', '.page', function(){
+		    var cate = $('#cate').val();
+		    if(cate == null){
+ 				cate = 0;
+ 			}
+		    var page = $(this).val();
+		    $.ajax({
+		        url: './rentalAmount',
+		        type: 'get',
+		        data: { cate: cate, page: page },
+		        success: function(data) {
+		            location.href = "./rentalAmount?cate=" + cate + "&page=" + page;
+		        },
+		        error: function(error) {
+		            alert('에러');
+		        }
+		    });
 		});
 		
 	    function getParameterByName(name, url) {
@@ -269,12 +319,12 @@
         }
 
         var options = {
-            title: '날짜별 카테고리당 매출액',
+            title: '날짜별 카테고리당 대여량',
             hAxis: {
                 title: '날짜',
             },
             vAxis: {
-                title: '매출액'
+                title: '대여량'
             },
             legend: { position: 'top' } // 범례를 위쪽에 배치
         };

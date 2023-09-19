@@ -145,6 +145,15 @@
 					</form>
 				</div>
 			</section>
+			<c:choose>
+				<c:when test="${list[0].count eq null}">
+					<section class="module-small">
+						<div class="container">
+							<h2 style="text-align: center;">게시물이 없습니다.</h2>
+						</div>
+					</section>
+				</c:when>
+				<c:otherwise>
 			<div class="container">
 				<div class="row multi-columns-row">
 					<div class="col-sm-13">
@@ -178,7 +187,22 @@
 						</div>
 					</div>
 				</div>
+				<ul class="paging">
+				    <c:if test="${paging.prev}">
+				        <span><a href='<c:url value="/admin/notice?page=${paging.startPage-1}"/>'>이전</a></span>
+				    </c:if>
+					<c:if test="${paging.endPage gt 1}">
+						<c:forEach begin="${paging.startPage}" end="${paging.endPage}" var="num">
+					        <span><input class="page" type="button" value="${num}"></input></span>
+						</c:forEach>
+				    </c:if>
+				    <c:if test="${paging.next && paging.endPage>0}">
+				        <span><a href='<c:url value="/admin/notice?page=${paging.endPage+1}"/>'>다음</a></span>
+				    </c:if>
+				</ul>
 			</div>
+			</c:otherwise>
+		</c:choose>
 		</div>
 	</main>
 	<!-- Modal -->
@@ -256,21 +280,43 @@
  	    var defaultCate = getParameterByName('cate');
  	    $('#cate').val(defaultCate);
  	    
- 		$('#cate').on('change', function(){
+ 		$(document).on('change', '#cate', function(){
  			var cate = $('#cate').val();
- 			// alert(cate);
+ 			var page = $('.page').val();
+ 			if(page == null){
+ 				page = 1;
+ 			}
  			$.ajax({
  				url:'./notice',
  				type:'get',
  				data:{cate:cate},
  				success:function(data){
- 					location.href="./notice?cate=" + cate;
+ 					location.href="./notice?cate=" + cate + "&page=" + page;
  					
  				},
  				error:function(error){
  					alert('에러');
  				}
  			});
+ 		});
+ 		
+ 		$(document).on('click', '.page', function(){
+ 		    var cate = $('#cate').val();
+ 		    if(cate == null){
+ 				cate = 0;
+ 			}
+ 		    var page = $(this).val();
+ 		    $.ajax({
+ 		        url: './notice',
+ 		        type: 'get',
+ 		        data: { cate: cate, page: page },
+ 		        success: function(data) {
+ 		            location.href = "./notice?cate=" + cate + "&page=" + page;
+ 		        },
+ 		        error: function(error) {
+ 		            alert('에러');
+ 		        }
+ 		    });
  		});
  		
  	    function getParameterByName(name, url) {

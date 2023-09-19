@@ -120,13 +120,12 @@
 			<button class="btn" onclick="location.href='./rent'">전체보기</button>
 		</div>
 			<form action="./rent" method="get" class="row">
-				<div class="col-sm-3 mb-sm-20">
+				<div class="col-sm-2 mb-sm-20">
 					<select class="form-control" name="cate" id="cate">
-						<optgroup label="날짜">
-							<option selected="selected" value="1">최근 1개월</option>
-							<option value="3">최근 3개월</option>
-							<option value="6">최근 6개월</option>
-						</optgroup>
+						<option value="0">예약</option>
+						<option selected="selected" value="1">최근 1개월</option>
+						<option value="3">최근 3개월</option>
+						<option value="6">최근 6개월</option>
 					</select>
 				</div>
 				<div class="col-sm-2 mb-sm-20">
@@ -147,12 +146,20 @@
 			</form>
 		</div>
 	</section>
+	<c:choose>
+		<c:when test="${list[0].count eq null}">
+			<section class="module-small">
+				<div class="container">
+					<h2 style="text-align: center;">대여도서가 없습니다.</h2>
+				</div>
+			</section>
+		</c:when>
+		<c:otherwise>
 	<div class="container">
-	
 		<div class="col-sm-15">
 			<div class="menu" style="text-align: center;">
 				<div class="row">
-					<span class="menu-price font-alt col-sm-3">책제목</span>
+					<span class="menu-price font-alt col-sm-2">책제목</span>
 					<span class="menu-price font-alt col-sm-2">저자</span>
 					<span class="menu-price font-alt col-sm-2">대여일</span>
 					<span class="menu-price font-alt col-sm-2">반납일</span>
@@ -161,8 +168,8 @@
 				<hr>
 				<c:forEach items="${list }" var="row">
 					<div class="row" style="margin-bottom: 5px;">
-						<span class="menu-price font-alt col-sm-3">
-							<a href="../bookdetail?bkno=${row.bkno}"><img src="/img/bookimg/${row.bkimg }" alt="Blog-post Thumbnail"/></a>
+						<span class="menu-price font-alt col-sm-2">
+							<a href="../bookdetail?bkno=${row.bkno}"><img src="/img/bookimg/${row.bkimg }" alt="Blog-post Thumbnail"/></a>${row.bkname}
 						</span>
 						<span class="menu-price font-alt col-sm-2">${row.bkwrite}</span>
 						<span class="menu-price font-alt col-sm-2">${row.rsdate}</span>
@@ -182,9 +189,22 @@
 				</c:forEach>
 		</div>
 	</div>
-	</div>
-	</c:otherwise>
-	</c:choose>
+	<ul class="paging">
+				    <c:if test="${paging.prev}">
+				        <span><a href='<c:url value="/admin/stock?page=${paging.startPage-1}"/>'>이전</a></span>
+				    </c:if>
+				    <c:if test="${paging.endPage gt 1}">
+						<c:forEach begin="${paging.startPage}" end="${paging.endPage}" var="num">
+					        <span><input class="page" type="button" value="${num}"></input></span>
+						</c:forEach>
+				    </c:if>
+				    <c:if test="${paging.next && paging.endPage>0}">
+				        <span><a href='<c:url value="/admin/stock?page=${paging.endPage+1}"/>'>다음</a></span>
+				    </c:if>
+				</ul>
+			</div>
+			</c:otherwise>
+		</c:choose>
 	</div>
 	</main>
 	<!--  

@@ -119,9 +119,15 @@
 		<div class="col-sm-2 mb-sm-20">
 			<button class="btn" onclick="location.href='./buy'">전체보기</button>
 		</div>
-		<div class="col-sm-10">
 			<form action="./buy" method="get" class="row">
-				<div class="col-sm-3 mb-sm-20">
+				<div class="col-sm-2 mb-sm-20">
+					<select class="form-control" name="cate" id="cate">
+						<option selected="selected" value="1">최근 1개월</option>
+						<option value="3">최근 3개월</option>
+						<option value="6">최근 6개월</option>
+					</select>
+				</div>
+				<div class="col-sm-2 mb-sm-20">
 					<select class="form-control" name="searchN">
 						<option selected="selected" value="no">주문번호</option>
 						<option value="title">책제목</option>
@@ -138,7 +144,6 @@
 				</div>
 				</div>
 			</form>
-			</div>
 		</div>
 	</section>
 	<div class="container">
@@ -165,9 +170,22 @@
 				</div>
 			</div>
 		</div>
-	</div>
-	</c:otherwise>
-	</c:choose>
+	<ul class="paging">
+				    <c:if test="${paging.prev}">
+				        <span><a href='<c:url value="/admin/stock?page=${paging.startPage-1}"/>'>이전</a></span>
+				    </c:if>
+				    <c:if test="${paging.endPage gt 1}">
+						<c:forEach begin="${paging.startPage}" end="${paging.endPage}" var="num">
+					        <span><input class="page" type="button" value="${num}"></input></span>
+						</c:forEach>
+				    </c:if>
+				    <c:if test="${paging.next && paging.endPage>0}">
+				        <span><a href='<c:url value="/admin/stock?page=${paging.endPage+1}"/>'>다음</a></span>
+				    </c:if>
+				</ul>
+			</div>
+			</c:otherwise>
+		</c:choose>
 	</div>
 	</main>
 	<!--  
@@ -190,5 +208,36 @@
 		src="../assets/lib/simple-text-rotator/jquery.simple-text-rotator.min.js"></script>
 	<script src="../assets/js/plugins.js"></script>
 	<script src="../assets/js/main.js"></script>
+	
+	<script type="text/javascript">
+$(function() {
+ 	// URL에서 cate 매개변수를 가져와서 기본값으로 설정
+    var defaultCate = getParameterByName('cate');
+    $('#cate').val(defaultCate);
+    
+	$('#cate').on('change', function(){
+		var cate = $('#cate').val();
+		// alert(cate);
+		$.ajax({
+			url:'./buy',
+			type:'get',
+			data:{cate:cate},
+			success:function(data){
+				location.href="./buy?cate=" + cate;
+				
+			},
+			error:function(error){
+				alert('에러');
+			}
+		});
+	});
+	
+    function getParameterByName(name, url) {
+    	const urlParams = new URL(location.href).searchParams;
+    	return urlParams.get(name);
+    }
+    
+});
+</script>
 </body>
 </html>

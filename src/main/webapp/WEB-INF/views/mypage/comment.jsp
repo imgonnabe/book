@@ -101,15 +101,6 @@
 					</div>
 				</div>
 			</div>
-			<c:choose>
-				<c:when test="${list[0].count eq null}">
-					<section class="module-small">
-						<div class="container">
-							<h2 style="text-align: center;">댓글이 없습니다.</h2>
-						</div>
-					</section>
-				</c:when>
-			<c:otherwise>
 			<section class="module-small">
 				<div class="container">
 					<div class="col-sm-2 mb-sm-20">
@@ -125,6 +116,7 @@
 									<option value="3">모임&amp;스터디</option>
 							</select>
 						</div>
+			
 						<div class="col-sm-2 mb-sm-20">
 							<select class="form-control" name="searchN">
 								<option selected="selected" value="ccontent">댓글내용</option>
@@ -143,6 +135,15 @@
 					</form>
 				</div>
 			</section>
+			<c:choose>
+				<c:when test="${list[0].count eq null}">
+					<section class="module-small">
+						<div class="container">
+							<h2 style="text-align: center;">댓글이 없습니다.</h2>
+						</div>
+					</section>
+				</c:when>
+			<c:otherwise>
 			<div class="container">
 				<div class="row multi-columns-row">
 				<div class="col-sm-15">
@@ -169,6 +170,19 @@
 						</div>
 					</div>
 				</div>
+			<ul class="paging">
+				    <c:if test="${paging.prev}">
+				        <span><a href='<c:url value="/admin/board?page=${paging.startPage-1}"/>'>이전</a></span>
+				    </c:if>
+				   <c:if test="${paging.endPage gt 1}">
+						<c:forEach begin="${paging.startPage}" end="${paging.endPage}" var="num">
+					        <span><input class="page" type="button" value="${num}"></input></span>
+						</c:forEach>
+				    </c:if>
+				    <c:if test="${paging.next && paging.endPage>0}">
+				        <span><a href='<c:url value="/admin/board?page=${paging.endPage+1}"/>'>다음</a></span>
+				    </c:if>
+				</ul>
 			</div>
 			</c:otherwise>
 			</c:choose>
@@ -258,21 +272,43 @@
     var defaultCate = getParameterByName('cate');
     $('#cate').val(defaultCate);
     
-	$('#cate').on('change', function(){
+    $(document).on('change', '#cate', function(){
 		var cate = $('#cate').val();
-		// alert(cate);
+		var page = $('.page').val();
+		if(page == null){
+			page = 1;
+		}
 		$.ajax({
 			url:'./comment',
 			type:'get',
-			data:{cate:cate},
+			data:{cate:cate,page:page},
 			success:function(data){
-				location.href="./comment?cate=" + cate;
+				location.href="./comment?cate=" + cate + "&page=" + page;
 				
 			},
 			error:function(error){
 				alert('에러');
 			}
 		});
+	});
+	
+	$(document).on('click', '.page', function(){
+	    var cate = $('#cate').val();
+	    if(cate == null){
+			cate = 0;
+		}
+	    var page = $(this).val();
+	    $.ajax({
+	        url: './comment',
+	        type: 'get',
+	        data: { cate: cate, page: page },
+	        success: function(data) {
+	            location.href = "./comment?cate=" + cate + "&page=" + page;
+	        },
+	        error: function(error) {
+	            alert('에러');
+	        }
+	    });
 	});
 	
 	// URL에서 매개변수를 추출하는 함수

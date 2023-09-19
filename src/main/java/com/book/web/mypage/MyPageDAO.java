@@ -42,4 +42,10 @@ public interface MyPageDAO {
 
 	void returnBook(Map<String, Object> map);
 
+	int boardlistCnt(Map<String, Object> map);
+
+	int commentlistCnt(Map<String, Object> map);
+
+	void cdelete(Map<String, Object> map);
+
 }

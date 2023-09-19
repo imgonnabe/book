@@ -10,7 +10,6 @@ import javax.servlet.http.HttpSession;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -100,9 +99,13 @@ public class MyPageController {
 	}
 	
 	@GetMapping("/buy")
-	public String buy(Model model, @RequestParam Map<String, Object> map, HttpSession session) {
+	public String buy(Model model, @RequestParam Map<String, Object> map, HttpSession session,
+			@RequestParam(name="cate", required = false, defaultValue = "0") int cate) {
 		System.out.println(map);
 		if(session.getAttribute("mid") != null) {
+			if(!map.containsKey("cate") || map.get("cate").equals(null) || map.get("cate").equals("")) {
+				map.put("cate", 0);
+			}
 			map.put("mid", session.getAttribute("mid"));
 			List<Map<String, Object>> list = myPageService.buylist(map);
 			model.addAttribute("list", list);
@@ -143,32 +146,27 @@ public class MyPageController {
 	}
 	
 	@GetMapping("/board")
-	public String board(Model model, @RequestParam Map<String, Object> map, @RequestParam(value = "pageNo", required = false, defaultValue = "1") int pageNo,
+	public String board(Model model, @RequestParam Map<String, Object> map, Criteria cri,
 			@RequestParam(name="cate", required = false, defaultValue = "0") int cate, HttpSession session) {
 		if(session.getAttribute("mid") != null) {
+			map.put("mid", session.getAttribute("mid"));
 			if(!map.containsKey("cate") || map.get("cate").equals(null) || map.get("cate").equals("")) {
 				map.put("cate", 0);
 			}
-			PaginationInfo paginationInfo = new PaginationInfo();
-			paginationInfo.setCurrentPageNo(pageNo);// 현재 페이지 번호
-			paginationInfo.setRecordCountPerPage(10);// 한페이지에 게시되는 게시물 건수
-			paginationInfo.setPageSize(10);// 페이징 리스트의 사이즈
-			// 전체 글수 가져오는 명령문장
-			int totalCount = myPageService.totalCount();
-			paginationInfo.setTotalRecordCount(totalCount);// 전체 게시물 건수
-
-			int firstRecordIndex = paginationInfo.getFirstRecordIndex();// 시작위치
-			int recordCountPerPage = paginationInfo.getRecordCountPerPage();// 페이지당 글수
-
-			PageDTO page = new PageDTO();
-			page.setFirstRecordIndex(firstRecordIndex);
-			page.setRecordCountPerPage(recordCountPerPage);
-
-			map.put("mid", session.getAttribute("mid"));
-			List<Map<String, Object>> list = myPageService.boardlist(page);
-			// 페이징 관련 정보가 있는 PaginationInfo 객체를 모델에 넣어준다.
-			model.addAttribute("list", list);
-			model.addAttribute("paginationInfo", paginationInfo);
+			// 전체 글 개수
+	        int boardListCnt = myPageService.boardlistCnt(map);
+	        
+	        // 페이징 객체
+	        Paging paging = new Paging();
+	        paging.setCri(cri);
+	        paging.setTotalCount(boardListCnt);    
+	        map.put("cri", cri);
+	        System.out.println(map);// {mid=bbbb, cate=0, cri=Criteria [page=1, perPageNum=10]}
+	        System.out.println(boardListCnt);
+	        List<Map<String, Object>> list = myPageService.boardlist(map);
+	        
+	        model.addAttribute("list", list);    
+	        model.addAttribute("paging", paging);    
 			return "/mypage/board";
 		} else {
 			return "redirect:/login";
@@ -206,17 +204,26 @@ public class MyPageController {
 	}
 	
 	@GetMapping("/comment")
-	public String comment(Model model, @RequestParam Map<String, Object> map,
+	public String comment(Model model, @RequestParam Map<String, Object> map, Criteria cri,
 			@RequestParam(name="cate", required = false, defaultValue = "0") int cate, HttpSession session) {
 		if(session.getAttribute("mid") != null) {
+			map.put("mid", session.getAttribute("mid"));
 			if(!map.containsKey("cate") || map.get("cate").equals(null) || map.get("cate").equals("")) {
 				map.put("cate", 0);
 			}
-			map.put("mid", session.getAttribute("mid"));
-			System.out.println(cate);
-			System.out.println(map);
-			List<Map<String, Object>> list = myPageService.commentlist(map);
-			model.addAttribute("list", list);
+			// 전체 글 개수
+	        int commentListCnt = myPageService.commentlistCnt(map);
+	        
+	        // 페이징 객체
+	        Paging paging = new Paging();
+	        paging.setCri(cri);
+	        paging.setTotalCount(commentListCnt);    
+	        map.put("cri", cri);
+	        System.out.println(map);// {mid=bbbb, cate=0, cri=Criteria [page=1, perPageNum=10]}
+	        List<Map<String, Object>> list = myPageService.commentlist(map);
+	        
+	        model.addAttribute("list", list);    
+	        model.addAttribute("paging", paging);
 			return "/mypage/comment";
 		} else {
 			return "redirect:/login";
@@ -233,6 +240,21 @@ public class MyPageController {
 			ObjectMapper mapp = new ObjectMapper();
 			String json = mapp.writeValueAsString(map);
 			return json;
+		} else {
+			return "redirect:/login";
+		}
+	}
+	
+	@GetMapping("/cdelete")
+	public String cdelete(@RequestParam(value = "cno", required = true, defaultValue = "0") int cno
+			, Map<String, Object> map, HttpSession session) {
+		// System.out.println(bno);
+		if(session.getAttribute("mid") != null) {
+			map.put("cno", cno);
+			map.put("mid", session.getAttribute("mid"));
+			System.out.println(map);
+			myPageService.cdelete(map);
+			return "redirect:/mypage/comment";
 		} else {
 			return "redirect:/login";
 		}

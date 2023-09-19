@@ -19,8 +19,6 @@ configurations {
 
 repositories {
 	mavenCentral()
-    mavenLocal() // maven 로컬 캐시 저장소
-    maven { url "http://www.egovframe.go.kr/maven/" } // maven 원격 저장소
 }
 
 dependencies {
@@ -51,18 +49,6 @@ dependencies {
 	implementation 'net.nurigo:sdk:4.3.0'
 	// Gson
 	implementation'com.google.code.gson:gson:2.8.7'
-	
-	compile(group: 'egovframework.rte', name: 'egovframework.rte.ptl.mvc', version:'3.5.0') {
-        exclude(module: 'commons-logging')
-    }
-    compile group: 'egovframework.rte', name: 'egovframework.rte.psl.dataaccess', version:'3.5.0'
-    compile group: 'egovframework.rte', name: 'egovframework.rte.fdl.idgnr', version:'3.5.0'
-    compile group: 'egovframework.rte', name: 'egovframework.rte.fdl.property', version:'3.5.0'
-    compile group: 'javax.servlet', name: 'jstl', version:'1.2'
-    compile group: 'taglibs', name: 'standard', version:'1.1.2'
-    compile group: 'org.antlr', name: 'antlr', version:'3.5'
-    compile group: 'org.hsqldb', name: 'hsqldb', version:'2.3.2'
-    providedCompile group: 'javax.servlet', name: 'servlet-api', version:'2.5'
 	
 }
 

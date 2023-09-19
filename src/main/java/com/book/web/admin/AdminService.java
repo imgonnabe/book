@@ -51,16 +51,40 @@ public class AdminService {
 		return adminDAO.rentalAmount(map);
 	}
 
-	public List<Map<String, Object>> notice(Map<String, Object> map) {
-		return adminDAO.notice(map);
-	}
-
 	public Map<String, Object> ndetail(int bno) {
 		return adminDAO.ndetail(bno);
 	}
 
 	public List<Map<String, Object>> ncomment(int bno) {
 		return adminDAO.ncomment(bno);
+	}
+
+	public int boardlistCnt(Map<String, Object> map) {
+		return adminDAO.boardlistCnt(map);
+	}
+
+	public int stocklistCnt(Map<String, Object> map) {
+		return adminDAO.stocklistCnt(map);
+	}
+
+	public List<Map<String, Object>> noticelist(Map<String, Object> map) {
+		return adminDAO.noticelist(map);
+	}
+
+	public int noticelistCnt(Map<String, Object> map) {
+		return adminDAO.noticelistCnt(map);
+	}
+
+	public int tradelistCnt(Map<String, Object> map) {
+		return adminDAO.tradelistCnt(map);
+	}
+
+	public int rentalAmountCnt(Map<String, Object> map) {
+		return adminDAO.rentalAmountCnt(map);
+	}
+
+	public int rentlistCnt(Map<String, Object> map) {
+		return adminDAO.rentlistCnt(map);
 	}
 
 }

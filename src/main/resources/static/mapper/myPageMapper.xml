@@ -32,6 +32,11 @@
 		<where>
 		t.mid = #{mid}
 			<choose>
+				<when test="cate == 1">and t.tdate between DATE_SUB(NOW(), INTERVAL 1 MONTH) and NOW()</when>
+				<when test="cate == 3">and t.tdate between DATE_SUB(NOW(), INTERVAL 3 MONTH) and NOW()</when>
+				<when test="cate == 6">and t.tdate between DATE_SUB(NOW(), INTERVAL 6 MONTH) and NOW()</when>
+			</choose>
+			<choose>
 				<when test="searchN == 'no'">and t.tgroup like concat('%', #{searchV},'%')</when>
 				<when test="searchN == 'title'">and b.bkname like concat('%', #{searchV},'%')</when>
 				<when test="searchN == 'writer'">and b.bkwrite like concat('%', #{searchV},'%')</when>
@@ -48,6 +53,7 @@
 		<where>
 		r.mid = #{mid}
 			<choose>
+				<when test="cate == 0">AND r.rsdate >= DATE_ADD(NOW(), INTERVAL 1 DAY)</when>
 				<when test="cate == 1">and r.rsdate between DATE_SUB(NOW(), INTERVAL 1 MONTH) and NOW()</when>
 				<when test="cate == 3">and r.rsdate between DATE_SUB(NOW(), INTERVAL 3 MONTH) and NOW()</when>
 				<when test="cate == 6">and r.rsdate between DATE_SUB(NOW(), INTERVAL 6 MONTH) and NOW()</when>
@@ -67,7 +73,16 @@
 	
 	<select id="boardlist" parameterType="Map" resultType="Map">
 		select b.bno, b.btitle, b.bcontent, DATE_FORMAT(b.bdate, '%y-%m-%d %h:%m') AS bdate, b.bcate,
-			(select count(*) from board where mid = #{mid}) as count
+			(select count(*) from board b JOIN members m on b.mno = m.mno
+			<where>
+			m.mid = #{mid} and b.bdel = 1
+				<if test="cate gt 0">and b.bcate = #{cate}</if>
+				<choose>
+					<when test="searchN == 'title'">and b.btitle like concat('%', #{searchV},'%')</when>
+					<when test="searchN == 'content'">and b.bcontent like concat('%', #{searchV},'%')</when>
+				</choose>
+			</where>
+			) as count
 		from board b join members m
 		on b.mno = m.mno
 		<where>
@@ -79,6 +94,21 @@
 			</choose>
 		</where>
 		order by b.bno desc
+		LIMIT #{cri.pageStart}, #{cri.perPageNum}
+	</select>
+	
+	<select id="boardlistCnt" parameterType="Map" resultType="Integer">
+        SELECT count(*)
+        FROM board b join members m
+		on b.mno = m.mno
+		<where>
+		m.mid = #{mid} and b.bdel = 1
+			<if test="cate gt 0">and b.bcate = #{cate}</if>
+			<choose>
+				<when test="searchN == 'title'">and b.btitle like concat('%', #{searchV},'%')</when>
+				<when test="searchN == 'content'">and b.bcontent like concat('%', #{searchV},'%')</when>
+			</choose>
+		</where>
 	</select>
 	
 	<select id="bdetail" parameterType="Integer" resultType="Map">
@@ -94,9 +124,18 @@
 	</update>
 	
 	<select id="commentlist" parameterType="Map" resultType="Map">
-		select c.cno, c.comment, c.cdate, DATE_FORMAT(b.bdate, '%y-%m-%d %h:%m') AS bdate, b.bcate, b.btitle,
+		select c.cno, c.comment, DATE_FORMAT(c.cdate, '%y-%m-%d %h:%m') AS cdate,
+		 DATE_FORMAT(b.bdate, '%y-%m-%d %h:%m') AS bdate, b.bcate, b.btitle,
 			(select count(*) from comments c join members m on c.mno = m.mno 
-				where mid = #{mid}) as count
+				<where>
+				m.mid = #{mid} and c.cdel = 1
+					<if test="cate gt 0">and b.bcate = #{cate}</if>
+					<choose>
+						<when test="searchN == 'btitle'">and b.btitle like concat('%', #{searchV},'%')</when>
+						<when test="searchN == 'ccontent'">and c.comment like concat('%', #{searchV},'%')</when>
+					</choose>
+				</where>
+				) as count
 		from comments c join members m on c.mno = m.mno
 			join board b on c.bno = b.bno
 		<where>
@@ -110,11 +149,31 @@
 		order by c.cno desc
 	</select>
 	
+	<select id="commentlistCnt" parameterType="Map" resultType="Integer">
+        SELECT count(*)
+        FROM comments c join members m on c.mno = m.mno
+        	join board b on c.bno = b.bno
+		<where>
+		m.mid = #{mid} and c.cdel = 1
+			<if test="cate gt 0">and b.bcate = #{cate}</if>
+			<choose>
+				<when test="searchN == 'title'">and b.btitle like concat('%', #{searchV},'%')</when>
+				<when test="searchN == 'content'">and b.bcontent like concat('%', #{searchV},'%')</when>
+			</choose>
+		</where>
+	</select>
+	
 	<select id="cdetail" parameterType="Integer" resultType="Map">
 		select b.btitle, b.bcontent, b.bdate, b.bread, m.mname
 		from board b ,comments c, members m
 		where c.cno = #{cno} and c.bno = b.bno and b.mno = m.mno
 	</select>
+	
+	<update id="cdelete" parameterType="Map">
+		update comments set cdel = 0 
+		where cno=#{cno}
+		and mno=(select mno from members where mid=#{mid})
+	</update>
 	
 	<select id="info" parameterType="Map" resultType="Map">
 		select mid, mname, maddr, mbirth, mphone, memail

@@ -101,15 +101,7 @@
 					</div>
 				</div>
 			</div>
-		<c:choose>
-			<c:when test="${list[0].count eq null}">
-				<section class="module-small">
-					<div class="container">
-						<h2 style="text-align: center;">게시물이 없습니다.</h2>
-					</div>
-				</section>
-			</c:when>
-		<c:otherwise>
+		
 			<section class="module-small">
 				<div class="container">
 					<div class="col-sm-2 mb-sm-20">
@@ -140,33 +132,55 @@
 								</button>
 							</div>
 						</div>
-					</form>
-				</div>
-			</section>
-			<div class="container">
-				<div class="row multi-columns-row">
-				<div class="col-sm-15">
-						<div class="menu" style="text-align: center;">
-							<div class="row">
-								<span class="menu-detail font-alt col-sm-2">번호</span>
-								<span class="menu-title font-alt col-sm-3">제목</span>
-								<span class="menu-price font-alt col-sm-3">날짜</span>
-								<span class="menu-price font-alt col-sm-3"></span>
-							</div>
-							<c:forEach items="${list }" var="row">
-								<div class="row rowbody" onclick="detail(${row.bno})">
-									<span class="menu-detail font-serif col-sm-2">${row.bno}</span>
-									<span class="menu-title font-alt col-sm-3">${row.btitle}</span>
-									<span class="menu-price font-alt col-sm-3">${row.bdate}</span>
-									<span class="menu-price font-alt col-sm-3">
-										<button onclick="edit(${row.bno})">수정</button>
-										<button onclick="del(${row.bno})">삭제</button>
-									</span>
+						</form>
+					</div>
+				</section>
+				<c:choose>
+				<c:when test="${list[0].count eq null}">
+					<section class="module-small">
+						<div class="container">
+							<h2 style="text-align: center;">게시물이 없습니다.</h2>
+						</div>
+					</section>
+				</c:when>
+				<c:otherwise>
+				<div class="container">
+					<div class="row multi-columns-row">
+					<div class="col-sm-15">
+							<div class="menu" style="text-align: center;">
+								<div class="row">
+									<span class="menu-detail font-alt col-sm-2">번호</span>
+									<span class="menu-title font-alt col-sm-3">제목</span>
+									<span class="menu-price font-alt col-sm-3">날짜</span>
+									<span class="menu-price font-alt col-sm-3"></span>
 								</div>
-							</c:forEach>
+								<c:forEach items="${list }" var="row">
+									<div class="row rowbody" onclick="detail(${row.bno})">
+										<span class="menu-detail font-serif col-sm-2">${row.bno}</span>
+										<span class="menu-title font-alt col-sm-3">${row.btitle}</span>
+										<span class="menu-price font-alt col-sm-3">${row.bdate}</span>
+										<span class="menu-price font-alt col-sm-3">
+											<button onclick="edit(${row.bno})">수정</button>
+											<button onclick="del(${row.bno})">삭제</button>
+										</span>
+									</div>
+								</c:forEach>
+							</div>
 						</div>
 					</div>
-				</div>
+					<ul class="paging">
+					    <c:if test="${paging.prev}">
+					        <span><a href='<c:url value="/mypage/board?page=${paging.startPage-1}"/>'>이전</a></span>
+					    </c:if>
+					    <c:if test="${paging.endPage gt 1}">
+							<c:forEach begin="${paging.startPage}" end="${paging.endPage}" var="num">
+						        <span><input class="page" type="button" value="${num}"></input></span>
+							</c:forEach>
+					    </c:if>
+					    <c:if test="${paging.next && paging.endPage>0}">
+					        <span><a href='<c:url value="/mypage/board?page=${paging.endPage+1}"/>'>다음</a></span>
+					    </c:if>
+					</ul>
 			</div>
 		</c:otherwise>
 		</c:choose>
@@ -254,21 +268,43 @@
     var defaultCate = getParameterByName('cate');
     $('#cate').val(defaultCate);
     
-	$('#cate').on('change', function(){
+    $(document).on('change', '#cate', function(){
 		var cate = $('#cate').val();
-		// alert(cate);
+		var page = $('.page').val();
+		if(page == null){
+			page = 1;
+		}
 		$.ajax({
 			url:'./board',
 			type:'get',
-			data:{cate:cate},
+			data:{cate:cate,page:page},
 			success:function(data){
-				location.href="./board?cate=" + cate;
+				location.href="./board?cate=" + cate + "&page=" + page;
 				
 			},
 			error:function(error){
 				alert('에러');
 			}
 		});
+	});
+	
+	$(document).on('click', '.page', function(){
+	    var cate = $('#cate').val();
+	    if(cate == null){
+			cate = 0;
+		}
+	    var page = $(this).val();
+	    $.ajax({
+	        url: './board',
+	        type: 'get',
+	        data: { cate: cate, page: page },
+	        success: function(data) {
+	            location.href = "./board?cate=" + cate + "&page=" + page;
+	        },
+	        error: function(error) {
+	            alert('에러');
+	        }
+	    });
 	});
 	
 	// URL에서 매개변수를 추출하는 함수
@@ -291,107 +327,5 @@
     
 	});
  	</script>
- 	<script type="text/javascript">
-	$(function() {
-		let totalCount = 0;
-		let pageNo = 1;
-		ajax_call(1);
-		function ajax_call(pageNo) {
-			// alert(pageNo);
-			$.ajax({
-				url : "./boardList",
-				type : "get",
-				data : {"pageNo" : pageNo},
-				dataType : "json",
-				success : function(data) {
-					totalCount = data.totalCount;
-					pageNo = data.pageNo;
-					let startPage = pageNo;
-					let endPage = pageNo + 9;
-					
-					let list = data.list;
-					$(".rowbody").empty();
-					$(".paging").empty();
-					let html = "";
-					$.each(list, function(index) {// jQuery for문
-						html += "<div class='row rowbody' onclick='detail(${row.bno})'>";
-						html +=	"<span class='menu-detail font-serif col-sm-2'>" + list[index].bno + "</span>";
-						html +=	"<span class='menu-title font-alt col-sm-3'>" + list[index].btitle + "</span>";
-						html +=	"<span class='menu-title font-alt col-sm-3'>" + list[index].bdate + "</span>";
-						html +=	"<span class='menu-title font-alt col-sm-3'><button onclick='edit(${row.bno})'>수정</button><button onclick='del(${row.bno})'>삭제</button></span>";
-						html += "</div>";
-					});
-					$(".rowbody").append(html);
-					
-					// 페이징하기
-					let pages = totalCount / 10;// let 안쓰면 오류
-					if (totalCount % 10 != 0){
-						pages += 1;
-					}
-					startPage = pageNo;
-					endPage = startPage + 10 < pages ? startPage + 9 : pages;
-					
-					// 페이지 버튼
-					// ◀◀
-					if (pageNo - 10 > 0) {
-						$(".paging").append("<button class='begin'>◀◀</button>");
-					} else {
-						$(".paging").append("<button disable='disabled'>◀◀</button>");
-					}
-					// ◀
-					if (pageNo - 1 > 0) {
-						$(".paging").append("<button class='backward'>◀</button>");
-					} else{
-						$(".paging").append("<button disabled='disabled'>◀</button>");
-					}
-					// 1 2 3 4 5 6 7 8 9 10
-					for (let i = startPage; i <= endPage; i++) {
-						$(".paging").append(
-								"<button type='button' class='page'>" + i
-										+ "</button>");// 동적으로 생성
-					}
-					// ▶
-					if(pageNo + 1 < pages){
-						$(".paging").append("<button class='forward'>▶</button>");
-					} else {
-						$(".paging").append("<button disabled='disabled'>▶</button>");
-					}
-					// ▶▶
-					if (pageNo + 10 < pages) {
-						$(".paging").append("<button class='end'>▶▶</button>");
-					} else {
-						$(".paging").append("<button disabled='disabled'>▶▶</button>");
-					}
-				},
-				error : function(error) {
-					alert("에러가 발생했습니다" + error);
-				}
-			});
-
-		$(document).on("click", ".page", function() {// 동적으로 생성된 버튼 클릭
-			let pageNo = $(this).text();
-			// alert(pageNo);
-			ajax_call(pageNo);
-		});
-		$(document).on("click", ".begin", function() {// ▶▶
-			pageNo = pageNo - 10;
-			ajax_call(pageNo);
-		});
-		$(document).on("click", ".backward", function() {// ▶
-			pageNo = pageNo - 1;
-			ajax_call(pageNo);
-		});
-		$(document).on("click", ".forward", function() {// ▶
-			pageNo = pageNo + 1;
-			ajax_call(pageNo);
-		});
-		$(document).on("click", ".end", function() {// ▶▶
-			pageNo = pageNo + 10;
-			ajax_call(pageNo);
-		});
-		
-	});
-</script>
-
 </body>
 </html>
