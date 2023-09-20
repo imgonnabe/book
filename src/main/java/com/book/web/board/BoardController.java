@@ -26,8 +26,6 @@ import com.book.web.notification.NotificationService;
 public class BoardController {
 	@Autowired
 	private BoardService boardService;
-	@Autowired
-    private NotificationService notificationService;
 	
 	@GetMapping("/boardM")
 	public String boardM(Model model ) {

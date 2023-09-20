@@ -165,6 +165,7 @@
 							<div class="menu-title font-alt col-sm-3">${row.tamount}개</div>
 							<div class="menu-title font-alt col-sm-3"><fmt:formatNumber value="${row.bkprice}" pattern="#,###"/>원</div>
 						</div>
+						<hr>
 					</c:forEach>
 					</div>
 				</div>

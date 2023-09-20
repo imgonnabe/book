@@ -204,6 +204,8 @@
 							<div class="detail-read font-serif">조회수</div>	      		
 						</div>  
 						<div style="font-weight: bold; font-size: larger;" class="detail-content font-alt">본문내용</div>
+						<div class="comment">
+						</div>
 					</div>
 				</div>
 			</div>
@@ -229,14 +231,84 @@
 		src="../assets/lib/simple-text-rotator/jquery.simple-text-rotator.min.js"></script>
 	<script src="../assets/js/plugins.js"></script>
 	<script src="../assets/js/main.js"></script>
+	
 	<script type="text/javascript">
 	
+	function getParameterByName(name, url) {
+    	const urlParams = new URL(location.href).searchParams;
+    	return urlParams.get(name);
+    }
 	// 수정
     function edit(cno){
     	if(confirm("수정하시겠습니까?")){
-    		location.href = "./cedit?cno=" + cno;
+    		// location.href = "./cedit?cno=" + cno;
+    		$.ajax({
+     			url:'./cdetail',
+     			type:'post',
+     			data:{cno:cno},
+     			dataType:'json',
+     			success:function(data){
+     				$(".modal-title").text(data.btitle);
+     				$(".detail-name").text("이름 : " + data.mname);
+     				var date = new Date(data.bdate).toISOString().split("T")[0];
+     				$(".detail-date").text("날짜 : "+date);
+     				$(".detail-read").text("조회수:"+data.bread);
+     				$(".detail-content").html(data.bcontent + "<hr>");
+     				
+     				var commentHtml = "";
+   	                commentHtml += "<div class='comment-item'>";
+   	                commentHtml += "<input id='comment' style='font-weight: bold;width:95%;height:100px;margin:5px;' value='" + data.comment +"'></input>";
+   	                commentHtml += "</div><button style='margin:5px;' type='button' id='cedit'>수정</button>";
+   	                commentHtml += "<input id='cno' type='hidden' value='" + data.cno +"'></input>";
+     	            $(".comment").html(commentHtml);
+     	            
+     				$("#exampleModal").modal("show");
+     			},
+     			error:function(error){
+     				alert('에러');
+     			}
+     		});
     	}
     }
+	
+    $(function() {
+	    var defaultCate = getParameterByName('cate');
+	    var page = getParameterByName('page');
+	    if(page == null){
+	    	page = 1;
+	    }
+	    $('#cate').val(defaultCate);
+	    
+    $(document).on('click','#cedit', function(){
+    	var cno = $('#cno').val();
+		var comment = $('#comment').val().trim();
+		if(comment.length == 0){
+			alert("댓글을 입력하세요.");
+			$('#comment').focus();
+			return false;
+		}
+		var cate = $('#cate').val();
+		if(cate == null){
+			cate = 0;
+		}
+		$.ajax({
+			url:'./cedit',
+			type:'post',
+			data:{comment:comment, cno:cno, cate:cate, page:page},
+			dataType:'json',
+			success:function(data){
+				if(data.result == "1"){
+					location.href = "./comment?cate=" + cate + "&page=" + page;
+				} else {
+					alert('??');
+				}
+			},
+			error:function(error){
+				alert('에러');
+			}
+		});
+	});
+    });
     
  	// 삭제
     function del(cno){
@@ -246,6 +318,7 @@
     	}
     }
  	
+ 	// 상세보기
     function cdetail(cno){
  		$.ajax({
  			url:'./cdetail',
@@ -267,23 +340,23 @@
  		});
  	}
  	
- 	$(function() {
- 	// URL에서 cate 매개변수를 가져와서 기본값으로 설정
-    var defaultCate = getParameterByName('cate');
-    $('#cate').val(defaultCate);
     
+ 	$(function() {
+	 	// URL에서 cate 매개변수를 가져와서 기본값으로 설정
+	    var defaultCate = getParameterByName('cate');
+	    $('#cate').val(defaultCate);
+	    
     $(document).on('change', '#cate', function(){
 		var cate = $('#cate').val();
-		var page = $('.page').val();
-		if(page == null){
-			page = 1;
+		if(cate == null){
+			cate = 0;
 		}
 		$.ajax({
 			url:'./comment',
 			type:'get',
-			data:{cate:cate,page:page},
+			data:{cate:cate},
 			success:function(data){
-				location.href="./comment?cate=" + cate + "&page=" + page;
+				location.href="./comment?cate=" + cate;
 				
 			},
 			error:function(error){
@@ -297,7 +370,6 @@
 	    if(cate == null){
 			cate = 0;
 		}
-	    var page = $(this).val();
 	    $.ajax({
 	        url: './comment',
 	        type: 'get',
@@ -310,26 +382,8 @@
 	        }
 	    });
 	});
-	
-	// URL에서 매개변수를 추출하는 함수
-    /*function getParameterByName(name, url) {
-        if (!url) {
-        	url = window.location.href;
-        }
-        name = name.replace(/[\[\]]/g, '\\$&');
-        var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)');
-        var results = regex.exec(url);
-        if (!results) return null;
-        if (!results[2]) return '';
-        return decodeURIComponent(results[2].replace(/\+/g, ' '));
-    }*/
-    function getParameterByName(name, url) {
-    	const urlParams = new URL(location.href).searchParams;
-    	return urlParams.get(name);
-    }
-    
-    
 	});
+ 	
  	</script>
 
 </body>

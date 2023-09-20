@@ -31,7 +31,13 @@
 			LEFT JOIN books b ON t.bkno = b.bkno
 		<where>
 		t.mid = #{mid}
-			<choose>
+			AND TIME_TO_SEC(TIME_FORMAT(t.tdate, '%H:%i')) IN (
+	        SELECT TIME_TO_SEC(TIME_FORMAT(tt.tdate, '%H:%i')) 
+	        FROM trade tt
+	        WHERE tt.mid = t.mid
+	        GROUP BY TIME_FORMAT(tt.tdate, '%H:%i')
+	        HAVING COUNT(*) > 1
+	    )			<choose>
 				<when test="cate == 1">and t.tdate between DATE_SUB(NOW(), INTERVAL 1 MONTH) and NOW()</when>
 				<when test="cate == 3">and t.tdate between DATE_SUB(NOW(), INTERVAL 3 MONTH) and NOW()</when>
 				<when test="cate == 6">and t.tdate between DATE_SUB(NOW(), INTERVAL 6 MONTH) and NOW()</when>
@@ -112,10 +118,15 @@
 	</select>
 	
 	<select id="bdetail" parameterType="Integer" resultType="Map">
-		select btitle, bcontent, bdate, bread
+		select btitle, bcontent, bdate, bread, bno
 		from board
 		where bno = #{bno}
 	</select>
+	
+	<update id="bedit" parameterType="Map">
+		update board set btitle = #{title}, bcontent = #{content}
+		where bno=#{bno}
+	</update>
 	
 	<update id="bdelete" parameterType="Map">
 		update board set bdel = 0 
@@ -147,6 +158,7 @@
 			</choose>
 		</where>
 		order by c.cno desc
+		LIMIT #{cri.pageStart}, #{cri.perPageNum}
 	</select>
 	
 	<select id="commentlistCnt" parameterType="Map" resultType="Integer">
@@ -164,10 +176,15 @@
 	</select>
 	
 	<select id="cdetail" parameterType="Integer" resultType="Map">
-		select b.btitle, b.bcontent, b.bdate, b.bread, m.mname
+		select b.btitle, b.bcontent, b.bdate, b.bread, m.mname, c.comment, c.cno
 		from board b ,comments c, members m
 		where c.cno = #{cno} and c.bno = b.bno and b.mno = m.mno
 	</select>
+	
+	<update id="cedit" parameterType="Map">
+		update comments set comment = #{comment}
+		where cno=#{cno}
+	</update>
 	
 	<update id="cdelete" parameterType="Map">
 		update comments set cdel = 0 

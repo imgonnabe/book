@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import com.book.web.notification.NotificationService;
@@ -188,16 +189,43 @@ public class MyPageController {
 		}
 	}
 	
+	@GetMapping("/bedit")
+	public String bedit(@RequestParam(value = "bno", required = true, defaultValue = "0") int bno
+			, @RequestParam Map<String, Object> map, HttpSession session, Model model) {
+		System.out.println(map);// {bno=72, cate=0, page=1}
+		if(session.getAttribute("mid") != null) {
+			map.put("mid", session.getAttribute("mid"));
+			Map<String, Object> detail = myPageService.bdetail(bno);
+			model.addAttribute("detail", detail);
+			model.addAttribute("cate", map.get("cate"));
+			model.addAttribute("page", map.get("page"));
+			return "/mypage/bedit";
+		} else {
+			return "redirect:/login";
+		}
+	}
+	
+	@PostMapping("/bedit")
+	public String edit(@RequestParam Map<String, Object> map, HttpSession session) {
+		System.out.println(map);// {title=ㅅㅈㄷ굓ㄷㄳ, content=<p><br></p>, bno=72}
+		if(session.getAttribute("mid") != null) {
+			myPageService.bedit(map);
+			return "redirect:/mypage/board?cate=" + map.get("cate") + "&page=" + map.get("page");
+		} else {
+			return "redirect:/login";
+		}
+	}
+	
 	@GetMapping("/delete")
 	public String delete(@RequestParam(value = "bno", required = true, defaultValue = "0") int bno
-			, Map<String, Object> map, HttpSession session) {
+			, @RequestParam Map<String, Object> map, HttpSession session) {
 		// System.out.println(bno);
 		if(session.getAttribute("mid") != null) {
 			map.put("bno", bno);
 			map.put("mid", session.getAttribute("mid"));
 			System.out.println(map);
 			myPageService.bdelete(map);
-			return "redirect:/mypage/board";
+			return "redirect:/mypage/board?cate=" + map.get("cate") + "&page=" + map.get("page");
 		} else {
 			return "redirect:/login";
 		}
@@ -240,6 +268,36 @@ public class MyPageController {
 			ObjectMapper mapp = new ObjectMapper();
 			String json = mapp.writeValueAsString(map);
 			return json;
+		} else {
+			return "redirect:/login";
+		}
+	}
+	
+	@GetMapping("/cedit")
+	public String cedit(@RequestParam(value = "cno", required = true, defaultValue = "0") int cno
+			, Map<String, Object> map, HttpSession session, Model model) {
+		// System.out.println(bno);
+		if(session.getAttribute("mid") != null) {
+			map.put("cno", cno);
+			map.put("mid", session.getAttribute("mid"));
+			Map<String, Object> detail = myPageService.cdetail(cno);
+			model.addAttribute("detail", detail);
+			return "/mypage/comment";
+		} else {
+			return "redirect:/login";
+		}
+	}
+	
+	@ResponseBody
+	@PostMapping("/cedit")
+	public String cedit(@RequestParam Map<String, Object> map, HttpSession session) {
+		System.out.println(map);// {comment=마이페이지 댓글쓰기 수정, cno=86}
+		if(session.getAttribute("mid") != null) {
+			int result = myPageService.cedit(map);
+			System.out.println(result);
+			JSONObject json = new JSONObject();
+			json.put("result", result);
+			return json.toString();
 		} else {
 			return "redirect:/login";
 		}

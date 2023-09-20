@@ -1,59 +1,60 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="X-UA-Compatible">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <!--  
     Document Title
     =============================================
     -->
-<title>Titan | Multipurpose HTML5 Template</title>
+<title>우리동네 | 동네북</title>
 <!--  
     Favicons
     =============================================
     -->
 <link rel="apple-touch-icon" sizes="57x57"
-	href="../assets/images/favicons/apple-icon-57x57.png">
+	href="assets/images/favicons/apple-icon-57x57.png">
 <link rel="apple-touch-icon" sizes="60x60"
-	href="../assets/images/favicons/apple-icon-60x60.png">
+	href="assets/images/favicons/apple-icon-60x60.png">
 <link rel="apple-touch-icon" sizes="72x72"
-	href="../assets/images/favicons/apple-icon-72x72.png">
+	href="assets/images/favicons/apple-icon-72x72.png">
 <link rel="apple-touch-icon" sizes="76x76"
-	href="../assets/images/favicons/apple-icon-76x76.png">
+	href="assets/images/favicons/apple-icon-76x76.png">
 <link rel="apple-touch-icon" sizes="114x114"
-	href="../assets/images/favicons/apple-icon-114x114.png">
+	href="assets/images/favicons/apple-icon-114x114.png">
 <link rel="apple-touch-icon" sizes="120x120"
-	href="../assets/images/favicons/apple-icon-120x120.png">
+	href="assets/images/favicons/apple-icon-120x120.png">
 <link rel="apple-touch-icon" sizes="144x144"
-	href="../assets/images/favicons/apple-icon-144x144.png">
+	href="assets/images/favicons/apple-icon-144x144.png">
 <link rel="apple-touch-icon" sizes="152x152"
-	href="../assets/images/favicons/apple-icon-152x152.png">
+	href="assets/images/favicons/apple-icon-152x152.png">
 <link rel="apple-touch-icon" sizes="180x180"
-	href="../assets/images/favicons/apple-icon-180x180.png">
+	href="assets/images/favicons/apple-icon-180x180.png">
 <link rel="icon" type="image/png" sizes="192x192"
-	href="../assets/images/favicons/android-icon-192x192.png">
+	href="assets/images/favicons/android-icon-192x192.png">
 <link rel="icon" type="image/png" sizes="32x32"
-	href="../assets/images/favicons/favicon-32x32.png">
+	href="assets/images/favicons/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="96x96"
-	href="../assets/images/favicons/favicon-96x96.png">
+	href="assets/images/favicons/favicon-96x96.png">
 <link rel="icon" type="image/png" sizes="16x16"
-	href="../assets/images/favicons/favicon-16x16.png">
-<link rel="manifest" href="/manifest.json">
+	href="assets/images/favicons/favicon-16x16.png">
+<link rel="manifest" href="assets/images/favicons/manifest.json">
 <meta name="msapplication-TileColor" content="#ffffff">
 <meta name="msapplication-TileImage"
-	content="../assets/images/favicons/ms-icon-144x144.png">
+	content="assets/images/favicons/ms-icon-144x144.png">
 <meta name="theme-color" content="#ffffff">
 <!--  
     Stylesheets
     =============================================
-    
     -->
 <!-- Default stylesheets-->
-<link href="../assets/lib/bootstrap/dist/css/bootstrap.min.css"
+<link href="assets/lib/bootstrap/dist/css/bootstrap.min.css"
 	rel="stylesheet">
 <!-- Template specific stylesheets-->
 <link
@@ -64,235 +65,234 @@
 <link
 	href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800"
 	rel="stylesheet">
-<link href="../assets/lib/animate.css/animate.css" rel="stylesheet">
-<link
-	href="../assets/lib/components-font-awesome/css/font-awesome.min.css"
+<link href="assets/lib/animate.css/animate.css" rel="stylesheet">
+<link href="assets/lib/components-font-awesome/css/font-awesome.min.css"
 	rel="stylesheet">
-<link href="../assets/lib/et-line-font/et-line-font.css"
-	rel="stylesheet">
-<link href="../assets/lib/flexslider/flexslider.css" rel="stylesheet">
-<link href="../assets/lib/owl.carousel/dist/assets/owl.carousel.min.css"
+<link href="assets/lib/et-line-font/et-line-font.css" rel="stylesheet">
+<link href="assets/lib/flexslider/flexslider.css" rel="stylesheet">
+<link href="assets/lib/owl.carousel/dist/assets/owl.carousel.min.css"
 	rel="stylesheet">
 <link
-	href="../assets/lib/owl.carousel/dist/assets/owl.theme.default.min.css"
+	href="assets/lib/owl.carousel/dist/assets/owl.theme.default.min.css"
 	rel="stylesheet">
-<link href="../assets/lib/magnific-popup/dist/magnific-popup.css"
+<link href="assets/lib/magnific-popup/dist/magnific-popup.css"
 	rel="stylesheet">
-<link href="../assets/lib/simple-text-rotator/simpletextrotator.css"
+<link href="assets/lib/simple-text-rotator/simpletextrotator.css"
 	rel="stylesheet">
 <!-- Main stylesheet and color file-->
-<link href="../assets/css/style.css" rel="stylesheet">
-<link id="color-scheme" href="../assets/css/colors/default.css"
+<link href="assets/css/style.css" rel="stylesheet">
+<link id="color-scheme" href="assets/css/colors/default.css"
 	rel="stylesheet">
+<link href="../css/booklist.css" rel="stylesheet">
+<script type="text/javascript">
+ 
+function inputNumberFormat(obj) {
+    var sanitizedValue = comma(uncomma(obj.value));
+
+    // 첫 번째 문자가 0일 경우, 0을 제거합니다.
+    if (sanitizedValue.charAt(0) === '0' && sanitizedValue.length > 1) {
+        sanitizedValue = sanitizedValue.substring(1);
+    }
+
+    obj.value = sanitizedValue;
+}
+
+function comma(str) {
+    str = String(str);
+    return str.replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,');
+}
+
+function uncomma(str) {
+    str = String(str);
+    return str.replace(/[^\d]+/g, '');
+}
+	
+</script>
+<!-- --------------------------------------------------- 상단 ---------------------------------------------------------------- -->
 </head>
 <body data-spy="scroll" data-target=".onpage-navigation"
 	data-offset="60">
-	<%@ include file="../menu.jsp"%>
-	<div style="margin-top: 100px;"></div>
+	<%@ include file="menu.jsp"%>
 	<main>
-		<div class="page-loader">
-			<div class="loader">Loading...</div>
-		</div>
-		<div class="main">
-			<div class="container">
-				<div class="row">
-					<div class="col-sm-6 col-sm-offset-3">
-						<h1 class="module-title font-alt">상품 등록</h1>
-					</div>
-				</div>
-			</div>
+      <div class="main">
+          <div class="container">
 
-			<div class="container">
-				<div class="row multi-columns-row">
-					<div class="col-sm-10">
-						<div class="search-box">
-							<div class="row">
-								<div class="col-sm-4">
-									<input class="name form-control" type="text" required="required" placeholder="책제목">
-								</div>
-								<div class="col-sm-4">
-									<input class="writer form-control" type="text" required="required" placeholder="저자">
-								</div>
-								<div class="col-sm-4">
-									<textarea class="content1 form-control" required="required" placeholder="소개글1">
-									</textarea>
-								</div>
-								<div class="col-sm-4">
-									<textarea class="content2 form-control" required="required" placeholder="소개글2">
-									</textarea>
-								</div>
-								<div class="col-sm-4">
-									<input class="img form-control" type="text" required="required" placeholder="이미지">
-								</div>
-								<div class="col-sm-4">
-									<input class="price form-control" type="text" required="required" placeholder="가격">
-								</div>
-								<div class="col-sm-4">
-									<input class="cate form-control" type="text" required="required" placeholder="카테고리">
-								</div>
-								<div class="col-sm-4">
-									<input class="publisher form-control" type="text" required="required" placeholder="출판사">
-								</div>
-								<button class="search-btn" type="submit">게시</button>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</main>
-	<!-- Modal -->
-	<div class="modal fade" id="exampleModal" tabindex="-1"
-		aria-labelledby="exampleModalLabel" aria-hidden="true">
-		<div class="modal-dialog modal-lg">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLabel">재고</h5>
-				</div>
-				<div class="modal-body">
-					<input id="bkno2" type="hidden">
-					<div class="detail">
-						<!-- <select class="form-control" name="stock" id="stock" onclick="stockChange()">
-								<option value="10">10</option>
-								<option value="20">20</option>
-								<option value="30">30</option>
-								<option value="40">40</option>
-								<option value="50">50</option>
-								<option value="admin">사용자 지정</option>
-						</select> 
-						<div id="adminInputContainer"></div>-->
-						<input id="stockCnt" type="text" placeholder="수량을 입력하세요...">
-						<button id="stockbtn">재고 업데이트</button>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<!--  
+          </div>
+        
+        <section class="module-small">
+      <h1>책추가</h1>
+        <hr class="divider-w">
+          <div class="container">
+                    <div class="comment-form mt-30">
+                      <h4 class="comment-form-title font-alt">책 추가</h4>
+                      <form action="./bookWrite" method="post" enctype="multipart/form-data">
+                        <div class="row">
+                          <div class="col-sm-4">
+                            <div class="form-group">
+                               도서명
+                              <label class="sr-only" for="name">도서명</label>
+                              <input class="form-control" id="name" type="text" name="name" placeholder="도서명"/>
+                            </div>
+                          </div>
+                          <div class="col-sm-4">
+                            <div class="form-group">
+                                저자
+                              <label class="sr-only" for="write">저자</label>
+                              <input class="form-control" id="write" type="text" name="write" placeholder="저자"/>
+                            </div>
+                          </div>
+                          <div class="col-sm-4">
+                            <div class="form-group">
+                                 가격
+                               <input class="form-control" id=price type="number" name="price" placeholder="가격"/>
+                            </div>
+                          </div>
+                          <div class="col-sm-4">
+                            <div class="form-group">
+                                 구매재고
+                               <input class="form-control" id=bstock type="number" name="bstock"  placeholder="재고"/>
+                            </div>
+                          </div>
+                          <div class="col-sm-4">
+                            <div class="form-group">
+                                 대여가능여부
+                               <select class="form-control" name="rdel">
+					             <option selected="selected" value="0">대여가능</option>
+					             <option value="1">대여불가</option>
+				                </select>
+                            </div>
+                          </div>
+                          <div class="col-sm-4">
+                            <div class="form-group">
+                                 카테고리
+                               <select class="form-control" name="cate">
+					             <option selected="selected" value="0">장르선택</option>
+					             <option value="1">소설</option>
+					             <option value="2">에세이</option>
+					             <option value="3">자기개발</option>
+				                </select>
+                            </div>
+                          </div>
+                          
+                          <div class="col-sm-6">
+                            <div class="form-group">
+                              간략정보
+                              <textarea class="form-control" id="scontent" name="scontent" rows="4" placeholder="정보"></textarea>
+                            </div>
+                          </div>
+                          <div class="col-sm-6">
+                            <div class="form-group">
+                            <input type="file" name="upFile">
+                            </div>
+                          </div>
+                          <div class="col-sm-12">
+                            <div class="form-group">
+                              상세정보
+                              <textarea class="form-control" id="content" name="content" rows="4" placeholder="정보"></textarea>
+                            </div>
+                          </div>
+                          <div class="col-sm-12">
+                            <button class="btn btn-round btn-d" type="submit">추가하기</button>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+          </div>
+        </section>
+
+<!-- --------------------------------------------------- 하단 풋---------------------------------------------------------------- -->
+        <div class="module-small bg-dark">
+          <div class="container">
+            <div class="row">
+              <div class="col-sm-3">
+                <div class="widget">
+                  <h5 class="widget-title font-alt">About Titan</h5>
+                  <p>The languages only differ in their grammar, their pronunciation and their most common words.</p>
+                  <p>Phone: +1 234 567 89 10</p>Fax: +1 234 567 89 10
+                  <p>Email:<a href="#">somecompany@example.com</a></p>
+                </div>
+              </div>
+              <div class="col-sm-3">
+                <div class="widget">
+                  <h5 class="widget-title font-alt">Recent Comments</h5>
+                  <ul class="icon-list">
+                    <li>Maria on <a href="#">Designer Desk Essentials</a></li>
+                    <li>John on <a href="#">Realistic Business Card Mockup</a></li>
+                    <li>Andy on <a href="#">Eco bag Mockup</a></li>
+                    <li>Jack on <a href="#">Bottle Mockup</a></li>
+                    <li>Mark on <a href="#">Our trip to the Alps</a></li>
+                  </ul>
+                </div>
+              </div>
+              <div class="col-sm-3">
+                <div class="widget">
+                  <h5 class="widget-title font-alt">Blog Categories</h5>
+                  <ul class="icon-list">
+                    <li><a href="#">Photography - 7</a></li>
+                    <li><a href="#">Web Design - 3</a></li>
+                    <li><a href="#">Illustration - 12</a></li>
+                    <li><a href="#">Marketing - 1</a></li>
+                    <li><a href="#">Wordpress - 16</a></li>
+                  </ul>
+                </div>
+              </div>
+              <div class="col-sm-3">
+                <div class="widget">
+                  <h5 class="widget-title font-alt">Popular Posts</h5>
+                  <ul class="widget-posts">
+                    <li class="clearfix">
+                      <div class="widget-posts-image"><a href="#"><img src="assets/images/rp-1.jpg" alt="Post Thumbnail"/></a></div>
+                      <div class="widget-posts-body">
+                        <div class="widget-posts-title"><a href="#">Designer Desk Essentials</a></div>
+                        <div class="widget-posts-meta">23 january</div>
+                      </div>
+                    </li>
+                    <li class="clearfix">
+                      <div class="widget-posts-image"><a href="#"><img src="assets/images/rp-2.jpg" alt="Post Thumbnail"/></a></div>
+                      <div class="widget-posts-body">
+                        <div class="widget-posts-title"><a href="#">Realistic Business Card Mockup</a></div>
+                        <div class="widget-posts-meta">15 February</div>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <hr class="divider-d">
+        <footer class="footer bg-dark">
+          <div class="container">
+            <div class="row">
+              <div class="col-sm-6">
+                <p class="copyright font-alt">&copy; 2017&nbsp;<a href="index.html">TitaN</a>, All Rights Reserved</p>
+              </div>
+              <div class="col-sm-6">
+                <div class="footer-social-links"><a href="#"><i class="fa fa-facebook"></i></a><a href="#"><i class="fa fa-twitter"></i></a><a href="#"><i class="fa fa-dribbble"></i></a><a href="#"><i class="fa fa-skype"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </footer>
+      </div>
+      <div class="scroll-up"><a href="#totop"><i class="fa  fa-chevron-up"></i></a></div>
+    </main>
+    <!--  
     JavaScripts
     =============================================
     -->
-	<script src="../assets/lib/jquery/dist/jquery.js"></script>
-	<script src="../assets/lib/bootstrap/dist/js/bootstrap.min.js"></script>
-	<script src="../assets/lib/wow/dist/wow.js"></script>
-	<script
-		src="../assets/lib/jquery.mb.ytplayer/dist/jquery.mb.YTPlayer.js"></script>
-	<script src="../assets/lib/isotope/dist/isotope.pkgd.js"></script>
-	<script src="../assets/lib/imagesloaded/imagesloaded.pkgd.js"></script>
-	<script src="../assets/lib/flexslider/jquery.flexslider.js"></script>
-	<script src="../assets/lib/owl.carousel/dist/owl.carousel.min.js"></script>
-	<script src="../assets/lib/smoothscroll.js"></script>
-	<script
-		src="../assets/lib/magnific-popup/dist/jquery.magnific-popup.js"></script>
-	<script
-		src="../assets/lib/simple-text-rotator/jquery.simple-text-rotator.min.js"></script>
-	<script src="../assets/js/plugins.js"></script>
-	<script src="../assets/js/main.js"></script>
-	
-	<script type="text/javascript">
-	
-	function stock(bkno, bstock) {
-		// alert(bkno +" "+ bstock);
-	    if (confirm(bstock + "개 남은 재고를 바꾸시겠습니까?")) {
-	    	$("#bkno2").val(bkno);
-	        $("#exampleModal").modal("show");
-	    }
-	}
-	
-	$(document).on('click', '#stockbtn', function () {
-		var bkno = $('#bkno2').val();
-		var bstock = $("#stockCnt").val();
-		var cate = getParameterByName('cate');
-		// alert(bkno + " " + bstock);
-		$.ajax({
-            url: './updateStock',
-            type: 'post',
-            data: {bkno: bkno, bstock: bstock, cate:cate},
-            success: function (data) {
-                alert("재고가 업데이트됐습니다.");
-                location.href = "./stock";
-            },
-            error: function (error) {
-                alert('에러');
-            }
-        });
-	});
-	
-	/*function stockChange() {
-		
-	    var adminInputContainer = document.getElementById("adminInputContainer");
-
-	    // "사용자 지정" 옵션이 선택되었을 때
-	    if ($('#stock').val() === "admin") {
-	        // <input> 요소를 생성하여 adminInputContainer에 추가
-	        var adminInput = document.createElement("input");
-	        adminInput.id = "admin";
-	        adminInput.name = "admin";
-	        adminInput.placeholder = "사용자 지정 내용을 입력하세요";
-	        adminInputContainer.innerHTML = ""; // 이전 내용 삭제
-	        adminInputContainer.appendChild(adminInput);
-	    } else {
-	        // 다른 옵션을 선택한 경우, adminInputContainer를 비운다.
-	        adminInputContainer.innerHTML = "";
-	    }
-	    
-	    $(document).on('click', '#stockbtn', function () {
-	    	var bkno = $('#bkno2').val(); // 책 번호 가져오기
-	    	// alert(bkno);
-	    	var bstock = "";
-	    	if ($('#stock').val() == "admin") {
-	            bstock = $('#admin').val(); // 사용자가 정의한 재고 값을 가져오기
-	        } else {
-	            bstock = $('#stock').val(); // 선택한 재고 값을 가져오기
-	        }
-
-	        var cate = getParameterByName('cate');
-	        
-	        $.ajax({
-	            url: './updateStock',
-	            type: 'post',
-	            data: { bkno: bkno, bstock: bstock, cate:cate },
-	            success: function (data) {
-	                // location.href = "./stock?cate=" + cate;
-	                alert("재고가 업데이트됐습니다.");
-	            },
-	            error: function (error) {
-	                alert('에러');
-	            }
-	        });
-	    });
-	}*/
-
-	function getParameterByName(name) {
-	    const urlParams = new URL(location.href).searchParams;
-	    return urlParams.get(name);
-	}
- 	
- 	
- 	$(function() {
- 	// URL에서 cate 매개변수를 가져와서 기본값으로 설정
-    var defaultCate = getParameterByName('cate');
-    $('#cate').val(defaultCate);
-    
-	$('#cate').on('change', function(){
-		var cate = $('#cate').val();
-		// alert(cate);
-		$.ajax({
-			url:'./stock',
-			type:'get',
-			data:{cate:cate},
-			success:function(data){
-				location.href="./stock?cate=" + cate;
-				
-			},
-			error:function(error){
-				alert('에러');
-			}
-		});
-	});
-	
-	});
- 	</script>
-
-</body>
+    <script src="../assets/lib/jquery/dist/jquery.js"></script>
+    <script src="../assets/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="../assets/lib/wow/dist/wow.js"></script>
+    <script src="../assets/lib/jquery.mb.ytplayer/dist/jquery.mb.YTPlayer.js"></script>
+    <script src="../assets/lib/isotope/dist/isotope.pkgd.js"></script>
+    <script src="../assets/lib/imagesloaded/imagesloaded.pkgd.js"></script>
+    <script src="../assets/lib/flexslider/jquery.flexslider.js"></script>
+    <script src="../assets/lib/owl.carousel/dist/owl.carousel.min.js"></script>
+    <script src="../assets/lib/smoothscroll.js"></script>
+    <script src="../assets/lib/magnific-popup/dist/jquery.magnific-popup.js"></script>
+    <script src="../assets/lib/simple-text-rotator/jquery.simple-text-rotator.min.js"></script>
+    <script src="../assets/js/plugins.js"></script>
+    <script src="../assets/js/main.js"></script>
+  </body>
 </html>

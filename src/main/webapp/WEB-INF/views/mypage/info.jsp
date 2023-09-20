@@ -343,15 +343,15 @@
      	
      	// form 유효성 검사
         function validateForm() {
-            var id = $('#id').val();
-            var pw = $('#pw').val();
-            var pwchk = $('#pwchk').val();
-            var birth = $('#birth').val();
+            var id = $('#id').val().trim();;
+            var pw = $('#pw').val().trim();;
+            var pwchk = $('#pwchk').val().trim();;
+            var birth = $('#birth').val().trim();;
             var postcode = $('#postcode').val().trim();
             var address = $('#address').val().trim();
             var detailAddress = $('#detailAddress').val().trim();
             var extraAddress = $('#extraAddress').val().trim();
-            var email = $('#emailId').val();
+            var email = $('#emailId').val().trim();;
 
             // id 길이
             if (id.length > 0 && id.length < 4) {

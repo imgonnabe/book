@@ -178,12 +178,14 @@
 										<span class="menu-price font-alt col-sm-2">${row.bdate}</span>
 										<span class="menu-price font-alt col-sm-4">
 											<span class="col-sm-7">
-												<select class="form-control" name="punish" id="punish">
+												<select class="form-control punish" name="punish">
 													<option value="0">회원 탈퇴</option>
 													<option value="1">게시물 삭제</option>
 												</select>
 											</span>
-											<span><input type="button" class="btn punishbtn" data-bno="${row.bno}" data-mid="${row.mid}" value="등록"></span>
+											<span>
+												<input type="button" class="btn punishbtn" data-bno="${row.bno}" data-mid="${row.mid}" value="등록">
+											</span>
 										</span>
 									</div>
 								</div>
@@ -253,37 +255,50 @@
 	<script src="../assets/js/main.js"></script>
 	
 	<script type="text/javascript">
+	function getParameterByName(name, url) {
+    	const urlParams = new URL(location.href).searchParams;
+    	return urlParams.get(name);
+    }
 $(function(){
-	
+	var defaultCate = getParameterByName('cate');
+    var page = getParameterByName('page');
+    if(page == null){
+    	page = 1;
+    }
+    $('#cate').val(defaultCate);
 	
    $(".punishbtn").click(function(){
-	  var selected = $("#punish").val();
+	  var cate = $('#cate').val();
+	  if(cate == null){
+		  cate = 0;
+	  }
+	  var selected = $(this).parent().siblings().children(".punish").val();
    	  var bno = $(this).data("bno");
    	  var mid = $(this).data("mid");
-	  if(selected == 0){
+	  if(selected == '0'){
 		  var con = confirm("회원을 탈퇴시키겠습니까?");
 		  if(con){
 			  $.ajax({
 				  url: 'memberOut',
 	                type: 'post',
-	                data: {mid: mid},
+	                data: {mid: mid,cate:cate,page:page},
 	                success: function(data){
-	                    location.href='./board';
+	                    location.href="./board?cate=" + cate + "&page=" + page;
 	                },
 	                error: function(error){
 	                    alert('에러');
 	                }
 			  });
 		  }
-	  } else if(selected == 1){
+	  } else if(selected == '1'){
 		  var con2 = confirm("게시물을 삭제하시겠습니까?");
 		  if(con2){
 			  $.ajax({
 				  url: 'bdel',
 	                type: 'post',
-	                data: {bno:bno},
+	                data: {bno:bno,cate:cate,page:page},
 	                success: function(data){
-	                    location.href='./board';
+	                    location.href="./board?cate=" + cate + "&page=" + page;
 	                },
 	                error: function(error){
 	                    alert('에러');
@@ -307,7 +322,8 @@ $(function(){
  				var comment = data.comment;
  				// alert(comment);
  				$(".modal-title").text(detail.btitle);
- 				$(".detail-date").text("날짜 : "+detail.bdate);
+ 				var date = new Date(detail.bdate).toISOString().split("T")[0];
+ 				$(".detail-date").text("날짜 : "+date);
  				$(".detail-read").text("조회수:"+detail.bread);
  				$(".detail-content").html(detail.bcontent + "<hr>");
  				
@@ -315,7 +331,8 @@ $(function(){
  	            for(var i = 0; i < comment.length; i++){
  	                commentHtml += "<div class='comment-item'>";
  	                commentHtml += comment[i].mid + "(" + comment[i].mname + ")&nbsp;&nbsp;&nbsp;";
- 	                commentHtml += comment[i].cdate + "<br>";
+ 	               	var date = new Date(detail.bdate).toISOString().split("T")[0];
+ 	                commentHtml += cdate[i] + "<br>";
  	                commentHtml += "<div style='font-weight: bold; font-size: larger;'>" + comment[i].comment + "</div>";
  	                commentHtml += "</div><hr>";
  	            }
@@ -330,21 +347,20 @@ $(function(){
  	
  	$(function() {
  	// URL에서 cate 매개변수를 가져와서 기본값으로 설정
-    var defaultCate = getParameterByName('cate');
-    $('#cate').val(defaultCate);
+ 		var defaultCate = getParameterByName('cate');
+	    $('#cate').val(defaultCate);
     
 	$(document).on('change', '#cate', function(){
 		var cate = $('#cate').val();
-		var page = $('.page').val();
-		if(page == null){
-			page = 1;
+		if(cate == null){
+			cate = 0;
 		}
 		$.ajax({
 			url:'./board',
 			type:'get',
-			data:{cate:cate,page:page},
+			data:{cate:cate},
 			success:function(data){
-				location.href="./board?cate=" + cate + "&page=" + page;
+				location.href="./board?cate=" + cate;
 				
 			},
 			error:function(error){
@@ -372,12 +388,6 @@ $(function(){
 	    });
 	});
 	
-    function getParameterByName(name, url) {
-    	const urlParams = new URL(location.href).searchParams;
-    	return urlParams.get(name);
-    }
-    
-    
 	});
  	</script>
  	

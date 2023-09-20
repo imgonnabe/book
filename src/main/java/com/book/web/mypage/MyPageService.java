@@ -90,6 +90,14 @@ public class MyPageService {
 	public void cdelete(Map<String, Object> map) {
 		myPageDAO.cdelete(map);
 	}
+
+	public void bedit(Map<String, Object> map) {
+		myPageDAO.bedit(map);
+	}
+
+	public int cedit(Map<String, Object> map) {
+		return myPageDAO.cedit(map);
+	}
 	
 
 }

@@ -104,17 +104,11 @@
 		</div>
 		
 	</div>
-	<c:choose>
-		<c:when test="${list[0].count eq null}">
-			<section class="module-small">
-				<div class="container">
-					<h2 style="text-align: center;">대여 내역이 없습니다.</h2>
-				</div>
-			</section>
-		</c:when>
-	<c:otherwise>
+	
 	<section class="module-small">
-	<div class="module-subtitle font-alt">총 대출 건수 : ${list[0].count }개</div>
+	<div class="module-subtitle font-alt">
+		<c:if test="${list[0].count ne null}"> 총 대출 건수 : ${list[0].count }개</c:if>
+	</div>
 		<div class="container">
 		<div class="col-sm-2 mb-sm-20">
 			<button class="btn" onclick="location.href='./rent'">전체보기</button>
@@ -236,7 +230,6 @@ $(function() {
     
 	$('#cate').on('change', function(){
 		var cate = $('#cate').val();
-		// alert(cate);
 		$.ajax({
 			url:'./rent',
 			type:'get',
@@ -249,6 +242,25 @@ $(function() {
 				alert('에러');
 			}
 		});
+	});
+	
+	$(document).on('click', '.page', function(){
+	    var cate = $('#cate').val();
+	    if(cate == null){
+			cate = 0;
+		}
+	    var page = $(this).val();
+	    $.ajax({
+	        url: './board',
+	        type: 'get',
+	        data: { cate: cate, page: page },
+	        success: function(data) {
+	            location.href = "./board?cate=" + cate + "&page=" + page;
+	        },
+	        error: function(error) {
+	            alert('에러');
+	        }
+	    });
 	});
 	
     function getParameterByName(name, url) {

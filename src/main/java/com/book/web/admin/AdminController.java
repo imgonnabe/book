@@ -77,7 +77,7 @@ public class AdminController {
 	}
 	
 	@GetMapping("/board")
-	public String board(Model model, @RequestParam Map<String, Object> map, Criteria cri,
+	public String board(Model model, @RequestParam Map<String, Object> map, Criteria cri,@RequestParam(name="cate", required = false, defaultValue = "0") int cate,
 			@RequestParam(name="page", required = true, defaultValue = "1") int page, HttpSession session) {
 		if(session.getAttribute("mid") != null && session.getAttribute("mname").equals("admin")) {
 			if(!map.containsKey("cate") || map.get("cate").equals(null) || map.get("cate").equals("")) {

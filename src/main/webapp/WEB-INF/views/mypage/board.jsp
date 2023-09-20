@@ -230,16 +230,37 @@
 	<script type="text/javascript">
 	// 수정
     function edit(bno){
+    	var defaultCate = getParameterByName('cate');
+    	var defaultPage = getParameterByName('page');
+        $('#cate').val(defaultCate);
+    	var cate = $('#cate').val();
+	    if(cate == null){
+			cate = 0;
+		}
+	    var page = defaultPage;
+	    if(page == null){
+	    	page = 1;
+	    }
     	if(confirm("수정하시겠습니까?")){
-    		location.href = "./edit?bno=" + bno;
+    		location.href = "./bedit?cate=" + cate + "&page=" + page + "&bno=" + bno;
     	}
     }
     
  	// 삭제
     function del(bno){
- 		// alert(bno);
+    	var defaultCate = getParameterByName('cate');
+    	var defaultPage = getParameterByName('page');
+        $('#cate').val(defaultCate);
+    	var cate = $('#cate').val();
+	    if(cate == null){
+			cate = 0;
+		}
+	    var page = defaultPage;
+	    if(page == null){
+	    	page = 1;
+	    }
     	if(confirm("삭제하시겠습니까?")){
-    		location.href = "./delete?bno=" + bno;
+    		location.href = "./delete?cate=" + cate + "&page=" + page + "&bno=" + bno;
     	}
     }
  	
@@ -262,24 +283,20 @@
  			}
  		});
  	}
- 	
- 	$(function() {
+	
  	// URL에서 cate 매개변수를 가져와서 기본값으로 설정
     var defaultCate = getParameterByName('cate');
     $('#cate').val(defaultCate);
-    
+ 	
+ 	$(function() {
     $(document).on('change', '#cate', function(){
 		var cate = $('#cate').val();
-		var page = $('.page').val();
-		if(page == null){
-			page = 1;
-		}
 		$.ajax({
 			url:'./board',
 			type:'get',
 			data:{cate:cate,page:page},
 			success:function(data){
-				location.href="./board?cate=" + cate + "&page=" + page;
+				location.href="./board?cate=" + cate;
 				
 			},
 			error:function(error){
@@ -307,25 +324,11 @@
 	    });
 	});
 	
-	// URL에서 매개변수를 추출하는 함수
-    /*function getParameterByName(name, url) {
-        if (!url) {
-        	url = window.location.href;
-        }
-        name = name.replace(/[\[\]]/g, '\\$&');
-        var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)');
-        var results = regex.exec(url);
-        if (!results) return null;
-        if (!results[2]) return '';
-        return decodeURIComponent(results[2].replace(/\+/g, ' '));
-    }*/
+	});
     function getParameterByName(name, url) {
     	const urlParams = new URL(location.href).searchParams;
     	return urlParams.get(name);
     }
-    
-    
-	});
  	</script>
 </body>
 </html>

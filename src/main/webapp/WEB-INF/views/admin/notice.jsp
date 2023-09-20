@@ -122,7 +122,7 @@
 				<br><br>
 					<form action="./notice" method="get" class="row">
 					<span class="col-sm-3 mb-sm-20">
-							<select class="form-control" name="cate" id="cate">
+							<select class="form-control" name="cate" id="cate" onclick="cateChange()">
 									<option selected="selected" value="0">전체</option>
 									<option value="1">공지사항</option>
 									<option value="2">Q&amp;A</option>
@@ -246,17 +246,17 @@
 	
 	<script type="text/javascript">
 	
- 	function ndetail(bno){
+ 	function ndetail(nno){
  		$.ajax({
  			url:'./ndetail',
  			type:'post',
- 			data:{bno:bno},
+ 			data:{nno:nno},
  			dataType:'json',
  			success:function(data){
  				var detail = data.detail;
  				var comment = data.ncomment;
- 				$(".modal-title").text(detail.btitle);
- 				$(".detail-content").html(detail.bcontent + "<hr>");
+ 				$(".modal-title").text(detail.ntitle);
+ 				$(".detail-content").html(detail.ncontent + "<hr>");
  				
  				var commentHtml = "";
  	            for(var i = 0; i < comment.length; i++){
@@ -282,16 +282,15 @@
  	    
  		$(document).on('change', '#cate', function(){
  			var cate = $('#cate').val();
- 			var page = $('.page').val();
- 			if(page == null){
- 				page = 1;
+ 			if(cate == null){
+ 				cate = 0;
  			}
  			$.ajax({
  				url:'./notice',
  				type:'get',
  				data:{cate:cate},
  				success:function(data){
- 					location.href="./notice?cate=" + cate + "&page=" + page;
+ 					location.href="./notice?cate=" + cate;
  					
  				},
  				error:function(error){

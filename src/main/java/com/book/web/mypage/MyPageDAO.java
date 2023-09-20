@@ -48,4 +48,8 @@ public interface MyPageDAO {
 
 	void cdelete(Map<String, Object> map);
 
+	void bedit(Map<String, Object> map);
+
+	int cedit(Map<String, Object> map);
+
 }

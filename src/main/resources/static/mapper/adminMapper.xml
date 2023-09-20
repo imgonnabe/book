@@ -231,9 +231,9 @@
 	</select>
 	
 	<select id="ndetail" parameterType="Integer" resultType="Map">
-		select btitle, bcontent
-		FROM board
-		where bno = #{bno}
+		select ntitle, ncontent, ndate, nread
+		FROM notice
+		where nno = #{nno}
 	</select>
 	
 	<select id="ncomment" parameterType="Integer" resultType="Map">
