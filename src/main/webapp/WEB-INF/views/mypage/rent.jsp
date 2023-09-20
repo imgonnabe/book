@@ -186,7 +186,7 @@
 	</div>
 	<ul class="paging">
 				    <c:if test="${paging.prev}">
-				        <span><a href='<c:url value="/admin/stock?page=${paging.startPage-1}"/>'>이전</a></span>
+				        <span><a href='<c:url value="/mypage/rent?page=${paging.startPage-1}"/>'>이전</a></span>
 				    </c:if>
 				    <c:if test="${paging.endPage gt 1}">
 						<c:forEach begin="${paging.startPage}" end="${paging.endPage}" var="num">
@@ -194,7 +194,7 @@
 						</c:forEach>
 				    </c:if>
 				    <c:if test="${paging.next && paging.endPage>0}">
-				        <span><a href='<c:url value="/admin/stock?page=${paging.endPage+1}"/>'>다음</a></span>
+				        <span><a href='<c:url value="/mypage/rent?page=${paging.endPage+1}"/>'>다음</a></span>
 				    </c:if>
 				</ul>
 			</div>
@@ -256,7 +256,7 @@ $(function() {
 	        type: 'get',
 	        data: { cate: cate, page: page },
 	        success: function(data) {
-	            location.href = "./board?cate=" + cate + "&page=" + page;
+	            location.href = "./rent?cate=" + cate + "&page=" + page;
 	        },
 	        error: function(error) {
 	            alert('에러');

@@ -172,7 +172,7 @@
 				</div>
 			<ul class="paging">
 				    <c:if test="${paging.prev}">
-				        <span><a href='<c:url value="/admin/board?page=${paging.startPage-1}"/>'>이전</a></span>
+				        <span><a href='<c:url value="/mypage/comment?page=${paging.startPage-1}"/>'>이전</a></span>
 				    </c:if>
 				   <c:if test="${paging.endPage gt 1}">
 						<c:forEach begin="${paging.startPage}" end="${paging.endPage}" var="num">
@@ -180,7 +180,7 @@
 						</c:forEach>
 				    </c:if>
 				    <c:if test="${paging.next && paging.endPage>0}">
-				        <span><a href='<c:url value="/admin/board?page=${paging.endPage+1}"/>'>다음</a></span>
+				        <span><a href='<c:url value="/mypage/comment?page=${paging.endPage+1}"/>'>다음</a></span>
 				    </c:if>
 				</ul>
 			</div>
