@@ -88,10 +88,6 @@
 .gray{
 	background-color: gray;
 }
-
-.silver{
-	background-color: silver;
-}
 </style>
 </head>
 <body data-spy="scroll" data-target=".onpage-navigation"
@@ -117,7 +113,7 @@
 					<button class="btn" onclick="location.href='./notice?cate=0'">전체보기</button>
 				</span>
 				<span class="col-sm-2 mb-sm-20">
-					<button class="btn" type="button">글쓰기</button>
+					<button class="btn nwrite" type="button" onclick="location.href='./nwrite'">글쓰기</button>
 				</span>
 				<br><br>
 					<form action="./notice" method="get" class="row">
@@ -166,7 +162,7 @@
 								<span class="menu-price font-alt col-sm-5"></span>
 							</div>
 							<c:forEach items="${list }" var="row">
-								<div class="row">
+								<div class="row <c:if test="${row.ndel eq 0}">gray</c:if>">
 									<div class="col-sm-13">
 										<span class="menu-detail font-serif col-sm-1">${row.nno}</span>
 										<span onclick="ndetail(${row.nno})" class="menu-title font-alt col-sm-3">${row.ntitle}</span>
@@ -174,12 +170,12 @@
 										<span class="menu-price font-alt col-sm-1">${row.nread}</span>
 										<span class="menu-price font-alt col-sm-5">
 											<span class="col-sm-3">
-												<select class="form-control" name="noticeChange" id="noticeChange">
+												<select class="form-control noticeChange" name="noticeChange">
 													<option value="0">수정</option>
 													<option value="1">삭제</option>
 												</select>
 											</span>
-											<span><input type="button" class="btn punishbtn" data-bno="${row.bno}" value="등록"></span>
+											<span><input type="button" class="btn nbtn" data-nno="${row.nno}" value="등록"></span>
 										</span>
 									</div>
 								</div>
@@ -215,9 +211,11 @@
 				</div>
 				<div class="modal-body">
 					<div class="detail">
+						<div class="detail-date-read">    		
+							<div class="detail-date">날짜</div>     		
+							<div class="detail-read">조회수</div>	      		
+						</div> 
 						<div style="font-weight: bold; font-size: larger;" class="detail-content">본문내용</div>
-						<div class="comment">
-						</div>
 					</div>
 				</div>
 			</div>
@@ -246,6 +244,62 @@
 	
 	<script type="text/javascript">
 	
+	function getParameterByName(name, url) {
+    	const urlParams = new URL(location.href).searchParams;
+    	return urlParams.get(name);
+    }
+$(function(){
+	
+	var defaultCate = getParameterByName('cate');
+    var page = getParameterByName('page');
+    if(page == null){
+    	page = 1;
+    }
+    $('#cate').val(defaultCate);
+	
+   $(".nbtn").click(function(){
+	  var cate = $('#cate').val();
+	  if(cate == null){
+		  cate = 0;
+	  }
+	  var selected = $(this).parent().siblings().children(".noticeChange").val();
+   	  var nno = $(this).data("nno");
+	  if(selected == '0'){
+		  var con = confirm("게시물을 수정하시겠습니까?");
+		  if(con){
+			  $.ajax({
+				  url: 'nedit',
+	                type: 'get',
+	                data: {nno: nno,cate:cate,page:page},
+	                success: function(data){
+	                    location.href="./nedit?cate=" + cate + "&page=" + page + "&nno=" + nno;
+	                },
+	                error: function(error){
+	                    alert('에러');
+	                }
+			  });
+		  }
+	  } else if(selected == '1'){
+		  var con2 = confirm("게시물을 삭제하시겠습니까?");
+		  if(con2){
+			  $.ajax({
+				  url: 'ndelete',
+	                type: 'get',
+	                data: {nno:nno,cate:cate,page:page},
+	                success: function(data){
+	                    location.href="./ndelete?cate=" + cate + "&page=" + page + "&nno=" + nno;
+	                },
+	                error: function(error){
+	                    alert('에러');
+	                }
+			  });
+		  }
+	  } else {
+		  return false;
+	  }
+	});
+}); 
+	
  	function ndetail(nno){
  		$.ajax({
  			url:'./ndetail',
@@ -254,19 +308,11 @@
  			dataType:'json',
  			success:function(data){
  				var detail = data.detail;
- 				var comment = data.ncomment;
  				$(".modal-title").text(detail.ntitle);
+ 				var date = new Date(detail.ndate).toISOString().split("T")[0];
+ 				$(".detail-date").text("날짜 : "+date);
+ 				$(".detail-read").text("조회수:"+detail.nread);
  				$(".detail-content").html(detail.ncontent + "<hr>");
- 				
- 				var commentHtml = "";
- 	            for(var i = 0; i < comment.length; i++){
- 	                commentHtml += "<div class='comment-item'>";
- 	                commentHtml += comment[i].mid + "(" + comment[i].mname + ")&nbsp;&nbsp;&nbsp;";
- 	                commentHtml += comment[i].cdate + "<br>";
- 	                commentHtml += "<div style='font-weight: bold; font-size: larger;'>" + comment[i].comment + "</div>";
- 	                commentHtml += "</div><hr>";
- 	            }
- 	            $(".comment").html(commentHtml);
  				$("#exampleModal").modal("show");
  			},
  			error:function(error){
@@ -317,13 +363,6 @@
  		        }
  		    });
  		});
- 		
- 	    function getParameterByName(name, url) {
- 	    	const urlParams = new URL(location.href).searchParams;
- 	    	return urlParams.get(name);
- 	    }
- 	    
- 	    
  		});
  	
  	</script>

@@ -52,4 +52,8 @@ public interface MyPageDAO {
 
 	int cedit(Map<String, Object> map);
 
+	int buylistCnt(Map<String, Object> map);
+
+	int rentlistCnt(Map<String, Object> map);
+
 }

@@ -98,6 +98,14 @@ public class MyPageService {
 	public int cedit(Map<String, Object> map) {
 		return myPageDAO.cedit(map);
 	}
+
+	public int buylistCnt(Map<String, Object> map) {
+		return myPageDAO.buylistCnt(map);
+	}
+
+	public int rentlistCnt(Map<String, Object> map) {
+		return myPageDAO.rentlistCnt(map);
+	}
 	
 
 }

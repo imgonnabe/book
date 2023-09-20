@@ -254,16 +254,75 @@ public class AdminController {
 		}
 	}
 	
+	@GetMapping("/nwrite")
+	public String nwrite(HttpSession session, Model model) {
+		if(session.getAttribute("mid") != null && session.getAttribute("mname").equals("admin")) {
+			return "/admin/nwrite";
+		} else {
+			return "redirect:/index";
+		}
+	}
+	
+	@PostMapping("/nwrite")
+	public String nwrite(@RequestParam Map<String, Object> map, HttpSession session) {
+		System.out.println(map);
+		if(session.getAttribute("mid") != null && session.getAttribute("mname").equals("admin")) {
+			map.put("mid", session.getAttribute("mid"));
+			adminService.nwrite(map);
+			return "redirect:/admin/notice";
+		} else {
+			return "redirect:/index";
+		}
+	}
+	
 	@ResponseBody
 	@PostMapping("/ndetail")
-	public String ndetail(@RequestParam(value = "bno", required = true) int bno, HttpSession session) {
+	public String ndetail(@RequestParam(value = "nno", required = true) int nno, HttpSession session) {
 		if(session.getAttribute("mid") != null && session.getAttribute("mname").equals("admin")) {
-			Map<String, Object> detail = adminService.ndetail(bno);
-			List<Map<String, Object>> ncomment = adminService.ncomment(bno);
+			Map<String, Object> detail = adminService.ndetail(nno);
 			JSONObject json = new JSONObject();
 			json.put("detail", detail);
-			json.put("ncomment", ncomment);
 			return json.toString();
+		} else {
+			return "redirect:/index";
+		}
+	}
+	
+	@GetMapping("/nedit")
+	public String nedit(@RequestParam(value = "nno", required = true, defaultValue = "0") int nno
+			, @RequestParam Map<String, Object> map, HttpSession session, Model model) {
+		System.out.println(map);
+		if(session.getAttribute("mid") != null && session.getAttribute("mname").equals("admin")) {
+			map.put("mid", session.getAttribute("mid"));
+			Map<String, Object> detail = adminService.ndetail(nno);
+			model.addAttribute("detail", detail);
+			model.addAttribute("cate", map.get("cate"));
+			model.addAttribute("page", map.get("page"));
+			return "/admin/nedit";
+		} else {
+			return "redirect:/index";
+		}
+	}
+	
+	@PostMapping("/nedit")
+	public String nedit(@RequestParam Map<String, Object> map, HttpSession session) {
+		System.out.println(map);
+		if(session.getAttribute("mid") != null && session.getAttribute("mname").equals("admin")) {
+			adminService.nedit(map);
+			return "redirect:/admin/notice?cate=" + map.get("cate") + "&page=" + map.get("page");
+		} else {
+			return "redirect:/index";
+		}
+	}
+	
+	@GetMapping("/ndelete")
+	public String delete(@RequestParam(value = "nno", required = true, defaultValue = "0") int nno
+			, @RequestParam Map<String, Object> map, HttpSession session) {
+		if(session.getAttribute("mid") != null && session.getAttribute("mname").equals("admin")) {
+			map.put("bno", nno);
+			map.put("mid", session.getAttribute("mid"));
+			adminService.ndelete(map);
+			return "redirect:/admin/notice?cate=" + map.get("cate") + "&page=" + map.get("page");
 		} else {
 			return "redirect:/index";
 		}

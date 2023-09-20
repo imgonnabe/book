@@ -105,7 +105,7 @@
 	</div>
 	
 	<c:choose>
-		<c:when test="${list[0].count eq null}">
+		<c:when test="${buyListCnt eq null}">
 			<section class="module-small">
 				<div class="container">
 					<h2 style="text-align: center;">주문 목록이 없습니다.</h2>
@@ -114,7 +114,9 @@
 		</c:when>
 	<c:otherwise>
 		<section class="module-small">
-		<div class="module-subtitle font-alt">총 주문개수 : ${list[0].count }개</div>
+		<div class="module-subtitle font-alt">
+			<c:if test="${buyListCnt ne null}">총 주문개수 : ${buyListCnt }개</c:if>
+		</div>
 		<div class="container">
 		<div class="col-sm-2 mb-sm-20">
 			<button class="btn" onclick="location.href='./buy'">전체보기</button>
@@ -122,7 +124,8 @@
 			<form action="./buy" method="get" class="row">
 				<div class="col-sm-2 mb-sm-20">
 					<select class="form-control" name="cate" id="cate">
-						<option selected="selected" value="1">최근 1개월</option>
+						<option selected="selected" value="0">전체 보기</option>
+						<option value="1">최근 1개월</option>
 						<option value="3">최근 3개월</option>
 						<option value="6">최근 6개월</option>
 					</select>
@@ -218,7 +221,6 @@ $(function() {
     
 	$('#cate').on('change', function(){
 		var cate = $('#cate').val();
-		// alert(cate);
 		$.ajax({
 			url:'./buy',
 			type:'get',
@@ -232,6 +234,7 @@ $(function() {
 			}
 		});
 	});
+	
 	
     function getParameterByName(name, url) {
     	const urlParams = new URL(location.href).searchParams;

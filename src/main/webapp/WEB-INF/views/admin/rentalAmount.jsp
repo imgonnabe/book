@@ -208,16 +208,12 @@
 	    
 	    $(document).on('change', '#cate', function(){
 			var cate = $('#cate').val();
-			var page = $('.page').val();
-			if(page == null){
- 				page = 1;
- 			}
 			$.ajax({
 				url:'./rentalAmount',
 				type:'get',
 				data:{cate:cate},
 				success:function(data){
-					location.href="./rentalAmount?cate=" + cate + "&page=" + page;
+					location.href="./rentalAmount?cate=" + cate;
 					
 				},
 				error:function(error){

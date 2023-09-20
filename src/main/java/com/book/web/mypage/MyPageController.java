@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import com.book.web.notification.NotificationService;
@@ -100,7 +99,7 @@ public class MyPageController {
 	}
 	
 	@GetMapping("/buy")
-	public String buy(Model model, @RequestParam Map<String, Object> map, HttpSession session,
+	public String buy(Model model, @RequestParam Map<String, Object> map, HttpSession session, Criteria cri,
 			@RequestParam(name="cate", required = false, defaultValue = "0") int cate) {
 		System.out.println(map);
 		if(session.getAttribute("mid") != null) {
@@ -108,8 +107,19 @@ public class MyPageController {
 				map.put("cate", 0);
 			}
 			map.put("mid", session.getAttribute("mid"));
+			// 전체 글 개수
+	        int buyListCnt = myPageService.buylistCnt(map);
+	        
+	        // 페이징 객체
+	        Paging paging = new Paging();
+	        paging.setCri(cri);
+	        paging.setTotalCount(buyListCnt);    
+	        map.put("cri", cri);
+	        System.out.println(map);
 			List<Map<String, Object>> list = myPageService.buylist(map);
 			model.addAttribute("list", list);
+			model.addAttribute("paging", paging);
+			model.addAttribute("buyListCnt", buyListCnt);
 			return "/mypage/buy";
 		} else {
 			return "redirect:/login";
@@ -117,16 +127,27 @@ public class MyPageController {
 	}
 	
 	@GetMapping("/rent")
-	public String rent(Model model, @RequestParam Map<String, Object> map, HttpSession session,
+	public String rent(Model model, @RequestParam Map<String, Object> map, HttpSession session, Criteria cri,
 			@RequestParam(name="cate", required = false, defaultValue = "0") int cate) {
 		System.out.println(map);
 		if(session.getAttribute("mid") != null) {
 			if(!map.containsKey("cate") || map.get("cate").equals(null) || map.get("cate").equals("")) {
-				map.put("cate", 0);
+				map.put("cate", 2);
 			}
 			map.put("mid", session.getAttribute("mid"));
+			// 전체 글 개수
+	        int rentListCnt = myPageService.rentlistCnt(map);
+	        
+	        // 페이징 객체
+	        Paging paging = new Paging();
+	        paging.setCri(cri);
+	        paging.setTotalCount(rentListCnt);    
+	        map.put("cri", cri);
+	        System.out.println(map);
 			List<Map<String, Object>> list = myPageService.rentlist(map);
 			model.addAttribute("list", list);
+			model.addAttribute("rentListCnt", rentListCnt);
+			model.addAttribute("paging", paging);
 			return "/mypage/rent";
 		} else {
 			return "redirect:/login";

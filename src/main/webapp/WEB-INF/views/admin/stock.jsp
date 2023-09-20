@@ -266,8 +266,17 @@
 	$(document).on('click', '#stockbtn', function() {
 		var bkno = $('#bkno2').val();
 		var bstock = $("#stockCnt").val();
-		var cate = getParameterByName('cate');
-		// alert(bkno + " " + bstock);
+		var defaultCate = getParameterByName('cate');
+    	var defaultPage = getParameterByName('page');
+        $('#cate').val(defaultCate);
+    	var cate = $('#cate').val();
+	    if(cate == null){
+			cate = 0;
+		}
+	    var page = defaultPage;
+	    if(page == null){
+	    	page = 1;
+	    }
 		$.ajax({
             url: './updateStock',
             type: 'post',
@@ -278,7 +287,7 @@
             		alert("재고에 문자가 포함되어 있습니다.");
             	} else {
 	                alert("재고가 " + data.bstock + "개 업데이트됐습니다.");
-	                location.href = "./stock";
+	                location.href = "./stock?cate=" + cate + "&page=" + page;
             	}
             },
             error: function (error) {
@@ -345,16 +354,15 @@
     
     $(document).on('change', '#cate', function(){
 			var cate = $('#cate').val();
-			var page = $('.page').val();
-			if(page == null){
- 				page = 1;
- 			}
+			if(cate == null){
+				cate = 0;
+			}
 			$.ajax({
 				url:'./stock',
 				type:'get',
 				data:{cate:cate},
 				success:function(data){
-					location.href="./stock?cate=" + cate + "&page=" + page;
+					location.href="./stock?cate=" + cate;
 					
 				},
 				error:function(error){

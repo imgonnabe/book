@@ -28,9 +28,7 @@ public interface AdminDAO {
 
 	List<Map<String, Object>> rentalAmount(Map<String, Object> map);
 
-	Map<String, Object> ndetail(int bno);
-
-	List<Map<String, Object>> ncomment(int bno);
+	Map<String, Object> ndetail(int nno);
 
 	int boardlistCnt(Map<String, Object> map);
 
@@ -45,5 +43,11 @@ public interface AdminDAO {
 	int rentalAmountCnt(Map<String, Object> map);
 
 	int rentlistCnt(Map<String, Object> map);
+
+	void nedit(Map<String, Object> map);
+
+	void ndelete(Map<String, Object> map);
+
+	void nwrite(Map<String, Object> map);
 
 }

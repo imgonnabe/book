@@ -370,6 +370,7 @@
 	    if(cate == null){
 			cate = 0;
 		}
+	    var page = $(this).val();
 	    $.ajax({
 	        url: './comment',
 	        type: 'get',

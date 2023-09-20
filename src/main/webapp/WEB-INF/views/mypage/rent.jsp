@@ -107,7 +107,7 @@
 	
 	<section class="module-small">
 	<div class="module-subtitle font-alt">
-		<c:if test="${list[0].count ne null}"> 총 대출 건수 : ${list[0].count }개</c:if>
+		<c:if test="${rentListCnt ne null}"> 총 대출 건수 : ${rentListCnt }개</c:if>
 	</div>
 		<div class="container">
 		<div class="col-sm-2 mb-sm-20">
@@ -116,8 +116,9 @@
 			<form action="./rent" method="get" class="row">
 				<div class="col-sm-2 mb-sm-20">
 					<select class="form-control" name="cate" id="cate">
+						<option selected="selected" value="2">전체보기</option>
 						<option value="0">예약</option>
-						<option selected="selected" value="1">최근 1개월</option>
+						<option value="1">최근 1개월</option>
 						<option value="3">최근 3개월</option>
 						<option value="6">최근 6개월</option>
 					</select>
@@ -141,7 +142,7 @@
 		</div>
 	</section>
 	<c:choose>
-		<c:when test="${list[0].count eq null}">
+		<c:when test="${rentListCnt eq null}">
 			<section class="module-small">
 				<div class="container">
 					<h2 style="text-align: center;">대여도서가 없습니다.</h2>
@@ -270,12 +271,23 @@ $(function() {
     
     $(document).on('click','.returnBook', function(){
     	var rno = $(this).data('rno');
+    	var defaultCate = getParameterByName('cate');
+    	var defaultPage = getParameterByName('page');
+        $('#cate').val(defaultCate);
+    	var cate = $('#cate').val();
+	    if(cate == null){
+			cate = 2;
+		}
+	    var page = defaultPage;
+	    if(page == null){
+	    	page = 1;
+	    }
     	$.ajax({
     		url:'./returnBook',
 			type:'post',
-			data:{rno:rno},
+			data:{rno:rno,cate:cate,page:page},
 			success:function(data){
-				location.href="./rent";
+				location.href="./rent?cate=" + cate + "&page=" + page;
 			},
 			error:function(error){
 				alert('에러');

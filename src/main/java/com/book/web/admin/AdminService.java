@@ -51,12 +51,8 @@ public class AdminService {
 		return adminDAO.rentalAmount(map);
 	}
 
-	public Map<String, Object> ndetail(int bno) {
-		return adminDAO.ndetail(bno);
-	}
-
-	public List<Map<String, Object>> ncomment(int bno) {
-		return adminDAO.ncomment(bno);
+	public Map<String, Object> ndetail(int nno) {
+		return adminDAO.ndetail(nno);
 	}
 
 	public int boardlistCnt(Map<String, Object> map) {
@@ -85,6 +81,18 @@ public class AdminService {
 
 	public int rentlistCnt(Map<String, Object> map) {
 		return adminDAO.rentlistCnt(map);
+	}
+
+	void nedit(Map<String, Object> map) {
+		adminDAO.nedit(map);
+	}
+
+	public void ndelete(Map<String, Object> map) {
+		adminDAO.ndelete(map);
+	}
+
+	public void nwrite(Map<String, Object> map) {
+		adminDAO.nwrite(map);
 	}
 
 }

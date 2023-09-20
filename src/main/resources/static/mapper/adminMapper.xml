@@ -24,6 +24,7 @@
 			</choose>
 		</where>
 		order by b.bkno desc
+		LIMIT #{cri.pageStart}, #{cri.perPageNum}
 	</select>
 	
 	<select id="stocklistCnt" parameterType="Map" resultType="Integer">
@@ -130,6 +131,7 @@
 			</choose>
 		</where>
 		order by r.rno desc
+		LIMIT #{cri.pageStart}, #{cri.perPageNum}
 	</select>
 	
 	<select id="rentlistCnt" parameterType="Map" resultType="Integer">
@@ -231,15 +233,24 @@
 	</select>
 	
 	<select id="ndetail" parameterType="Integer" resultType="Map">
-		select ntitle, ncontent, ndate, nread
+		select ntitle, ncontent, ndate, nread, nno
 		FROM notice
 		where nno = #{nno}
 	</select>
 	
-	<select id="ncomment" parameterType="Integer" resultType="Map">
-		select c.comment, c.cdate, c.cdel, m.mid, m.mname
-		FROM comments c join members m on c.mno = m.mno
-		where c.bno = #{bno}
-	</select>
+	<update id="nedit" parameterType="Map">
+		update notice set ntitle = #{title}, ncontent = #{content}
+		where nno=#{nno}
+	</update>
+	
+	<update id="ndelete" parameterType="Map">
+		update notice set ndel = 0 
+		where nno=#{nno}
+	</update>
+	
+	<insert id="nwrite" parameterType="Map">
+		insert into notice (ntitle, ncontent, mno, ncate)
+		values(#{title}, #{content}, (select mno from members where mid = #{mid}), #{cate})
+	</insert>
 	
 </mapper>

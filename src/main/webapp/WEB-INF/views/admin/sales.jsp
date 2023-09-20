@@ -206,16 +206,12 @@
 	    
 		$(document).on('change', '#cate', function(){
 			var cate = $('#cate').val();
-			var page = $('.page').val();
-			if(page == null){
- 				page = 1;
- 			}
 			$.ajax({
 				url:'./sales',
 				type:'get',
 				data:{cate:cate},
 				success:function(data){
-					location.href="./sales?cate=" + cate + "&page=" + page;
+					location.href="./sales?cate=" + cate;
 					
 				},
 				error:function(error){
