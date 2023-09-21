@@ -191,7 +191,7 @@
 			</c:otherwise>
 		</c:choose>
 	</div>
-	<div class="scroll-up"><a href="#totop"><i class="fa  fa-chevron-up"></i></a></div>
+	<div class="scroll-up"><a href="#totop"><i class="fa fa-chevron-up"></i></a></div>
 	</main>
 	<!--  
     JavaScripts

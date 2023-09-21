@@ -174,7 +174,7 @@
 									<div class="col-sm-13">
 										<span class="menu-detail font-serif col-sm-1">${row.bno}</span>
 										<span onclick="detail(${row.bno})" class="menu-title font-alt col-sm-3">${row.btitle}</span>
-										<span class="menu-title font-alt col-sm-2">${row.mid}(${row.mname})</span>
+										<span class="menu-title col-sm-2">${row.mid}(${row.mname})</span>
 										<span class="menu-price font-alt col-sm-2">${row.bdate}</span>
 										<span class="menu-price font-alt col-sm-4">
 											<span class="col-sm-7">

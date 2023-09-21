@@ -30,8 +30,9 @@ public class AdminController {
 	
 	@GetMapping("/stock")
 	public String stock(Model model, @RequestParam Map<String, Object> map, HttpSession session, Criteria cri,
-			@RequestParam(name="cate", required = false, defaultValue = "0") int cate) {
-		if(session.getAttribute("mid") != null && (int)session.getAttribute("mgrade") != 2) {
+			@RequestParam(name="cate", required = false, defaultValue = "0") int cate,
+			@RequestParam(name="page", required = false, defaultValue = "1") int page) {
+		if(session.getAttribute("mid") != null && (int)session.getAttribute("mgrade") == 2) {
 			if(!map.containsKey("cate") || map.get("cate").equals(null) || map.get("cate").equals("")) {
 				map.put("cate", 0);
 			}
@@ -56,7 +57,7 @@ public class AdminController {
 	@ResponseBody
 	@PostMapping("/updateStock")
 	public String updateStock(Model model, @RequestParam Map<String, Object> map, HttpSession session) {
-		if(session.getAttribute("mid") != null && (int)session.getAttribute("mgrade") != 2) {
+		if(session.getAttribute("mid") != null && (int)session.getAttribute("mgrade") == 2) {
 			System.out.println(map);// {bkno=11, bstock=20, cate=}
 			if(!map.containsKey("cate") || map.get("cate").equals(null) || map.get("cate").equals("")) {
 				map.put("cate", 0);
@@ -79,7 +80,7 @@ public class AdminController {
 	@GetMapping("/board")
 	public String board(Model model, @RequestParam Map<String, Object> map, Criteria cri,@RequestParam(name="cate", required = false, defaultValue = "0") int cate,
 			@RequestParam(name="page", required = true, defaultValue = "1") int page, HttpSession session) {
-		if(session.getAttribute("mid") != null && (int)session.getAttribute("mgrade") != 2) {
+		if(session.getAttribute("mid") != null && (int)session.getAttribute("mgrade") == 2) {
 			if(!map.containsKey("cate") || map.get("cate").equals(null) || map.get("cate").equals("")) {
 				map.put("cate", 0);
 			}
@@ -108,7 +109,7 @@ public class AdminController {
 	@PostMapping("/detail")
 	public String detail(@RequestParam(value = "bno", required = true, defaultValue = "0") int bno, HttpSession session) 
 			throws JsonProcessingException {
-		if(session.getAttribute("mid") != null && (int)session.getAttribute("mgrade") != 2) {
+		if(session.getAttribute("mid") != null && (int)session.getAttribute("mgrade") == 2) {
 			Map<String, Object> detail = adminService.bdetail(bno);
 			List<Map<String, Object>> comment = adminService.comment(bno);
 			JSONObject json = new JSONObject();
@@ -125,7 +126,7 @@ public class AdminController {
 	@ResponseBody
 	@PostMapping("/memberOut")
 	public String memberOut(@RequestParam(value = "mid", required = true) String mid, HttpSession session) {
-		if(session.getAttribute("mid") != null && (int)session.getAttribute("mgrade") != 2) {
+		if(session.getAttribute("mid") != null && (int)session.getAttribute("mgrade") == 2) {
 			System.out.println(mid);
 			adminService.memberOut(mid);
 			return "/admin/board";
@@ -137,7 +138,7 @@ public class AdminController {
 	@ResponseBody
 	@PostMapping("/bdel")
 	public String bdel(@RequestParam(value = "bno", required = true) int bno, HttpSession session) {
-		if(session.getAttribute("mid") != null && (int)session.getAttribute("mgrade") != 2) {
+		if(session.getAttribute("mid") != null && (int)session.getAttribute("mgrade") == 2) {
 			System.out.println(bno);
 			adminService.bdel(bno);
 			return "/admin/board";
@@ -148,8 +149,9 @@ public class AdminController {
 	
 	@GetMapping("/rent")
 	public String rent(Model model, @RequestParam Map<String, Object> map, Criteria cri,
-			@RequestParam(name="cate", required = false, defaultValue = "0") int cate, HttpSession session) {
-		if(session.getAttribute("mid") != null && (int)session.getAttribute("mgrade") != 2) {
+			@RequestParam(name="cate", required = false, defaultValue = "0") int cate, HttpSession session,
+			@RequestParam(name="page", required = true, defaultValue = "1") int page) {
+		if(session.getAttribute("mid") != null && (int)session.getAttribute("mgrade") == 2) {
 			if(!map.containsKey("cate") || map.get("cate").equals(null) || map.get("cate").equals("")) {
 				map.put("cate", 0);
 			}
@@ -172,8 +174,9 @@ public class AdminController {
 	}
 	
 	@GetMapping("/sales")
-	public String sales(Model model, @RequestParam Map<String, Object> map, HttpSession session, Criteria cri) {
-		if(session.getAttribute("mid") != null && (int)session.getAttribute("mgrade") != 2) {
+	public String sales(Model model, @RequestParam Map<String, Object> map, HttpSession session, Criteria cri,
+			@RequestParam(name="page", required = true, defaultValue = "1") int page) {
+		if(session.getAttribute("mid") != null && (int)session.getAttribute("mgrade") == 2) {
 			if(!map.containsKey("cate") || map.get("cate").equals(null) || map.get("cate").equals("")) {
 				map.put("cate", 0);
 			}
@@ -196,8 +199,9 @@ public class AdminController {
 	}
 	
 	@GetMapping("/rentalAmount")
-	public String rentalAmount(Model model, @RequestParam Map<String, Object> map, HttpSession session, Criteria cri) {
-		if(session.getAttribute("mid") != null && (int)session.getAttribute("mgrade") != 2) {
+	public String rentalAmount(Model model, @RequestParam Map<String, Object> map, HttpSession session, Criteria cri,
+			@RequestParam(name="page", required = true, defaultValue = "1") int page) {
+		if(session.getAttribute("mid") != null && (int)session.getAttribute("mgrade") == 2) {
 			if(!map.containsKey("cate") || map.get("cate").equals(null) || map.get("cate").equals("")) {
 				map.put("cate", 0);
 			}
@@ -221,7 +225,7 @@ public class AdminController {
 	
 	@GetMapping("/product")
 	public String product(Model model, HttpSession session) {
-		if(session.getAttribute("mid") != null && (int)session.getAttribute("mgrade") != 2) {
+		if(session.getAttribute("mid") != null && (int)session.getAttribute("mgrade") == 2) {
 			
 			return "/admin/product";
 		} else {
@@ -231,8 +235,9 @@ public class AdminController {
 	
 	@GetMapping("/notice")
 	public String notice(Model model, HttpSession session, @RequestParam Map<String, Object> map, Criteria cri,
-			@RequestParam(name="cate", required = false, defaultValue = "0") int cate) {
-		if(session.getAttribute("mid") != null && (int)session.getAttribute("mgrade") != 2) {
+			@RequestParam(name="cate", required = false, defaultValue = "0") int cate,
+			@RequestParam(name="page", required = true, defaultValue = "1") int page) {
+		if(session.getAttribute("mid") != null && (int)session.getAttribute("mgrade") == 2) {
 			if(!map.containsKey("cate") || map.get("cate").equals(null) || map.get("cate").equals("")) {
 				map.put("cate", 0);
 			}
@@ -256,7 +261,7 @@ public class AdminController {
 	
 	@GetMapping("/nwrite")
 	public String nwrite(HttpSession session, Model model) {
-		if(session.getAttribute("mid") != null && (int)session.getAttribute("mgrade") != 2) {
+		if(session.getAttribute("mid") != null && (int)session.getAttribute("mgrade") == 2) {
 			return "/admin/nwrite";
 		} else {
 			return "redirect:/index";
@@ -266,7 +271,7 @@ public class AdminController {
 	@PostMapping("/nwrite")
 	public String nwrite(@RequestParam Map<String, Object> map, HttpSession session) {
 		System.out.println(map);
-		if(session.getAttribute("mid") != null && (int)session.getAttribute("mgrade") != 2) {
+		if(session.getAttribute("mid") != null && (int)session.getAttribute("mgrade") == 2) {
 			map.put("mid", session.getAttribute("mid"));
 			adminService.nwrite(map);
 			return "redirect:/admin/notice";
@@ -278,7 +283,7 @@ public class AdminController {
 	@ResponseBody
 	@PostMapping("/ndetail")
 	public String ndetail(@RequestParam(value = "nno", required = true) int nno, HttpSession session) {
-		if(session.getAttribute("mid") != null && (int)session.getAttribute("mgrade") != 2) {
+		if(session.getAttribute("mid") != null && (int)session.getAttribute("mgrade") == 2) {
 			Map<String, Object> detail = adminService.ndetail(nno);
 			JSONObject json = new JSONObject();
 			json.put("detail", detail);
@@ -292,7 +297,7 @@ public class AdminController {
 	public String nedit(@RequestParam(value = "nno", required = true, defaultValue = "0") int nno
 			, @RequestParam Map<String, Object> map, HttpSession session, Model model) {
 		System.out.println(map);
-		if(session.getAttribute("mid") != null && (int)session.getAttribute("mgrade") != 2) {
+		if(session.getAttribute("mid") != null && (int)session.getAttribute("mgrade") == 2) {
 			map.put("mid", session.getAttribute("mid"));
 			Map<String, Object> detail = adminService.ndetail(nno);
 			model.addAttribute("detail", detail);
@@ -307,7 +312,7 @@ public class AdminController {
 	@PostMapping("/nedit")
 	public String nedit(@RequestParam Map<String, Object> map, HttpSession session) {
 		System.out.println(map);
-		if(session.getAttribute("mid") != null && (int)session.getAttribute("mgrade") != 2) {
+		if(session.getAttribute("mid") != null && (int)session.getAttribute("mgrade") == 2) {
 			adminService.nedit(map);
 			return "redirect:/admin/notice?cate=" + map.get("cate") + "&page=" + map.get("page");
 		} else {
@@ -318,7 +323,7 @@ public class AdminController {
 	@GetMapping("/ndelete")
 	public String delete(@RequestParam(value = "nno", required = true, defaultValue = "0") int nno
 			, @RequestParam Map<String, Object> map, HttpSession session) {
-		if(session.getAttribute("mid") != null && (int)session.getAttribute("mgrade") != 2) {
+		if(session.getAttribute("mid") != null && (int)session.getAttribute("mgrade") == 2) {
 			map.put("bno", nno);
 			map.put("mid", session.getAttribute("mid"));
 			adminService.ndelete(map);

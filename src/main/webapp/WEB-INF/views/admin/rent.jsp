@@ -1,6 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ page import="java.text.SimpleDateFormat" %>
+<%@ page import="java.util.Date" %> 
 <!DOCTYPE html>
 <html>
 <head>
@@ -162,8 +165,13 @@
 								<span class="menu-price font-alt col-sm-2">대여일</span>
 								<span class="menu-price font-alt col-sm-2">반납일</span>
 							</div>
+							<c:set var="currentDate" value="<%= new java.util.Date() %>" />
+							<c:set var="dateFormat" value="yyyy-MM-dd" />
+							<c:set var="formattedDate">
+							    <fmt:formatDate pattern="${dateFormat}" value="${currentDate}" />
+							</c:set>
 							<c:forEach items="${list }" var="row">
-								<div class="row <c:if test="${row.rdel eq 0}">gray</c:if>">
+								<div class="row <c:if test="${row.rddate lt formattedDate && row.rdel eq 1}">gray</c:if>">
 									<div class="col-sm-15">
 										<span class="menu-detail font-serif col-sm-1">${row.rno}</span>
 										<span class="menu-title font-alt col-sm-3">${row.bkname}</span>

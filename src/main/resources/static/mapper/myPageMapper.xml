@@ -23,6 +23,7 @@
 	    from rental r 
 	    join books b on r.bkno = b.bkno
 	    where r.mid = #{mid}
+	    	AND DATE_FORMAT(r.rsdate, '%y-%m-%d') >= DATE_FORMAT(DATE_SUB(NOW(), INTERVAL 1 MONTH), '%y-%m-%d')
 	</select>
 	
 	<select id="tdatelist" parameterType="String" resultType="Map">
@@ -32,7 +33,7 @@
 		FROM trade t
 		LEFT JOIN books b ON t.bkno = b.bkno
 		<where>
-		t.mid = #{mid}
+		t.mid = #{mid} AND tdate >= DATE_FORMAT(DATE_SUB(NOW(), INTERVAL 1 MONTH), '%y-%m-%d')
 		</where>
 	</select>
 	

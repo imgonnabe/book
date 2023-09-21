@@ -193,8 +193,13 @@
 											<span><button class="returnBook" type="button" data-rno="${row.rno}">반납</button></span>
 										</c:when>
 										<c:otherwise>
-											<span class="widget-posts-title font-alt">대출중</span>
-											<span><button class="returnBook" type="button" data-rno="${row.rno}">반납</button></span>
+											<c:if test="${row.rsdate gt formattedDate }">
+												<span class="widget-posts-title font-alt">예약중</span>
+											</c:if>
+											<c:if test="${row.rsdate le formattedDate }">
+												<span class="widget-posts-title font-alt">대출중</span>
+												<span><button class="returnBook" type="button" data-rno="${row.rno}">반납</button></span>
+											</c:if>	
 										</c:otherwise>
 									</c:choose>
 								</c:when>

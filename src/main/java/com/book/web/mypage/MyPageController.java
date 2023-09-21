@@ -105,7 +105,8 @@ public class MyPageController {
 	
 	@GetMapping("/buy")
 	public String buy(Model model, @RequestParam Map<String, Object> map, HttpSession session, Criteria cri,
-			@RequestParam(name="cate", required = false, defaultValue = "0") int cate) {
+			@RequestParam(name="cate", required = false, defaultValue = "0") int cate,
+			@RequestParam(name="page", required = true, defaultValue = "1") int page) {
 		System.out.println(map);
 		if(session.getAttribute("mid") != null) {
 			if(!map.containsKey("cate") || map.get("cate").equals(null) || map.get("cate").equals("")) {
@@ -133,7 +134,8 @@ public class MyPageController {
 	
 	@GetMapping("/rent")
 	public String rent(Model model, @RequestParam Map<String, Object> map, HttpSession session, Criteria cri,
-			@RequestParam(name="cate", required = false, defaultValue = "0") int cate) {
+			@RequestParam(name="cate", required = false, defaultValue = "0") int cate,
+			@RequestParam(name="page", required = true, defaultValue = "1") int page) {
 		System.out.println(map);
 		if(session.getAttribute("mid") != null) {
 			if(!map.containsKey("cate") || map.get("cate").equals(null) || map.get("cate").equals("")) {
@@ -174,7 +176,8 @@ public class MyPageController {
 	
 	@GetMapping("/board")
 	public String board(Model model, @RequestParam Map<String, Object> map, Criteria cri,
-			@RequestParam(name="cate", required = false, defaultValue = "0") int cate, HttpSession session) {
+			@RequestParam(name="cate", required = false, defaultValue = "0") int cate, HttpSession session,
+			@RequestParam(name="page", required = true, defaultValue = "1") int page) {
 		if(session.getAttribute("mid") != null) {
 			map.put("mid", session.getAttribute("mid"));
 			if(!map.containsKey("cate") || map.get("cate").equals(null) || map.get("cate").equals("")) {
@@ -259,7 +262,8 @@ public class MyPageController {
 	
 	@GetMapping("/comment")
 	public String comment(Model model, @RequestParam Map<String, Object> map, Criteria cri,
-			@RequestParam(name="cate", required = false, defaultValue = "0") int cate, HttpSession session) {
+			@RequestParam(name="cate", required = false, defaultValue = "0") int cate, HttpSession session,
+			@RequestParam(name="page", required = true, defaultValue = "1") int page) {
 		if(session.getAttribute("mid") != null) {
 			map.put("mid", session.getAttribute("mid"));
 			if(!map.containsKey("cate") || map.get("cate").equals(null) || map.get("cate").equals("")) {

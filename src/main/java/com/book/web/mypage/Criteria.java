@@ -2,7 +2,7 @@ package com.book.web.mypage;
 
 public class Criteria {
 	// 특정 페이지 조회를 위한 클래스
-    private int page; // 현재 페이지 번호
+    private Integer page; // 현재 페이지 번호
     private int perPageNum; // 페이지당 보여줄 게시글의 개수
     
     public int getPageStart() {
@@ -22,8 +22,8 @@ public class Criteria {
         return page;
     }
  
-    public void setPage(int page) {
-        if(page <= 0) {
+    public void setPage(Integer page) {
+        if(page == null || page <= 0) {// int는 null값 할당 불가, 순서 바꾸면 오류
             this.page = 1;
             
         } else {

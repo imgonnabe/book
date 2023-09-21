@@ -201,22 +201,35 @@ label {
 			<!-- 알림이 표시될 영역 -->
 			<div class="main">
 			  <div class="alarm container">
-			    <div class="row multi-columns-row" id="notification-area">
+			    <div class="row" id="notification-area">
 			      <div class="col-sm-10">
 			        <div class="menu" id="menu">
+			        <c:set var="currentDate" value="<%= new java.util.Date() %>" />
+                            <c:set var="dateFormat" value="yyyy-MM-dd" />
+                            <c:set var="formattedDate">
+                                <fmt:formatDate pattern="${dateFormat}" value="${currentDate}" />
+                            </c:set>
 			          <c:forEach items="${rlist}" var="row">
 			            <c:if test="${row.rddate ne null}">
-			              <div class="row date-element" data-date="${row.rddate}" onclick="location.href='./rent'">
+			              <div class="row date-element" data-date="${formattedDate}" onclick="location.href='./rent'">
 			                <div class="menu-title font-alt col-sm-10">${row.bkname}이 연체되었습니다.<br> 
-			                  반납일은 ${row.rddate}입니다.</div>
+			                  반납일은 ${row.rddate}입니다.<hr></div>
 			              </div>
 			            </c:if>
 			          </c:forEach>
 			          <c:forEach items="${rlist}" var="row">
-			            <c:if test="${row.rsdate ne null}">
+			            <c:if test="${row.rsdate ne null && row.rsdate le formattedDate}">
 			              <div class="row date-element" data-date="${row.rsdate}" onclick="location.href='./rent'">
 			                <div class="menu-title font-alt col-sm-10">${row.rsdate}<br>
-			                  ${row.bkname}을 대여했습니다.</div>
+			                  ${row.bkname}을 대여했습니다.<hr></div>
+			              </div>
+			            </c:if>
+			          </c:forEach>
+			          <c:forEach items="${rlist}" var="row">
+			            <c:if test="${row.rsdate ne null && row.rsdate gt formattedDate}">
+			              <div class="row date-element" data-date="${row.rsdate}" onclick="location.href='./rent'">
+			                <div class="menu-title font-alt col-sm-10">${row.rsdate}에
+			                  ${row.bkname}을 예약했습니다.<hr></div>
 			              </div>
 			            </c:if>
 			          </c:forEach>
@@ -224,15 +237,18 @@ label {
 			            <c:if test="${row.rddate_return ne null}">
 			              <div class="row date-element" data-date="${row.rddate_return}" onclick="location.href='./rent'">
 			                <div class="menu-title font-alt col-sm-10">${row.rddate_return}<br>
-			                  ${row.bkname}을 반납했습니다.</div>
+			                  ${row.bkname}을 반납했습니다.<hr></div>
 			              </div>
 			            </c:if>
 			          </c:forEach>
 			          <c:forEach items="${tlist}" var="row">
+			           <c:if test="${row.total != previousTotal}">
 			            <div class="row date-element" data-date="${row.tdate}" onclick="location.href='./buy'">
 			              <div class="menu-title font-alt col-sm-10">${row.tdate}&nbsp;(${row.tgroup })<br>
-			                <fmt:formatNumber value="${row.total}" pattern="#,###"/>원 결제완료</div>
+			                <fmt:formatNumber value="${row.total}" pattern="#,###"/>원 결제완료<hr></div>
 			            </div>
+			          </c:if>
+			          <c:set var="previousTotal" value="${row.total}" />
 			          </c:forEach>
 			        </div>
 			      </div>
@@ -268,7 +284,10 @@ label {
 						</div>
 					</div>
 				</div>
+				
+				<div class="scroll-up"><a href="#totop"><i class="fa fa-chevron-up"></i></a></div>
 			</div>
+			
 	</main>
 	<!--  
     JavaScripts
