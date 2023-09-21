@@ -38,6 +38,7 @@ public class LoginController {
 		if (String.valueOf(result.get("count")).equals("1")) {
 			session.setAttribute("mid", result.get("mid"));
 			session.setAttribute("mname", result.get("mname"));
+			session.setAttribute("mgrade", result.get("mgrade"));
 			System.out.println("Glogin완");
 			return "redirect:/";
 		}

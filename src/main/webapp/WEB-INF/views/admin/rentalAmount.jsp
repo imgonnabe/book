@@ -12,7 +12,7 @@
     Document Title
     =============================================
     -->
-<title>Titan | Multipurpose HTML5 Template</title>
+<title>우리동네 | 동네북</title>
 <!--  
     Favicons
     =============================================

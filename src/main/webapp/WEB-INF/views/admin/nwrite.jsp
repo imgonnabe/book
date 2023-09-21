@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>글쓰기</title>
+<title>우리동네 | 동네북</title>
  <!--  
     Favicons
     =============================================

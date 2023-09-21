@@ -56,4 +56,8 @@ public interface MyPageDAO {
 
 	int rentlistCnt(Map<String, Object> map);
 
+	List<Map<String, Object>> rddatelist(String mid);
+
+	List<Map<String, Object>> tdatelist(String mid);
+
 }

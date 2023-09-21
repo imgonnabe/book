@@ -1,7 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%> 
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ page import="java.text.SimpleDateFormat" %>
+<%@ page import="java.util.Date" %> 
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,7 +14,7 @@
     Document Title
     =============================================
     -->
-<title>마이페이지</title>
+<title>우리동네 | 동네북</title>
 <!--  
     Favicons
     =============================================
@@ -189,40 +191,84 @@ label {
 		<div class="main">
 			<div class="toggle">
 				<div class="btn-container">
-					<label class="switch toggle-switch">
-						<input type="checkbox" name="color_mode" id="color_mode" value="1">
-						<label for="color_mode" data-on="추천" data-off="알림" class="toggle-switch-inner"></label>
+					<label class="switch toggle-switch"> <input type="checkbox"
+						name="color_mode" id="color_mode" value="1"> <label
+						for="color_mode" data-on="추천" data-off="알림"
+						class="toggle-switch-inner"></label>
 					</label>
 				</div>
 			</div>
 			<!-- 알림이 표시될 영역 -->
-	        <div class="alarm">
-	             <div id ="notification-area">
-	             </div>
-	        </div>
-        
-        <!-- 추천 -->
-          <div class="container recommend">
-            <div class="row">
-              <div class="col-sm-6 col-sm-offset-3">
-                <div class="module-title font-alt">구매했던 책 카테고리 추천</div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="owl-carousel text-center" data-items="5" data-pagination="false" data-navigation="false">
-              <c:forEach items="${list }" var="row">
-                <div class="owl-item">
-                  <div class="col-sm-12">
-                    <div class="ex-product"><a href="../bookdetail?bkno=${row.bkno}"><img src="/img/bookimg/${row.bkimg}" alt="Leather belt"/></a>
-                      <h4 class="shop-item-title font-alt"><a href="../bookdetail?bkno=${row.bkno}">${row.bkname}</a></h4><fmt:formatNumber value="${row.bkprice}" pattern="#,###"/>원
-                    </div>
-                  </div>
-                </div>
-               </c:forEach>
-              </div>
-            </div>
-          </div>
-		</div>
+			<div class="main">
+			  <div class="alarm container">
+			    <div class="row multi-columns-row" id="notification-area">
+			      <div class="col-sm-10">
+			        <div class="menu" id="menu">
+			          <c:forEach items="${rlist}" var="row">
+			            <c:if test="${row.rddate ne null}">
+			              <div class="row date-element" data-date="${row.rddate}" onclick="location.href='./rent'">
+			                <div class="menu-title font-alt col-sm-10">${row.bkname}이 연체되었습니다.<br> 
+			                  반납일은 ${row.rddate}입니다.</div>
+			              </div>
+			            </c:if>
+			          </c:forEach>
+			          <c:forEach items="${rlist}" var="row">
+			            <c:if test="${row.rsdate ne null}">
+			              <div class="row date-element" data-date="${row.rsdate}" onclick="location.href='./rent'">
+			                <div class="menu-title font-alt col-sm-10">${row.rsdate}<br>
+			                  ${row.bkname}을 대여했습니다.</div>
+			              </div>
+			            </c:if>
+			          </c:forEach>
+			          <c:forEach items="${rlist}" var="row">
+			            <c:if test="${row.rddate_return ne null}">
+			              <div class="row date-element" data-date="${row.rddate_return}" onclick="location.href='./rent'">
+			                <div class="menu-title font-alt col-sm-10">${row.rddate_return}<br>
+			                  ${row.bkname}을 반납했습니다.</div>
+			              </div>
+			            </c:if>
+			          </c:forEach>
+			          <c:forEach items="${tlist}" var="row">
+			            <div class="row date-element" data-date="${row.tdate}" onclick="location.href='./buy'">
+			              <div class="menu-title font-alt col-sm-10">${row.tdate}&nbsp;(${row.tgroup })<br>
+			                <fmt:formatNumber value="${row.total}" pattern="#,###"/>원 결제완료</div>
+			            </div>
+			          </c:forEach>
+			        </div>
+			      </div>
+			    </div> 
+			  </div>
+			</div>
+
+				<!-- 추천 -->
+				<div class="container recommend">
+					<div class="row">
+						<div class="col-sm-6 col-sm-offset-3">
+							<div class="module-title font-alt">구매했던 책 카테고리 추천</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="owl-carousel text-center" data-items="5"
+							data-pagination="false" data-navigation="false">
+							<c:forEach items="${list }" var="row">
+								<div class="owl-item">
+									<div class="col-sm-12">
+										<div class="ex-product">
+											<a href="../bookdetail?bkno=${row.bkno}"><img
+												src="/img/bookimg/${row.bkimg}" alt="Leather belt" /></a>
+											<h4 class="shop-item-title font-alt">
+												<a href="../bookdetail?bkno=${row.bkno}">${row.bkname}</a>
+											</h4>
+											<fmt:formatNumber value="${row.bkprice}" pattern="#,###" />
+											원
+										</div>
+									</div>
+								</div>
+							</c:forEach>
+						</div>
+					</div>
+				</div>
+			</div>
 	</main>
 	<!--  
     JavaScripts
@@ -247,7 +293,7 @@ label {
 
 	<script type="text/javascript">
 		$(document).ready(function() {
-	        $(".recommend").hide();
+			$(".recommend").hide();
 
 			$(document).on("change", "#color_mode", function() {
 				colorModePreview(this);
@@ -265,20 +311,58 @@ label {
 		}
 	</script>
 	<script>
-        // SSE 연결 및 알림 표시 로직
-        const eventSource = new EventSource('/notifications/main');
-        const eventSource = new EventSource('/mypage/main/sse');
+		// SSE 연결 및 알림 표시 로직
+		const eventSource = new EventSource('/notifications/main');
+		const eventSource2 = new EventSource('/mypage/main/sse');
 
-        eventSource.onmessage = function(event) {
-            const notification = event.data;
-            // 알림을 notification-area에 추가하는 코드 작성
-            const notificationArea = document.getElementById('notification-area');
-            const notificationElement = document.createElement('p');
-            notificationElement.textContent = notification;
-            notificationElement.classList.add('menu-title');
-            notificationArea.appendChild(notificationElement);
-        };
-    </script>
-
+		eventSource.onmessage = function(event) {
+			const notification = event.data;
+			// 알림을 notification-area에 추가하는 코드 작성
+			const notificationArea = document
+					.getElementById('notification-area');
+			const notificationElement = document.createElement('p');
+			notificationElement.textContent = notification;
+			notificationElement.classList.add('menu-title');
+			notificationArea.appendChild(notificationElement);
+		};
+	</script>
+	
+	<script>
+	  // 날짜를 추출하여 비교하기 위한 함수
+	  function extractDate(dateString) {
+	    const parts = dateString.split('-');
+	    if (parts.length === 3) {
+	      const year = parseInt(parts[0]);
+	      const month = parseInt(parts[1]);
+	      const day = parseInt(parts[2]);
+	      return new Date(year, month - 1, day); // js에서 월은 0부터 시작하므로 -1을 해준다.
+	    }
+	    return null;
+	  }
+	
+	  // 최근 날짜로 정렬하는 함수
+	  function sortByRecentDate() {
+	    const dateElements = document.querySelectorAll('.date-element');
+	    const dateArray = Array.from(dateElements);// 배열로 변환
+	
+	    dateArray.sort(function(a, b) {
+	      const dateA = extractDate(a.getAttribute('data-date'));
+	      const dateB = extractDate(b.getAttribute('data-date'));
+	      if (dateA && dateB) {
+	        return dateB - dateA; // 최근 날짜순으로 정렬
+	      }
+	      return 0;
+	    });
+	
+	    const menu = document.getElementById('menu');
+	    dateArray.forEach(function(element) {
+	      menu.appendChild(element);
+	    });
+	  }
+	
+	  // 페이지 로드 시 최근 날짜로 정렬
+	  window.addEventListener('load', sortByRecentDate);
+	</script>
+	
 </body>
 </html>

@@ -8,6 +8,34 @@
 		WHERE bkcate IN (SELECT b.bkcate FROM books b, trade t WHERE t.mid=#{mid} AND b.bkno = t.bkno)
 	</select>
 	
+	<select id="rddatelist" parameterType="String" resultType="Map">
+		select 
+        case 
+            when r.rddate &lt; DATE_FORMAT(NOW(), '%Y-%m-%d') and r.rdel = 1 then r.rddate
+        end as rddate,
+        case 
+            when r.rddate &gt;= DATE_FORMAT(NOW(), '%Y-%m-%d') and r.rdel = 1 then r.rsdate
+        end as rsdate,
+        case
+        	when r.rsdate != '1111-11-11' and r.rdel = 0 then r.rddate
+        end as rddate_return,
+        r.rdel, b.bkname
+	    from rental r 
+	    join books b on r.bkno = b.bkno
+	    where r.mid = #{mid}
+	</select>
+	
+	<select id="tdatelist" parameterType="String" resultType="Map">
+		SELECT b.bkname, DATE_FORMAT(t.tdate, '%Y-%m-%d') AS tdate, 
+		t.tgroup, SUM(t.ttotal) OVER (PARTITION BY t.tgroup) AS total,
+			(SELECT COUNT(DISTINCT tgroup) FROM trade WHERE mid = #{mid}) AS count
+		FROM trade t
+		LEFT JOIN books b ON t.bkno = b.bkno
+		<where>
+		t.mid = #{mid}
+		</where>
+	</select>
+	
 	<select id="zzimlist" parameterType="String" resultType="Map">
 		select z.zno, b.bkname, b.bkimg, b.bkwrite, z.bkno,
 			(select count(*) from zzim z where z.mid = #{mid}) as count
@@ -139,7 +167,7 @@
 	</select>
 	
 	<update id="returnBook" parameterType="Map">
-		update rental set rdel = 0
+		update rental set rdel = 0, rddate = DATE_FORMAT(now(), '%y-%m-%d')
 		where mid = #{mid} and rno = #{rno}
 	</update>
 	
@@ -276,6 +304,7 @@
 				<when test="birth != null and birth != ''">mbirth = #{birth}</when>
 				<when test="addr != null and addr != ''">maddr = #{addr}</when>
 				<when test="email != null and email != ''">memail = #{email}</when>
+				<when test="phone != null and phone != ''">mphone = #{phone}</when>
 			</choose>
 		<where>
 			mname = #{mname}

@@ -39,7 +39,12 @@ public class MyPageController {
 		if(session.getAttribute("mid") != null) {
 			String mid = (String) session.getAttribute("mid");
 			List<Map<String, Object>> list = myPageService.booklist(mid);
+			List<Map<String, Object>> rddatelist = myPageService.rddatelist(mid);
+			List<Map<String, Object>> tdatelist = myPageService.tdatelist(mid);
+			
 			model.addAttribute("list", list);
+			model.addAttribute("rlist", rddatelist);
+			model.addAttribute("tlist", tdatelist);
 			return "/mypage/main";
 		} else {
 			return "redirect:/login";
@@ -365,7 +370,7 @@ public class MyPageController {
 		}
 	}
 	
-	@ResponseBody
+	/*@ResponseBody
 	@PostMapping("/phoneSave")
 	public String phoneSave(@RequestParam(name="phone", required = false) String phone, HttpSession session) {
 		if(session.getAttribute("mid") != null) {
@@ -378,7 +383,7 @@ public class MyPageController {
 		} else {
 			return "redirect:/login";
 		}
-	}
+	}*/
 	
 	@ResponseBody
 	@PostMapping("/idchk")
@@ -426,6 +431,7 @@ public class MyPageController {
 			String emailBefore = (String) map.get("emailId");
 			String selectEmailDomain = (String) map.get("selectEmailDomain");
 			String emailDomain = (String) map.get("emailDomain");
+			String phone = (String) map.get("phone");
 			System.out.println(id + " " +pw);
 			
 			if(id != null && !id.isEmpty() || pw != null && !pw.isEmpty() || 
@@ -434,7 +440,8 @@ public class MyPageController {
 					detailAddress != null && !detailAddress.isEmpty() &&
 					extraAddress != null && !extraAddress.isEmpty() ||
 					emailBefore != null && !emailBefore.isEmpty() &&
-					selectEmailDomain != null && !selectEmailDomain.isEmpty()) {
+					selectEmailDomain != null && !selectEmailDomain.isEmpty() ||
+					phone != null && !phone.isEmpty()) {
 				
 				if(postcode != null && !postcode.isEmpty() &&
 						detailAddress != null && !detailAddress.isEmpty() &&

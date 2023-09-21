@@ -11,7 +11,7 @@
     Document Title
     =============================================
     -->
-<title>찜목록</title>
+<title>우리동네 | 동네북</title>
 <!--  
     Favicons
     =============================================
@@ -93,8 +93,8 @@
 		<div class="page-loader">
 			<div class="loader">Loading...</div>
 		</div>
-		<div class="main">
-			<div class="container">
+		<section class="module-small">
+			<div class="container" style="width: 100%;">
 				<div class="row">
 					<div class="col-sm-6 col-sm-offset-3">
 						<h1 class="module-title font-alt">찜목록</h1>
@@ -117,29 +117,31 @@
 								<button class="delbtn btn" type="button" onclick="deleteValue()">삭제</button>
 							</div>
 						</section>
-						<div class="row multi-columns-row post-columns">
+						<div class="col-sm-8 col-sm-offset-1">
+						<div class="row multi-columns-row">
 							<c:forEach items="${list }" var="row">
 								<div class="col-sm-3 col-md-3 col-lg-3">
-                						<div class="shop-item">
-											<div>
-												<input name="rowCheck" type="checkbox" value="${row.zno }">
-											</div>
-											<div class="post-image">
-												<a href="../bookdetail?bkno=${row.bkno}"><img
-													src="/img/bookimg/${row.bkimg }" alt="Blog-post Thumbnail" /></a>
-											</div>
-											<div class="post-title">
-												<a href="../bookdetail?bkno=${row.bkno}">${row.bkname}</a>
-											</div>
-											<div class="post-entry">${row.bkwrite}</div>
+               						<div class="shop-item">
+										<div>
+											<input name="rowCheck" type="checkbox" value="${row.zno }">
 										</div>
+										<div style="height: 470px;" class="post-image">
+											<a href="../bookdetail?bkno=${row.bkno}"><img src="/img/bookimg/${row.bkimg }"/></a>
+										</div>
+										<div class="shop-item-title">
+											<a href="../bookdetail?bkno=${row.bkno}">${row.bkname}</a>
+										</div>
+										<div class="shop-item-title">${row.bkwrite}</div>
 									</div>
+								</div>
 							</c:forEach>
+						</div>
 						</div>
 					</c:otherwise>
 				</c:choose>
 			</div>
-		</div>
+		</section>
+		<div class="scroll-up"><a href="#totop"><i class="fa  fa-chevron-up"></i></a></div>
 	</main>
 	<!--  
     JavaScripts

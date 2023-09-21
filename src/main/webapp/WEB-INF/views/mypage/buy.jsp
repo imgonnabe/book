@@ -12,7 +12,7 @@
     Document Title
     =============================================
     -->
-<title>주문목록</title>
+<title>우리동네 | 동네북</title>
 <!--  
     Favicons
     =============================================
@@ -191,6 +191,7 @@
 			</c:otherwise>
 		</c:choose>
 	</div>
+	<div class="scroll-up"><a href="#totop"><i class="fa  fa-chevron-up"></i></a></div>
 	</main>
 	<!--  
     JavaScripts

@@ -106,6 +106,14 @@ public class MyPageService {
 	public int rentlistCnt(Map<String, Object> map) {
 		return myPageDAO.rentlistCnt(map);
 	}
+
+	public List<Map<String, Object>> rddatelist(String mid) {
+		return myPageDAO.rddatelist(mid);
+	}
+
+	public List<Map<String, Object>> tdatelist(String mid) {
+		return myPageDAO.tdatelist(mid);
+	}
 	
 
 }

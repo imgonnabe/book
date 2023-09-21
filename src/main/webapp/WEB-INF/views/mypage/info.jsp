@@ -12,7 +12,7 @@
     Document Title
     =============================================
     -->
-<title>회원정보</title>
+<title>우리동네 | 동네북</title>
 <!--  
     Favicons
     =============================================
@@ -147,7 +147,7 @@
                   </div>
                   <div class="form-group"> 전화번호 (숫자만 입력하세요.)
                       <div class="detail">
-                      <input class="menu-title" type="text" id="phone" placeholder="${info.mphone }">
+                      <input class="menu-title" type="text" id="phone" name="phone" placeholder="${info.mphone }">
 						<input class="btn" type="button" id="phoneChk" value = "인증번호 받기">	
 						<br><br>
 						<input class="menu-title" id="phone2" type="text" disabled required/>
@@ -343,15 +343,16 @@
      	
      	// form 유효성 검사
         function validateForm() {
-            var id = $('#id').val().trim();;
-            var pw = $('#pw').val().trim();;
-            var pwchk = $('#pwchk').val().trim();;
-            var birth = $('#birth').val().trim();;
+            var id = $('#id').val().trim();
+            var pw = $('#pw').val().trim();
+            var pwchk = $('#pwchk').val().trim();
+            var birth = $('#birth').val().trim();
             var postcode = $('#postcode').val().trim();
             var address = $('#address').val().trim();
             var detailAddress = $('#detailAddress').val().trim();
             var extraAddress = $('#extraAddress').val().trim();
-            var email = $('#emailId').val().trim();;
+            var email = $('#emailId').val().trim();
+            var phone = $('#phone').val().trim();
 
             // id 길이
             if (id.length > 0 && id.length < 4) {
@@ -381,7 +382,7 @@
                 return false;
             }
             
-	          // 모든 입력 값이 하나라도 비어있는 경우
+	          // 주소의 모든 입력 값이 하나라도 비어있는 경우
 	          if(!(postcode === '' && address === '' && detailAddress === '' && extraAddress === '')){
 		          if (postcode === '' || address === '' || detailAddress === '' || extraAddress === '') {
 		          	alert('주소를 전부 입력해주세요.');
@@ -391,7 +392,7 @@
 	          
 	          // 전부 입력 안됐을 때
 	          if(postcode === '' && address === '' && detailAddress === '' && extraAddress === '' &&
-	        		id === '' && pw === '' && birth === '' && email === ''){
+	        		id === '' && pw === '' && birth === '' && email === '' && phone === ''){
 	        	  alert('회원정보를 수정할 생각이 없으시다면 다른 페이지로 가세요.');
 	        	  return false;
 	          }
@@ -406,6 +407,12 @@
 	          if (email != '' && !isEmailChecked) {
 	              alert("이메일 중복 확인을 해주세요.");
 	              return false; // 폼 제출 중지
+	          }
+	          
+	          // 전화번호 인증을 하지 않은 경우
+	          if(phone != '' && !isphoneChecked){
+	        	  alert("전화번호 인증을 해주세요.")
+	        	  return false;
 	          }
 	          
             // 위의 유효성 검사를 모두 통과하면 true를 반환하여 폼 제출을 허용
@@ -463,7 +470,8 @@
 	
 	<script type="text/javascript">
 	$(function(){
-		 //휴대폰 번호 인증
+		   //휴대폰 번호 인증
+		   var isphoneChecked = false; // ID 중복 확인 여부를 저장하는 변수
 		   $(document).on("click", "#phoneChk", function() {
 		   	var phone = $("#phone").val().trim();
 		   	if (!strToInt(phone)) {
@@ -483,7 +491,8 @@
 		           			alert("본인 인증이 확인되었습니다.");
 		           			$("#phoneChk2").attr("disabled",true);
 		           			$("#phoneChk2").css("background-color",'green');
-		           			$.ajax({
+		           			isphoneChecked = true;
+		           			/*$.ajax({
 		           			   type:"post",
 		     		           url:"phoneSave",
 		     		           data:{phone:phone},
@@ -492,7 +501,7 @@
 		     		           }, error:function(error){
 		     		        	   alert('에러');
 		     		           }
-		           			});
+		           			});*/
 		           		} else if (clickCnt < 5){
 		           			alert("인증 번호가 틀렸습니다. 다시 시도하세요.");
 		           		} else if(clickCnt >= 5){

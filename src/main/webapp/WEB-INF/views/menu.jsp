@@ -188,7 +188,7 @@
                   <li><a href="typography.html"><i class="fa fa-font"></i> Typography</a></li>
                 </ul>
               </li>
-              <c:if test="${sessionScope.mname ne null && sessionScope.mname eq 'admin'}">
+              <c:if test="${sessionScope.mname ne null && sessionScope.mgrade eq 2}">
 	              <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown">관리자 페이지</a>
 	              	<ul class="dropdown-menu" role="menu">
 	                  <li><a href="/admin/board">게시물 관리</a></li>
@@ -207,7 +207,7 @@
 	                </ul>
 	               </li>
                </c:if>
-               <c:if test="${sessionScope.mname ne null && sessionScope.mname ne 'admin'}">
+               <c:if test="${sessionScope.mname ne null && sessionScope.mgrade ne 2}">
 	              <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown">마이페이지</a>
 	                <ul class="dropdown-menu" role="menu">
 	                  <li><a href="/mypage/main">메인</a></li>

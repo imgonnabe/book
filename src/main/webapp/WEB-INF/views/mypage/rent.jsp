@@ -1,7 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%> 
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ page import="java.text.SimpleDateFormat" %>
+<%@ page import="java.util.Date" %> 
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,7 +14,7 @@
     Document Title
     =============================================
     -->
-<title>대여목록</title>
+<title>우리동네 | 동네북</title>
 <!--  
     Favicons
     =============================================
@@ -85,6 +87,12 @@
 <link href="../assets/css/style.css" rel="stylesheet">
 <link id="color-scheme" href="../assets/css/colors/default.css"
 	rel="stylesheet">
+<style type="text/css">
+.gray{
+	background-color: gray;
+}
+
+</style>	
 </head>
 <body data-spy="scroll" data-target=".onpage-navigation"
 	data-offset="60">
@@ -151,7 +159,7 @@
 		</c:when>
 		<c:otherwise>
 	<div class="container">
-		<div class="col-sm-15">
+		<div class="col-sm-13">
 			<div class="menu" style="text-align: center;">
 				<div class="row">
 					<span class="menu-price font-alt col-sm-2">책제목</span>
@@ -169,11 +177,26 @@
 						<span class="menu-price font-alt col-sm-2">${row.bkwrite}</span>
 						<span class="menu-price font-alt col-sm-2">${row.rsdate}</span>
 						<span class="menu-price font-alt col-sm-2">${row.rddate}</span>
-						<span class="menu-price font-alt col-sm-2">
+						<span class="menu-price font-alt col-sm-2 <c:if test="${row.rddate lt formattedDate && row.rdel eq 1}">gray</c:if>">
+						
+						<c:set var="currentDate" value="<%= new java.util.Date() %>" />
+						<c:set var="dateFormat" value="yyyy-MM-dd" />
+						<c:set var="formattedDate">
+						    <fmt:formatDate pattern="${dateFormat}" value="${currentDate}" />
+						</c:set>
+						
 							<c:choose>
 								<c:when test="${row.rdel eq 1}">
-									<span class="widget-posts-title font-alt">대출중</span>
-									<span><button class="returnBook" type="button" data-rno="${row.rno}">반납</button></span>
+									<c:choose>
+										<c:when test="${row.rddate lt formattedDate}">
+											<span class="widget-posts-title font-alt">연체중</span>
+											<span><button class="returnBook" type="button" data-rno="${row.rno}">반납</button></span>
+										</c:when>
+										<c:otherwise>
+											<span class="widget-posts-title font-alt">대출중</span>
+											<span><button class="returnBook" type="button" data-rno="${row.rno}">반납</button></span>
+										</c:otherwise>
+									</c:choose>
 								</c:when>
 								<c:otherwise>
 									<span class="widget-posts-title font-alt">반납완료</span>
