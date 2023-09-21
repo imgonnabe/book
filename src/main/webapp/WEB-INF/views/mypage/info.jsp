@@ -86,8 +86,7 @@
 <link id="color-scheme" href="../assets/css/colors/default.css"
 	rel="stylesheet">
 </head>
-<body data-spy="scroll" data-target=".onpage-navigation"
-	data-offset="60">
+<body>
 	<%@ include file="../menu.jsp"%>
 	<div style="margin-top: 100px;"></div>
 	<main>
@@ -205,7 +204,7 @@
 	<script src="../assets/lib/imagesloaded/imagesloaded.pkgd.js"></script>
 	<script src="../assets/lib/flexslider/jquery.flexslider.js"></script>
 	<script src="../assets/lib/owl.carousel/dist/owl.carousel.min.js"></script>
-	<script src="../assets/lib/smoothscroll.js"></script>
+	<!-- <script src="../assets/lib/smoothscroll.js"></script> -->
 	<script
 		src="../assets/lib/magnific-popup/dist/jquery.magnific-popup.js"></script>
 	<script
