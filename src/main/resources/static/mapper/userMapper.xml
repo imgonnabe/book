@@ -20,5 +20,16 @@
 	    WHERE mid=#{mid} AND memail=#{memail}
 	</update>
 	
+	<update id="editpw" parameterType="com.book.web.join.JoinDTO" >
+		UPDATE members
+	    SET mpw=#{mpw}
+	    WHERE mid=#{mid}
+	</update>
 
+	<select id="userinfo" parameterType="com.book.web.user.UserDTO" resultType="com.book.web.user.UserDTO">
+		SELECT *
+		FROM members
+		WHERE mid=#{mid}
+	</select>
+	
 </mapper>

@@ -1,13 +1,11 @@
 package com.book.web.join;
 
-import java.security.SecureRandom;
 import java.util.UUID;
 
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -78,23 +76,29 @@ public class JoinController {
 	@PostMapping("/login/subjoin")
 	public String subjoin(JoinDTO joinDTO, HttpSession session) {
 		
-		
+		System.out.println("subjoin제출값 : "+joinDTO);
+
 		if(session.getAttribute("withK") != null) {
+			
+			System.out.println(joinDTO);
 			joinDTO.setMid(String.valueOf(session.getAttribute("mid")));
 			joinDTO.setWithK(String.valueOf(session.getAttribute("withK")));
-			
+			session.setAttribute("mname", joinDTO.getMname());
+			session.setAttribute("mgrade", 1);
+
 			joinService.setKakaoUser(joinDTO);
 			
 		} else if(session.getAttribute("withN") != null) {
 			
 			joinDTO.setMid(String.valueOf(session.getAttribute("mid")));
 			joinDTO.setWithK(String.valueOf(session.getAttribute("withN")));
-			System.out.println("jsp에서 오는 값 : " + joinDTO);
+			session.setAttribute("mname", joinDTO.getMname());
+			session.setAttribute("mgrade", 1);
 			
 			joinService.setNaverUser(joinDTO);
 		}
 
-		return "redirect:/";
+		return "redirect:/main";
 	}
 	
 }

@@ -22,6 +22,17 @@ public interface BooklistDAO {
 	List<BooklistDTO> bookrtop();
 
 	void bookWrite2(Map<String, Object> map);
+	
+	List<Map<String, Object>> reviewsList(Map<String, Object> map);
+	
+	void addReview(Map<String, Object> map);
+	
+	int rdel(Map<String, Object> map);
+	
+	List<String> booktrade(int bkno);
+
+	List<String> bookrental(int bkno);
+
 
 /*-----------------------------------------------------------------*/
 
@@ -51,8 +62,18 @@ public interface BooklistDAO {
 
 	void update(Map<String, Object> map);
 
-	void update2(Map<String, Object> map);
+	void delete4(CartDTO cart);
+
+	Map<String, Object> rentaldata(int bkno);
+
+
+
+
+
+
 	
+
+
 	
 /*-----------------------------------------------------------------*/
 }

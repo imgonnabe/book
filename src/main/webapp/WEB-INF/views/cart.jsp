@@ -11,53 +11,86 @@
 <script type="text/javascript">
 
 //select 요소를 가져옵니다.
-$(function(){
-  $("#coopang").click(function(){ 
-    let coopang = $(".selectMail").val();
-    
-    alert(coopang + "이 적용되었습니다.");
-  //  let price = 0.9*parseInt($(".").text());
-    let sumtotal = 0.9*parseInt($(".sumtotal").text());
-    let mtotal =sumtotal + 2000;
-    let cartno = $(".cartno").text();
-   alert(cartno);
-    if (coopang === '웰컴 10%할인쿠폰') {
-    	   $.ajax({
-               url : "./coupon",
-               type : "post",
-               data : {"sumtotal":sumtotal},
-               dataType : "json",
-               success : function(data) {	
-    
+$(function() {
+		$("#coopang").click(
+				function() {
+					let coopang = $(".selectMail").val();
+					alert(coopang + "이 적용되었습니다.");
+					//  let price = 0.9*parseInt($(".").text());
+					let sumtotal = 0.9 * parseInt($(".sumtotal").text());
+					let mtotal = sumtotal + 2000;
+					let cartno = $(".cartno").text();
 
+					
 
-	document.location.href = document.location.href;
-    }
-               
-               });
-    }
-  });
-});
+					//alert(mtotal)
+					if (coopang === '웰컴 10%할인쿠폰') {
+						$(".mtotal").css("color", "red").text("할인가: "+mtotal+"원");
+		                  $("#coupons").hide();
+		                //   selectBox.value = $("#Opt").val();
 
+						
+						
+						
+					}
+				});
 
+		$("#ncoopang").click(
+				function() {
 
+					alert("할인쿠폰이 취소되었습니다.");
+					let previousValue = parseInt($(".sumtotal").text());
+					$(".mtotal").css("color", "black").text(
+							previousValue + 2000 + "원");
 
+					$("#coupons").show();
 
-    $(function(){
-	$("#tbtn").click(function(){
-		let stock =  $("#mtotal").val();
-		if(stock =="2000"){
-			alert("장바구니에 재고가 없습니다.");
-		    location.href = './booklist';
-			
-		}else{
-		//위 두 검사가 성공한다면 form전송하기
-			if(confirm("결제페이지로 이동하겠습니까?")){
-				location.href="./purchase";
-			}
-		}
+					selectBox.value = $("#Opt").val();
+
+				});
+
 	});
-});    
+
+
+
+$(function() {
+    $("#tbtn").click(function() {
+  	  
+  	  
+  	  let coopang = $(".selectMail").val();
+       let stock = $("#mtotal").val();
+   	let cartno = $(".cartno").text();
+
+		let cartnos = [];
+		$(".cartno").each(function() {
+			cartnos.push($(this).text());
+		});
+		alert(cartnos);
+		
+       if (stock == "2000") {
+          alert("장바구니에 재고가 없습니다.");
+          location.href = './booklist';
+return false;
+       } else {
+          //위 두 검사가 성공한다면 form전송하기
+          if (confirm("결제페이지로 이동하겠습니까?")) {
+          	if (coopang === '웰컴 10%할인쿠폰') {
+  			
+          		document.getElementById("discount").submit()
+          		
+  			}else{
+  				location.href="./purchase";
+  				return false;
+          }
+      	
+       }else{
+      		location.href="./cart";
+      		return false;
+       }
+          	
+    }
+ });
+});
  
 
  
@@ -116,7 +149,7 @@ $(".pr-remove").click(function(){
     Document Title
     =============================================
     -->
-<title>Titan | Multipurpose HTML5 Template</title>
+<title>동네북 | 우리동네 동네북</title>
 <!--  
     Favicons
     =============================================
@@ -216,10 +249,10 @@ $(".pr-remove").click(function(){
                                <!-- <form action="./check" method="post"> -->
 
 										<c:if
-											test="${not empty row.bkimg and not empty row.bkscontent and not empty row.price and not empty row.amount and not empty row.total}"> --%>
+											test="${not empty row.bkimg and not empty row.bkscontent and not empty row.price and not empty row.amount and not empty row.total}">
 											<tr class="tree">
 												<td class="hidden-xs" style="width: 20%;"><a href="#"><img
-														src="${row.bkimg}" alt="책사진" width="200" height="300" /></a></td>
+														src="/img/bookimg/${row.bkimg}" alt="책사진" width="200" height="300" /></a></td>
 												<td style="width: 30%;">
 													<h5 class="product-title font-alt">${row.bkscontent}</h5>
 												</td>
@@ -231,12 +264,12 @@ $(".pr-remove").click(function(){
 												<td>
 													<h5 class="product-title font-alt">${row.total}원</h5>
 												</td>
-												<td class="seed"><input id="myInput" class="mod" type="number" name="mod"  min="1" max="${row.amount }" required="required"><button class="pr-remove" type="button" style="margin: 3px;">담기 취소</button></td>
+												<td class="seed"><input id="myInput" class="mod" type="number" name="mod"  min="1" max="${row.amount }" required="required" value="1"><button class="pr-remove" type="button" style="margin: 3px;">담기 취소</button></td>
 
 											</tr>
 										</c:if>
 
-                                   <!--</form> -->
+                                  		<!--</form> -->
 									</c:forEach>
 								</tbody>
 							</table>
@@ -245,14 +278,14 @@ $(".pr-remove").click(function(){
 					<div class="row">
 						<div class="col-sm-3" id="fren">
 							<div class="form-group">
-								 <select class="selectMail" id="selectBox" name="selectBox">
-						<option id="Opt">-쿠폰선택-</option>
-						<c:forEach items="${coupon}" var="row">
-						
-						<option id="coupons" value="${row.cocontent }">${row.cocontent }</option>
-						
-					</c:forEach>
-					</select> 
+								<select class="selectMail" id="selectBox" name="selectBox">
+									<option id="Opt">-쿠폰선택-</option>
+									<c:forEach items="${coupon}" var="row">
+
+										<option id="coupons" value="${row.cocontent }">${row.cocontent }</option>
+
+									</c:forEach>
+								</select>
 								<!-- <input class="form-control" type="text"  id="selectedValue" value="" readonly /> -->
 							</div>
 							
@@ -260,8 +293,11 @@ $(".pr-remove").click(function(){
 						<div class="col-sm-3" id="papa">
 							<div class="form-group">
 							
-						<button class="btn btn-block btn-round btn-c pull-right" type="button" id="coopang">쿠폰적용</button>
-					
+						
+								<button class="btn btn-block btn-round btn-c pull-right"
+									type="button" id="coopang">쿠폰적용</button>
+								<button class="btn btn-block btn-round btn-c pull-right"
+									type="button" id="ncoopang">쿠폰취소</button>
 					
 							</div>
 						</div>
@@ -277,7 +313,7 @@ $(".pr-remove").click(function(){
 					<div class="row mt-70">
 						<div class="col-sm-5 col-sm-offset-7">
 							<div class="shop-Cart-totalbox">
-							<!--  <form action="./purchase" method="post"> -->
+							<form id="discount" action="./coupon" method="post"> 
 								<h4 class="font-alt">Cart Totals</h4>
 								<table class="table table-striped table-border checkout-table">
 									<tbody>
@@ -315,103 +351,22 @@ $(".pr-remove").click(function(){
 						
 								<button class="btn btn-lg btn-block btn-round btn-d" id="tbtn"
 									type="button" >결제하기</button>
-							<!-- </form> --> 
+							 </form> 
 							</div>
 						</div>
 						
 					</div>
 				</div>
 			</section>
-			<div class="module-small bg-dark">
-				<div class="container">
-					<div class="row">
-						<div class="col-sm-3">
-							<div class="widget">
-								<h5 class="widget-title font-alt">About Titan</h5>
-								<p>The languages only differ in their grammar, their
-									pronunciation and their most common words.</p>
-								<p>Phone: +1 234 567 89 10</p>
-								Fax: +1 234 567 89 10
-								<p>
-									Email:<a href="#">somecompany@example.com</a>
-								</p>
-							</div>
-						</div>
-						<div class="col-sm-3">
-							<div class="widget">
-								<h5 class="widget-title font-alt">Recent Comments</h5>
-								<ul class="icon-list">
-									<li>Maria on <a href="#">Designer Desk Essentials</a></li>
-									<li>John on <a href="#">Realistic Business Card Mockup</a></li>
-									<li>Andy on <a href="#">Eco bag Mockup</a></li>
-									<li>Jack on <a href="#">Bottle Mockup</a></li>
-									<li>Mark on <a href="#">Our trip to the Alps</a></li>
-								</ul>
-							</div>
-						</div>
-						<div class="col-sm-3">
-							<div class="widget">
-								<h5 class="widget-title font-alt">Blog Categories</h5>
-								<ul class="icon-list">
-									<li><a href="#">Photography - 7</a></li>
-									<li><a href="#">Web Design - 3</a></li>
-									<li><a href="#">Illustration - 12</a></li>
-									<li><a href="#">Marketing - 1</a></li>
-									<li><a href="#">Wordpress - 16</a></li>
-								</ul>
-							</div>
-						</div>
-						<div class="col-sm-3">
-							<div class="widget">
-								<h5 class="widget-title font-alt">Popular Posts</h5>
-								<ul class="widget-posts">
-									<li class="clearfix">
-										<div class="widget-posts-image">
-											<a href="#"><img src="assets/images/rp-1.jpg"
-												alt="Post Thumbnail" /></a>
-										</div>
-										<div class="widget-posts-body">
-											<div class="widget-posts-title">
-												<a href="#">Designer Desk Essentials</a>
-											</div>
-											<div class="widget-posts-meta">23 january</div>
-										</div>
-									</li>
-									<li class="clearfix">
-										<div class="widget-posts-image">
-											<a href="#"><img src="assets/images/rp-2.jpg"
-												alt="Post Thumbnail" /></a>
-										</div>
-										<div class="widget-posts-body">
-											<div class="widget-posts-title">
-												<a href="#">Realistic Business Card Mockup</a>
-											</div>
-											<div class="widget-posts-meta">15 February</div>
-										</div>
-									</li>
-								</ul>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<hr class="divider-d">
+
 			<footer class="footer bg-dark">
 				<div class="container">
 					<div class="row">
 						<div class="col-sm-6">
-							<p class="copyright font-alt">
-								&copy; 2017&nbsp;<a href="index.html">TitaN</a>, All Rights
+							<p class="copyright font-alt" style="font-size: 11px;">
+								&copy; 2023&nbsp;<a href="/main">DongneBook</a>, All Rights
 								Reserved
 							</p>
-						</div>
-						<div class="col-sm-6">
-							<div class="footer-social-links">
-								<a href="#"><i class="fa fa-facebook"></i></a><a href="#"><i
-									class="fa fa-twitter"></i></a><a href="#"><i
-									class="fa fa-dribbble"></i></a><a href="#"><i
-									class="fa fa-skype"></i></a>
-							</div>
 						</div>
 					</div>
 				</div>

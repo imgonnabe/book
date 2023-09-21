@@ -1,27 +1,20 @@
 @charset "UTF-8";
 
-.subjoin-div{
-	box-sizing : border-box;
-	margin: 100px auto;
-	padding: 20px;
-	font-size:15px;
-	background-color:#F2F2F2;
-	width: 500px;
-}
-
-h1 {
+h2 {
     font-weight: bold; 
-    font-size: 40px; 
+    font-size: 35px; 
     color: black;
+    margin-bottom: 10px;
 }
 
-label{
-	margin: 15px 15px 15px -10px;
-	padding-right: 10px;
-    text-align: right;
-    vertical-align: middle;
-    width: 15%;
-	float: left;
+.userBox{
+   box-sizing : border-box;
+   margin: 100px auto;
+   padding: 20px;
+   font-size:15px;
+   background-color:#F2F2F2;
+   width: 700px;
+   text-align: centr;
 }
 
 input{
@@ -29,32 +22,28 @@ input{
     border-radius: 5px;
     width: 70%;
     height: 50px;
-    padding-left: 10px;
- 	border:none;
-  	outline:none;
+    border: none;
+    border-bottom: 1px solid black;
+     outline:none;
+     margin: 10px;
 }
 
-#mid, #mname, #maddr, #maddr1, #memail{
-	margin: 0 10px 20px 5px;
-}
-
-#autoInfo{
-	margin-left: 100px;
-	margin-bottom: 35px;
-	text-align: center;
-}
-#autoInfo span{
-	text-align: center;
-	color: tomato;
-	font-size: small;
+label{
+    margin: 17px 0px 17px 0px;
+    padding-right: 10px;
+    text-align: left;
+    vertical-align: middle;
+    width: 100px;
 }
 
 button{
-	background-color: black;
-	color: white;
-	border: none;
+   background-color: black;
+   color: white;
+   border: none;
     border-radius: 5px;
     padding: 10px 25px; 
     font-size: 16px;
     cursor: pointer;
+    margin-top: 10px;
+    float: left;
 }

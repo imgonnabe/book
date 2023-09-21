@@ -66,52 +66,65 @@
     window.onload = function() {
    
      //카테고리 선택하면 페이지 바로이동
-      var selectElement = document.querySelector("select[name='bkcate']");
-      var currentBkcate = getUrlParameter('bkcate');
+      let selectElement = document.querySelector("select[name='bkcate']");
+      let currentBkcate = getUrlParameter('bkcate');
       if (currentBkcate) {
         selectElement.value = currentBkcate;
       }
       
       //카테고리 유지
-      var searchN = document.getElementById("searchN");
-      var searchNvalue = getUrlParameter('searchN');
+      let searchN = document.getElementById("searchN");
+      let searchNvalue = getUrlParameter('searchN');
       if (searchNvalue) {
     	  searchN.value = searchNvalue;
       }
       
      //검색값 유지
-      var searchV = document.getElementById("searchV");
-      var searchVvalue = getUrlParameter('searchV');
+      let searchV = document.getElementById("searchV");
+      let searchVvalue = getUrlParameter('searchV');
       if (searchVvalue) {
     	  searchV.value = searchVvalue;
       }
     
      //페이지값 유지
-      var pageSize = document.getElementById("pageSize");
-      var pageSizevalue = getUrlParameter('pageSize');
+      let pageSize = document.getElementById("pageSize");
+      let pageSizevalue = getUrlParameter('pageSize');
       if (pageSizevalue) {
     	  pageSize.value = pageSizevalue;
       }
     };
     
+    function resetPage() {
+        let pageSize = document.getElementById("pageSize");
+        pageSize.value = ""; 
+
+        let searchN = document.getElementById("searchN");
+        searchN.value = ""; 
+
+        let searchV = document.getElementById("searchV");
+        searchV.value = ""; 
+
+        window.location.href = "/booklist?bkcate=0";
+    }
+    
 
     function getUrlParameter(name) {
       name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
-      var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
-      var results = regex.exec(location.search);
+      let regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+      let results = regex.exec(location.search);
       return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
     }
     
     //페이징
     function pageSizeSelect(selectElement) {
-    	  var pagesizesele = selectElement.value;
-    	  var currentURL = window.location.href;
-    	  var newURL;
+    	  let pagesizesele = selectElement.value;
+    	  let currentURL = window.location.href;
+    	  let newURL;
 
     	  if (currentURL.includes('pageSize=')) {
     	    newURL = currentURL.replace(/(pageSize=)[^\&]+/, 'pageSize=' + pagesizesele);
     	  } else {
-    	    var separator = currentURL.includes('?') ? '&' : '?';
+    	    let separator = currentURL.includes('?') ? '&' : '?';
     	    newURL = currentURL + separator + 'pageSize=' + pagesizesele;
     	  }
 
@@ -119,24 +132,24 @@
     	}
 
     function rePage(selectElement) {
-      var selectedValue = selectElement.value;
-        var url = './booklist?bkcate=' + selectedValue;
+      let selectedValue = selectElement.value;
+        let url = './booklist?bkcate=' + selectedValue;
         window.location.href = url;
     }
     
     
     function addPageToURL(pageNumber) {
     	
-    	  var currentURL = window.location.href;
+    	  let currentURL = window.location.href;
     	  
-    	  var hasPageParam = currentURL.includes('page=');
+    	  let hasPageParam = currentURL.includes('page=');
 
     	  if (hasPageParam) {
-    	    var updatedURL = currentURL.replace(/(page=)[^\&]+/, 'page=' + pageNumber);
+    	    let updatedURL = currentURL.replace(/(page=)[^\&]+/, 'page=' + pageNumber);
     	    window.location.href = updatedURL;
     	  } else {
-    	    var separator = currentURL.includes('?') ? '&' : '?';
-    	    var newURL = currentURL + separator + 'page=' + pageNumber;
+    	    let separator = currentURL.includes('?') ? '&' : '?';
+    	    let newURL = currentURL + separator + 'page=' + pageNumber;
     	    window.location.href = newURL;
     	  }
     	}
@@ -168,8 +181,12 @@
         <!-- 필터 , 검색옵션 -->
         <section class="module-small" style="margin-top: -35px; margin-bottom: -35px;">
           <div class="container">
+          <div class="col-sm-12">
+              <div class="col-sm-3">
+			    <button class="btn" onclick="resetPage()">전체보기</button>
+		      </div>
             <form action="./booklist" method="get" class="row">
-              <div class="col-sm-4 mb-sm-20">
+              <div class="col-sm-2">
                 <select class="form-control" name="bkcate">
                   <option selected="selected" value="0">전체장르</option>
                   <option value="1">소설</option>
@@ -177,7 +194,7 @@
                   <option value="3">자기개발</option>
                 </select>
               </div>
-              <div class="col-sm-3 mb-sm-20">
+              <div class="col-sm-2">
                 <select class="form-control" name="searchN" id="searchN">
                   <option selected="selected" value="all">전체조건</option>
                   <option value="name">책이름</option>
@@ -191,8 +208,8 @@
                       <button class="search-btn" type="submit"><i class="fa fa-search"></i></button>
                     </div>
               </div>
-
             </form>
+            </div>
           </div>
         </section>
         <hr class="divider-w">
@@ -212,12 +229,13 @@
                 <div class="widget">
                 <h4><b>카테고리</b></h4>
                   <h3 class="widget-title"></h3>
-                  <ul class="icon-list">
-                    <li ><a href="./booklist?bkcate=0">전체 도서</a></li>
-                    <li><a href="./booklist?bkcate=1">소설</a></li>
-                    <li><a href="./booklist?bkcate=2">에세이</a></li>
-                    <li><a href="./booklist?bkcate=3">자기개발</a></li>
+                  <ul class="">
+                    <li ><a href="./booklist?bkcate=0">  전체 도서</a></li>
+                    <li><a href="./booklist?bkcate=1">- 소설</a></li>
+                    <li><a href="./booklist?bkcate=2">- 에세이</a></li>
+                    <li><a href="./booklist?bkcate=3">- 자기개발</a></li>
                   </ul>
+                  <h3 class="widget-title"></h3>
                 </div>
 <%--                 <div class="widget">
                   <h5 class="widget-title font-alt">최근본 책</h5>
@@ -253,7 +271,11 @@
                     </div>
                   </div>
                   <h3 class="shop-item-title font-alt"><a href="./bookdetail?bkno=${row.bkno}">${row.bkname}</a></h3>
-                  <a href="./booklist?searchN=write&searchV=${row.bkwrite }"><h6>${row.bkwrite}</h6></a>
+                  <div class="shop-item-write">
+                  <a href="./booklist?searchN=write&searchV=${row.bkwrite }">
+                  ${row.bkwrite}
+                  </a>
+                  </div>
                   <fmt:formatNumber value="${row.bkprice}" pattern="#,###"/>원
                 </div>
               </div>
@@ -296,79 +318,19 @@
         </section>
 
 			<!-- 하단 풋 -->
-        <div class="module-small bg-dark">
-          <div class="container">
-            <div class="row">
-              <div class="col-sm-3">
-                <div class="widget">
-                  <h5 class="widget-title font-alt">About Titan</h5>
-                  <p>The languages only differ in their grammar, their pronunciation and their most common words.</p>
-                  <p>Phone: +1 234 567 89 10</p>Fax: +1 234 567 89 10
-                  <p>Email:<a href="#">somecompany@example.com</a></p>
-                </div>
-              </div>
-              <div class="col-sm-3">
-                <div class="widget">
-                  <h5 class="widget-title font-alt">Recent Comments</h5>
-                  <ul class="icon-list">
-                    <li>Maria on <a href="#">Designer Desk Essentials</a></li>
-                    <li>John on <a href="#">Realistic Business Card Mockup</a></li>
-                    <li>Andy on <a href="#">Eco bag Mockup</a></li>
-                    <li>Jack on <a href="#">Bottle Mockup</a></li>
-                    <li>Mark on <a href="#">Our trip to the Alps</a></li>
-                  </ul>
-                </div>
-              </div>
-              <div class="col-sm-3">
-                <div class="widget">
-                  <h5 class="widget-title font-alt">Blog Categories</h5>
-                  <ul class="icon-list">
-                    <li><a href="#">Photography - 7</a></li>
-                    <li><a href="#">Web Design - 3</a></li>
-                    <li><a href="#">Illustration - 12</a></li>
-                    <li><a href="#">Marketing - 1</a></li>
-                    <li><a href="#">Wordpress - 16</a></li>
-                  </ul>
-                </div>
-              </div>
-              <div class="col-sm-3">
-                <div class="widget">
-                  <h5 class="widget-title font-alt">Popular Posts</h5>
-                  <ul class="widget-posts">
-                    <li class="clearfix">
-                      <div class="widget-posts-image"><a href="#"><img src="assets/images/rp-1.jpg" alt="Post Thumbnail"/></a></div>
-                      <div class="widget-posts-body">
-                        <div class="widget-posts-title"><a href="#">Designer Desk Essentials</a></div>
-                        <div class="widget-posts-meta">23 january</div>
-                      </div>
-                    </li>
-                    <li class="clearfix">
-                      <div class="widget-posts-image"><a href="#"><img src="assets/images/rp-2.jpg" alt="Post Thumbnail"/></a></div>
-                      <div class="widget-posts-body">
-                        <div class="widget-posts-title"><a href="#">Realistic Business Card Mockup</a></div>
-                        <div class="widget-posts-meta">15 February</div>
-                      </div>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <hr class="divider-d">
-        <footer class="footer bg-dark">
-          <div class="container">
-            <div class="row">
-              <div class="col-sm-6">
-                <p class="copyright font-alt">&copy; 2017&nbsp;<a href="index.html">TitaN</a>, All Rights Reserved</p>
-              </div>
-              <div class="col-sm-6">
-                <div class="footer-social-links"><a href="#"><i class="fa fa-facebook"></i></a><a href="#"><i class="fa fa-twitter"></i></a><a href="#"><i class="fa fa-dribbble"></i></a><a href="#"><i class="fa fa-skype"></i></a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </footer>
+
+			<footer class="footer bg-dark">
+				<div class="container">
+					<div class="row">
+						<div class="col-sm-6">
+							<p class="copyright font-alt" style="font-size: 11px;">
+								&copy; 2023&nbsp;<a href="/main">DongneBook</a>, All Rights
+								Reserved
+							</p>
+						</div>
+					</div>
+				</div>
+			</footer>
       </div>
       <div class="scroll-up"><a href="#totop"><i class="fa  fa-chevron-up"></i></a></div>
  
@@ -382,7 +344,9 @@
     	document.addEventListener("DOMContentLoaded", function () {
     	    const likeButtons = document.querySelectorAll("[data-bkno]");
     	    const zzimBookNumbers = ${zzimBooklist};
+    	    
 
+    		   
     	    likeButtons.forEach(function (button) {
     	        const bkno = button.getAttribute("data-bkno");
 
@@ -392,6 +356,9 @@
     	        }
 
     	        button.addEventListener("click", function (event) {
+    	          if(${sessionScope.mid == null}){
+    		            alert("로그인 해주세요")
+    	            }else{
     	            event.preventDefault();
 
     	             const bkno = button.getAttribute("data-bkno");
@@ -406,8 +373,10 @@
     	                    sendAjaxRequest(bkno, "DELETE");
     	                }
     	            }
+     	           }
     	        });
     	    });
+    	    
     	});
     	
 

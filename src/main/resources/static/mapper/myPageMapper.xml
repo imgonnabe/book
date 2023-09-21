@@ -308,14 +308,14 @@
 				<when test="phone != null and phone != ''">mphone = #{phone}</when>
 			</choose>
 		<where>
-			mname = #{mname}
+			mno = #{mno}
 		</where>
 	</update>
 	
 	<select id="idchk" parameterType="String" resultType="Map">
 		select mid, count(*) as count
 		from members
-		where mid = #{id}
+		where mno = #{mno}
 	</select>
 	
 	<select id="emailchk" parameterType="String" resultType="Map">

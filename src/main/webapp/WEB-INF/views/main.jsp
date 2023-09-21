@@ -105,7 +105,7 @@
 			<div class="welcome_banner_inner">
 				<div class="swiper-container">
 					<ul class="swiper-wrapper">
-						<li class="swiper-slide" style="margin-left: 13%; width: 90%;">
+						<li class="swiper-slide" style="margin-left: 13%; width: 90">
 							<div class="owl-carousel" data-items="1" data-pagination="false" data-navigation="false">
 						<c:forEach items="${bannerlist }" var="row">
 							  <div class="owl-item">
@@ -123,112 +123,19 @@
 				</div>
 			</div>
 			<hr class="divider-w">
-<%-- 			<section class="module-small">
-				<div class="container">
-					<div class="row">
-						<div class="col-sm-6 col-sm-offset-3">
-							<h2 class="module-title font-alt">베스트셀러</h2>
-						</div>
-					</div>
-					<div class="row">
-						<div class="owl-carousel text-center" data-items="5"
-							data-pagination="false" data-navigation="false">
-							<c:forEach items="${booktop }" var="row" varStatus="loop">
-								<div class="owl-item">
-									<div class="col-sm-12">
-										<div class="ex-product">
-											<span class="bestnumber">${loop.index + 1}</span> <a
-												href="./bookdetail?bkno=${row.bkno}"><img
-												src="/img/bookimg/${row.bkimg}" alt="Leather belt" /></a>
-											<h4 class="shop-item-title font-alt">
-												<a href="./bookdetail?bkno=${row.bkno}">${row.bkname}</a>
-											</h4>
-											<fmt:formatNumber value="${row.bkprice}" pattern="#,###" />
-											원
-										</div>
-									</div>
-								</div>
-							</c:forEach>
-						</div>
-					</div>
-				</div>
-			</section> --%>
+
 			
 	    <section class="module-small">
-          <div class="container" style="width: 98%">
-            <div class="row">
+          <div class="container" style="width: 100%">
   <!--  ----------- 왼쪽 사이드바 ------------------------------------------------------------------ -->
-              <div class="col-sm-1 col-md-1 sidebar" style="background-color: #f5faf2; border-radius:20px;">
 
-                <div class="widget">
-                  <h5 class="widget-title font-alt">Blog Categories</h5>
-                  <ul class="icon-list">
-                    <li><a href="#">Photography - 7</a></li>
-                    <li><a href="#">Web Design - 3</a></li>
-                    <li><a href="#">Illustration - 12</a></li>
-                    <li><a href="#">Marketing - 1</a></li>
-                    <li><a href="#">Wordpress - 16</a></li>
-                  </ul>
-                </div>
-                <div class="widget">
-                  <h5 class="widget-title font-alt">Popular Posts</h5>
-                  <ul class="widget-posts">
-                    <li class="clearfix">
-                      <div class="widget-posts-image"><a href="#"><img src="assets/images/rp-1.jpg" alt="Post Thumbnail"/></a></div>
-                      <div class="widget-posts-body">
-                        <div class="widget-posts-title"><a href="#">Designer Desk Essentials</a></div>
-                        <div class="widget-posts-meta">23 january</div>
-                      </div>
-                    </li>
-                    <li class="clearfix">
-                      <div class="widget-posts-image"><a href="#"><img src="assets/images/rp-2.jpg" alt="Post Thumbnail"/></a></div>
-                      <div class="widget-posts-body">
-                        <div class="widget-posts-title"><a href="#">Realistic Business Card Mockup</a></div>
-                        <div class="widget-posts-meta">15 February</div>
-                      </div>
-                    </li>
-                    <li class="clearfix">
-                      <div class="widget-posts-image"><a href="#"><img src="assets/images/rp-3.jpg" alt="Post Thumbnail"/></a></div>
-                      <div class="widget-posts-body">
-                        <div class="widget-posts-title"><a href="#">Eco bag Mockup</a></div>
-                        <div class="widget-posts-meta">21 February</div>
-                      </div>
-                    </li>
-                    <li class="clearfix">
-                      <div class="widget-posts-image"><a href="#"><img src="assets/images/rp-4.jpg" alt="Post Thumbnail"/></a></div>
-                      <div class="widget-posts-body">
-                        <div class="widget-posts-title"><a href="#">Bottle Mockup</a></div>
-                        <div class="widget-posts-meta">2 March</div>
-                      </div>
-                    </li>
-                  </ul>
-                </div>
-                <div class="widget">
-                  <h5 class="widget-title font-alt">Tag</h5>
-                  <div class="tags font-serif"><a href="#" rel="tag">Blog</a><a href="#" rel="tag">Photo</a><a href="#" rel="tag">Video</a><a href="#" rel="tag">Image</a><a href="#" rel="tag">Minimal</a><a href="#" rel="tag">Post</a><a href="#" rel="tag">Theme</a><a href="#" rel="tag">Ideas</a><a href="#" rel="tag">Tags</a><a href="#" rel="tag">Bootstrap</a><a href="#" rel="tag">Popular</a><a href="#" rel="tag">English</a>
-                  </div>
-                </div>
-                <div class="widget">
-                  <h5 class="widget-title font-alt">Text</h5>The languages only differ in their grammar, their pronunciation and their most common words. Everyone realizes why a new common language would be desirable: one could refuse to pay expensive translators.
-                </div>
-                <div class="widget">
-                  <h5 class="widget-title font-alt">Recent Comments</h5>
-                  <ul class="icon-list">
-                    <li>Maria on <a href="#">Designer Desk Essentials</a></li>
-                    <li>John on <a href="#">Realistic Business Card Mockup</a></li>
-                    <li>Andy on <a href="#">Eco bag Mockup</a></li>
-                    <li>Jack on <a href="#">Bottle Mockup</a></li>
-                    <li>Mark on <a href="#">Our trip to the Alps</a></li>
-                  </ul>
-                </div>
-              </div>
  <!--  ----------- 중앙 본문 ------------------------------------------------------------------ -->
-              <div class="col-sm-8 col-sm-offset-1" >
+              <div class="col-sm-12" >
               <div class="container">
 					<div class="row">
 					   <div class="col-sm-12">
 					   <img src="../img/page/ad1.png"  style="width:560px; height: 170px; border-radius:20px;"/>
-					   <img src="../img/page/ad2.png"  style="width:560px; height: 170px; border-radius:20px; margin-left: 15px;"/>
+					   <img src="../img/page/ad2.png"  style="width:560px; height: 170px; border-radius:20px; margin-left: 14px;"/>
 					   </div>			   
 					</div>
 					
@@ -245,9 +152,9 @@
 								<div class="owl-item">
 									<div class="col-sm-12">
 										<div class="ex-product">
-											<span class="bestnumber">${loop.index + 1}</span> <a
-												href="./bookdetail?bkno=${row.bkno}"><img
-												src="/img/bookimg/${row.bkimg}" alt="Leather belt" /></a>
+											<span class="bestnumber">${loop.index + 1}</span> 
+											<a href="./bookdetail?bkno=${row.bkno}">
+											<img src="/img/bookimg/${row.bkimg}" class="bestimg"/></a>
 											<h4 class="shop-item-title font-alt">
 												<a href="./bookdetail?bkno=${row.bkno}">${row.bkname}</a>
 											</h4>
@@ -259,6 +166,11 @@
 							</c:forEach>
 						</div>
 						</div>
+					<div class="row">
+						<div class="col-sm-6">
+							<h3></h3>
+						</div>
+					</div>
 					</div>
 					</div>
 					
@@ -277,7 +189,7 @@
 										<div class="ex-product">
 											<span class="bestnumber">${loop.index + 1}</span> <a
 												href="./bookdetail?bkno=${row.bkno}"><img
-												src="/img/bookimg/${row.bkimg}" alt="Leather belt" /></a>
+												src="/img/bookimg/${row.bkimg}" class="bestimg" /></a>
 											<h4 class="shop-item-title font-alt">
 												<a href="./bookdetail?bkno=${row.bkno}">${row.bkname}</a>
 											</h4>
@@ -289,206 +201,74 @@
 							</c:forEach>
 						</div>
 						</div>
+					   <div class="row">
+						<div class="col-sm-6">
+							<h3></h3>
+						</div>
+					   </div>
 					</div>
 					</div>
-					</div>
-					
-					
-				  <div class="row"  style="background-color: #f5faf2; border-radius:20px; margin-top: 5%;">
+			<c:if test="${sessionScope.mid ne null }">
+				  <div class="row"  style="background-color: #f5faf2; border-radius:20px; margin-top: 5%; min-height: 470px;">
 					<div class="row" style="width: 90%; margin-left: 50px;">
 					<div class="row">
-						<div class="col-sm-12">
-							<h3 class="best-title" style="margin-top: 35px;margin-bottom: 35px;">안녕하세요 망곰님 대여중인 책이 있습니다.</h3>
-						</div>
+						<div class="col-sm-10">
+							<h3 class="best-title" style="margin-top: 35px;margin-bottom: 35px;">
+							안녕하세요 ${sessionScope.mid}님 대여중인 책이 
+							<c:choose>
+							<c:when test="${rentlist[0].count eq null}">
+							없습니다.
+							</c:when>
+							<c:otherwise>
+							있습니다.
+							</c:otherwise>
+							</c:choose>
+							</h3>
+						 </div>
+						<div class="col-sm-2" style="margin-top: 35px;">
+							<a href="/mypage/rent">대여내역 확인하기 ></a>
+					    </div>
 					</div>
 					<div class="row">
-											<div class="shop-item">
-												<div class="shop-item-image">
-													<img style="height: 418px;" src="/img/bookimg/bk5.jpg"/>
-													<div class="shop-item-detail">
-														<a class="btn btn-round btn-b"
-															href="./bookdetail?bkno=5"> 상세보기</a><br>
-													</div>
-												</div>
-												<h3 class="shop-item-title font-alt"><a href="./bookdetail?bkno=5">1Q84 1</a>
-												</h3>
-												<a href="./booklist?searchN=write&searchV=무라카미 하루키"><h6>무라카미 하루키</h6></a>
-											</div>
-										</div>
+					<c:choose>
+                       <c:when test="${rentlist[0].count eq null}">
+					    <div class="shop-item">
+					     <h2 style="text-align: center;">대여 내역이 없습니다.</h2>
+					    </div>
+					    </c:when>
+					    <c:otherwise>
+						<c:forEach items="${rentlist }" var="row">
+						<div class="shop-item">
+								<a href="./bookdetail?bkno=${row.bkno}"><img style="height: 300px;" src="/img/bookimg/${row.bkimg }" /></a>
+							<h3 class="shop-item-title font-alt"><a href="./bookdetail?bkno=${row.bkno}">${row.bkname}</a>
+							</h3>
+							<a href="./booklist?searchN=write&searchV=${row.bkwrite}"><h6>${row.bkwrite}</h6></a>
+				    	 </div>
+							</c:forEach>
+					    </c:otherwise>
+					  </c:choose>
+						</div>
 					</div>
 					</div>
-					
-					
+					</c:if>
 					
                 </div>
               
    <!--  ----------- 오른쪽 사이드바 ------------------------------------------------------------------ -->
-              <div class="col-sm-1 col-md-1 col-md-offset-1 sidebar" style="background-color: #f5faf2; border-radius:20px;">
-                <div class="widget">
-                  <form role="form">
-                    <div class="search-box">
-                      <input class="form-control" type="text" placeholder="Search..."/>
-                      <button class="search-btn" type="submit"><i class="fa fa-search"></i></button>
-                    </div>
-                  </form>
-                </div>
-                <div class="widget">
-                  <h5 class="widget-title font-alt">Blog Categories</h5>
-                  <ul class="icon-list">
-                    <li><a href="#">Photography - 7</a></li>
-                    <li><a href="#">Web Design - 3</a></li>
-                    <li><a href="#">Illustration - 12</a></li>
-                    <li><a href="#">Marketing - 1</a></li>
-                    <li><a href="#">Wordpress - 16</a></li>
-                  </ul>
-                </div>
-                <div class="widget">
-                  <h5 class="widget-title font-alt">Popular Posts</h5>
-                  <ul class="widget-posts">
-                    <li class="clearfix">
-                      <div class="widget-posts-image"><a href="#"><img src="assets/images/rp-1.jpg" alt="Post Thumbnail"/></a></div>
-                      <div class="widget-posts-body">
-                        <div class="widget-posts-title"><a href="#">Designer Desk Essentials</a></div>
-                        <div class="widget-posts-meta">23 january</div>
-                      </div>
-                    </li>
-                    <li class="clearfix">
-                      <div class="widget-posts-image"><a href="#"><img src="assets/images/rp-2.jpg" alt="Post Thumbnail"/></a></div>
-                      <div class="widget-posts-body">
-                        <div class="widget-posts-title"><a href="#">Realistic Business Card Mockup</a></div>
-                        <div class="widget-posts-meta">15 February</div>
-                      </div>
-                    </li>
-                    <li class="clearfix">
-                      <div class="widget-posts-image"><a href="#"><img src="assets/images/rp-3.jpg" alt="Post Thumbnail"/></a></div>
-                      <div class="widget-posts-body">
-                        <div class="widget-posts-title"><a href="#">Eco bag Mockup</a></div>
-                        <div class="widget-posts-meta">21 February</div>
-                      </div>
-                    </li>
-                    <li class="clearfix">
-                      <div class="widget-posts-image"><a href="#"><img src="assets/images/rp-4.jpg" alt="Post Thumbnail"/></a></div>
-                      <div class="widget-posts-body">
-                        <div class="widget-posts-title"><a href="#">Bottle Mockup</a></div>
-                        <div class="widget-posts-meta">2 March</div>
-                      </div>
-                    </li>
-                  </ul>
-                </div>
-                <div class="widget">
-                  <h5 class="widget-title font-alt">Tag</h5>
-                  <div class="tags font-serif"><a href="#" rel="tag">Blog</a><a href="#" rel="tag">Photo</a><a href="#" rel="tag">Video</a><a href="#" rel="tag">Image</a><a href="#" rel="tag">Minimal</a><a href="#" rel="tag">Post</a><a href="#" rel="tag">Theme</a><a href="#" rel="tag">Ideas</a><a href="#" rel="tag">Tags</a><a href="#" rel="tag">Bootstrap</a><a href="#" rel="tag">Popular</a><a href="#" rel="tag">English</a>
-                  </div>
-                </div>
-                <div class="widget">
-                  <h5 class="widget-title font-alt">Text</h5>The languages only differ in their grammar, their pronunciation and their most common words. Everyone realizes why a new common language would be desirable: one could refuse to pay expensive translators.
-                </div>
-                <div class="widget">
-                  <h5 class="widget-title font-alt">Recent Comments</h5>
-                  <ul class="icon-list">
-                    <li>Maria on <a href="#">Designer Desk Essentials</a></li>
-                    <li>John on <a href="#">Realistic Business Card Mockup</a></li>
-                    <li>Andy on <a href="#">Eco bag Mockup</a></li>
-                    <li>Jack on <a href="#">Bottle Mockup</a></li>
-                    <li>Mark on <a href="#">Our trip to the Alps</a></li>
-                  </ul>
-                </div>
-              </div>
             </div>
             </div>
           </section>
 
 			<!-- --------------------------------------------------- 하단 풋---------------------------------------------------------------- -->
-			<div class="module-small bg-dark">
-				<div class="container">
-					<div class="row">
-						<div class="col-sm-3">
-							<div class="widget">
-								<h5 class="widget-title font-alt">About Titan</h5>
-								<p>The languages only differ in their grammar, their
-									pronunciation and their most common words.</p>
-								<p>Phone: +1 234 567 89 10</p>
-								Fax: +1 234 567 89 10
-								<p>
-									Email:<a href="#">somecompany@example.com</a>
-								</p>
-							</div>
-						</div>
-						<div class="col-sm-3">
-							<div class="widget">
-								<h5 class="widget-title font-alt">Recent Comments</h5>
-								<ul class="icon-list">
-									<li>Maria on <a href="#">Designer Desk Essentials</a></li>
-									<li>John on <a href="#">Realistic Business Card Mockup</a></li>
-									<li>Andy on <a href="#">Eco bag Mockup</a></li>
-									<li>Jack on <a href="#">Bottle Mockup</a></li>
-									<li>Mark on <a href="#">Our trip to the Alps</a></li>
-								</ul>
-							</div>
-						</div>
-						<div class="col-sm-3">
-							<div class="widget">
-								<h5 class="widget-title font-alt">Blog Categories</h5>
-								<ul class="icon-list">
-									<li><a href="#">Photography - 7</a></li>
-									<li><a href="#">Web Design - 3</a></li>
-									<li><a href="#">Illustration - 12</a></li>
-									<li><a href="#">Marketing - 1</a></li>
-									<li><a href="#">Wordpress - 16</a></li>
-								</ul>
-							</div>
-						</div>
-						<div class="col-sm-3">
-							<div class="widget">
-								<h5 class="widget-title font-alt">Popular Posts</h5>
-								<ul class="widget-posts">
-									<li class="clearfix">
-										<div class="widget-posts-image">
-											<a href="#"><img src="assets/images/rp-1.jpg"
-												alt="Post Thumbnail" /></a>
-										</div>
-										<div class="widget-posts-body">
-											<div class="widget-posts-title">
-												<a href="#">Designer Desk Essentials</a>
-											</div>
-											<div class="widget-posts-meta">23 january</div>
-										</div>
-									</li>
-									<li class="clearfix">
-										<div class="widget-posts-image">
-											<a href="#"><img src="assets/images/rp-2.jpg"
-												alt="Post Thumbnail" /></a>
-										</div>
-										<div class="widget-posts-body">
-											<div class="widget-posts-title">
-												<a href="#">Realistic Business Card Mockup</a>
-											</div>
-											<div class="widget-posts-meta">15 February</div>
-										</div>
-									</li>
-								</ul>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<hr class="divider-d">
+
 			<footer class="footer bg-dark">
 				<div class="container">
 					<div class="row">
 						<div class="col-sm-6">
-							<p class="copyright font-alt">
-								&copy; 2017&nbsp;<a href="index.html">TitaN</a>, All Rights
+							<p class="copyright font-alt" style="font-size: 11px;">
+								&copy; 2023&nbsp;<a href="/main">DongneBook</a>, All Rights
 								Reserved
 							</p>
-						</div>
-						<div class="col-sm-6">
-							<div class="footer-social-links">
-								<a href="#"><i class="fa fa-facebook"></i></a><a href="#"><i
-									class="fa fa-twitter"></i></a><a href="#"><i
-									class="fa fa-dribbble"></i></a><a href="#"><i
-									class="fa fa-skype"></i></a>
-							</div>
 						</div>
 					</div>
 				</div>

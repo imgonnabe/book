@@ -43,6 +43,26 @@ public class BooklistService {
 		booklistDAO.bookWrite2(map);
 	}
 	
+	public List<Map<String, Object>> reviewsList(Map<String, Object> map) {
+		return booklistDAO.reviewsList(map);
+	}
+	public void addReview(Map<String, Object> map) {
+		booklistDAO.addReview(map);
+	}
+	
+
+	public int rdel(Map<String, Object> map) {
+		return booklistDAO.rdel(map);
+	}
+	
+	public List<String> booktrade(int bkno) {
+		return booklistDAO.booktrade(bkno);
+	}
+
+	public List<String> bookrental(int bkno) {
+		return booklistDAO.bookrental(bkno);
+	}
+	
 	/*-----------------------------------------------------------------*/
 	
 	/*--------------------------상민-----------------------------------*/
@@ -92,13 +112,24 @@ public class BooklistService {
 		
 	}
 
-	public void update2(Map<String, Object> map) {
-		booklistDAO.update2(map);
+
+
+	public void delete4(CartDTO cart) {
+		booklistDAO.delete4(cart);
+		
 	}
-	
-	/*-----------------------------------------------------------------*/
-	
-	
+
+	public Map<String, Object> rentaldata(int bkno) {
+		return booklistDAO.rentaldata(bkno);
+	}
+
+
+
+
+
+
+
+
 
 	
 	

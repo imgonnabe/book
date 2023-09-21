@@ -453,9 +453,7 @@
         }
     
     
-</script>
 	
-	<script type="text/javascript">
 	$(function(){
 		// 오늘 이후 선택이 안되게 함
 		var now_utc = Date.now()// 지금 날짜를 밀리초로
@@ -466,10 +464,11 @@
 		// document.getElementById("birth").setAttribute("max", today);
 		$("#birth").attr("max", today);
 	});
-	</script>
 	
-	<script type="text/javascript">
 	$(function(){
+		window.addEventListener('ssc_wheel', function(event) {
+			event.preventDefault();
+		}, {passive:false}); 
 		   //휴대폰 번호 인증
 		   var isphoneChecked = false; // ID 중복 확인 여부를 저장하는 변수
 		   $(document).on("click", "#phoneChk", function() {
@@ -544,6 +543,11 @@
    		$(".successPhoneChk").css("color","green");
    		$("#phone").attr("readonly",true);
 	}
+	$(function(){
+		window.addEventListener('ssc_wheel', function(event) {
+			event.preventDefault();
+		}, {passive:false});
+	});
 	</script>
 </body>
 </html>

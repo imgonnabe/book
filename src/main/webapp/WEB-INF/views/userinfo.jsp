@@ -13,7 +13,7 @@
     Document Title
     =============================================
     -->
-    <title>우리동네 | 동네북 | 추가정보입력</title>
+    <title>우리동네 | 동네북 | 회원정보</title>
     <!--  
     Favicons
     =============================================
@@ -56,176 +56,157 @@
     <!-- Main stylesheet and color file-->
     <link href="assets/css/style.css" rel="stylesheet">
     <link id="color-scheme" href="assets/css/colors/default.css" rel="stylesheet">
-    <link rel="stylesheet" href="./css/subjoin.css">
-	<script src="./js/jquery-3.7.0.min.js"></script>
-	<style type="text/css">
+    <link href="../css/userinfo.css" rel="stylesheet">
+    <script src="./js//jquery-3.7.0.min.js"></script>
+    
+<script type="text/javascript">
+
+function kakaoLogout(){
+	location.href="https://kauth.kakao.com/oauth/logout?client_id=3ecca13d973c6d11e752a114a1e14922&logout_redirect_uri=http://localhost/logout/kakao";
+	window.location.href = "/logout";
+}
+
+function naverLogout(){
+	window.location.href = "https://nid.naver.com/nidlogin.logout";
+}
+
+	$(function(){
 	
-	.subjoin-div{
-		box-sizing : border-box;
-		margin: 100px auto;
-		padding: 20px;
-		font-size:15px;
-		background-color:#F2F2F2;
-		width: 500px;
-	}
-	
-	h1 {
-	    font-weight: bold; 
-	    font-size: 40px; 
-	    color: black;
-	}
-	
-	label{
-		margin: 15px 15px 15px -10px;
-		padding-right: 10px;
-	    text-align: right;
-	    vertical-align: middle;
-	    width: 15%;
-		float: left;
-	}
-	
-	input{
-	    background-color:white;
-	    border-radius: 5px;
-	    width: 70%;
-	    height: 50px;
-	    padding-left: 10px;
-	 	border:none;
-	  	outline:none;
-	}
-	
-	#mid, #mname, #maddr, #maddr1, #memail{
-		margin: 0 10px 20px 5px;
-	}
-	
-	#autoInfo{
-		margin-left: 100px;
-		margin-bottom: 35px;
-		text-align: center;
-	}
-	#autoInfo span{
-		text-align: center;
-		color: tomato;
-		font-size: small;
-	}
-	
-	button{
-		background-color: black;
-		color: white;
-		border: none;
-	    border-radius: 5px;
-	    padding: 10px 25px; 
-	    font-size: 16px;
-	    cursor: pointer;
-	}
-	
-	</style>
-	
-	<script type="text/javascript">
-		$(function(){
-			
-			$("#joinCancel").click(function(){
-				alert("!");
-				window.location.href = "/logout";
-			});
-			
+		let sid = getCookie("SuserID");
+		let setS = getCookie("setS");
+		let setY = getCookie("setY");
+		
+		// 로그아웃버튼 클릭
+		$("#logoutbtn").click(function(){
+			Logout();
 		});
-	</script>
-	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-	<script type="text/javascript">
-		window.onload = function(){
-		    document.getElementById("maddr").addEventListener("click", function(){ //주소입력칸을 클릭하면
-		        //카카오 지도 발생
-		        new daum.Postcode({
-		            oncomplete: function(data) { //선택시 입력값 세팅
-		                document.getElementById("maddr").value = data.address; // 주소 넣기
-		              /*   document.querySelector("maddr1").focus(); //상세입력 포커싱 */
-		            }
-		        }).open();
-		    });
+		
+		// 자동로그인 해제버튼 클릭
+		$("#outauto").click(function(){
+			autoLogout();
+		});
+		
+		// 쿠키 삭제
+		function delCookie(cookieName){
+			let expireDate = new Date();
+			expireDate.setDate(expireDate.getDate() - 1);
+			document.cookie = cookieName +"="+ "; expires="+ expireDate.toUTCString()
 		}
-	</script>
+		
+		// 쿠키가져오기
+		function getCookie(cookieName){
+			let cname, cvalue;
+			let val = document.cookie.split(";");
+			for(let i = 0; i < val.length; i++){
+				cname = val[i].substr(0, val[i].indexOf("="));
+				cvalue = val[i].substr(val[i].indexOf("=")+1);
+				cname = cname.trim();
+				
+				if(cname == cookieName){
+					return cvalue;
+				}
+			}
+		}
+		
+		// 로그아웃 진행
+		function Logout(){
+			
+			if(${sessionScope.withN eq 2}){	// 네이버로그아웃 이후 로그아웃실행 
+				naverLogout();
+			} else if(${sessionScope.withK eq 1}){ // 카카오로그아웃 이후 로그아웃실행 
+				kakaoLogout();
+			} 
+				window.location.href = "/logout";	// 일반로그아웃
+			
+		}
+		
+		// 자동로그인 해제 진행
+		function autoLogout(){
+
+			// auto가 1이라면 0으로 변경
+			$.ajax({
+				url : "./autologout",
+				type : "post",
+				data : {sid : sid},
+					dataType : "json",
+					success : function(data) {
+						if(data.result == 1){
+							alert("자동로그인이 해제되었습니다.")
+							delCookie("SuserID");
+							delCookie("setS");
+							Logout();
+						}
+					},
+					error : function(error) {
+						alert("자동로그인이 해제된 상태입니다.");
+						}
+				});
+		}
+		
+		// 회원정보 수정으로 이동
+		$("#toInfo").click(function(){
+			window.location.href = "/mypage/info";		
+		});
+		
+	});
+	
+</script>
 
   </head>
   
-  <!-- --------------------------------------------------- 상단 ---------------------------------------------------------------- -->   
-   <body data-spy="scroll" data-target=".onpage-navigation" data-offset="60">
+   <!-- --------------------------------------------------- 상단 ---------------------------------------------------------------- -->   
+  
+  <body data-spy="scroll" data-target=".onpage-navigation" data-offset="60">
+  <%@ include file="menu.jsp"%>
     <main>
       <div class="main">
-      
-       <hr class="divider-w">
-        <section class="module-small"></section>
-        
-        <form action="/login/subjoin" method="post">
-		<div class="subjoin-div" align="center">
-			<div>
-			
-				<h1>추가정보입력</h1>
-			</div>
-			
-			<div>
-				<label for="mid">아이디</label>
-				<div>
-					<input type="text" name="mid" id="mid" value="${sessionScope.mid}" disabled/>
-				</div>
-			</div>
-					<label for="mname">이름</label>
-					<div>
-						<div>
-							<c:choose>
-           						<c:when test="${sessionScope.mname ne null}">
-           							<input type="text" name="mname" id="mname" value="${sessionScope.mname }" readonly/>
-           						</c:when>
-           						<c:otherwise>
-									<input type="text" name="mname" id="mname" placeholder="이름을 입력해 주세요"/>
-           						</c:otherwise>
-       						</c:choose>
-						</div>
-					</div>
-					<div>
-						<label for="memeil">이메일</label>
-						<div class="">
-							<c:choose>
-								<c:when test="${memail ne null}">
-									<input type="text" name="memail" id="memail" value="${memail }" readonly/>
-								</c:when>
-								<c:otherwise>
-									<c:choose>
-										<c:when test="${sessionScope.withN ne 2}"><span>네이버 계정이 올바른지 확인필요</span></c:when>
-										<c:when test="${sessionScope.withK ne 1}"><span>카카오 계정이 올바른지 확인필요</span></c:when>
-										<c:otherwise>
-											<input type="text" name="memail" id="memail" value="${memail }" disabled/>
- 											<span>올바르지 않은 접근경로<span>
-										</c:otherwise>
-									</c:choose>
-								</c:otherwise>
-							</c:choose>
-						</div>
-						<div id="autoInfo"><span>연동된 계정의 정보가 자동으로 입력됩니다.</span></div>
-					</div>
-					<div>
-						<div>
-							<label for="maddr">주소*</label>
-							<input type="text" name="maddr" id="maddr" placeholder="주소를 입력해 주세요"/>
-						</div>
-						<div>
-							<label for="maddr1"></label>
-						    <input type="text" name="maddr" id="maddr1" placeholder="상세주소를 입력해 주세요"/>
-						</div>
-						<input type="hidden" name="mphone" value="${mphone }"/>
-					</div>
-		
-					<div>
-						<button type="button" id="joinCancel">취소</button>
-						<button type="submit" id="joinjoin">가입</button>
-					</div>
 
-		</div>
-	</form>
-	<hr class="divider-w">
-        
-        
-        <section class="module"></section>          
+         <div class="userBox" align="center">
+               <h2>회원정보</h2>
+            <div class="idBox">
+               <label for="mid">아이디</label>
+               <input class="input" type="text" id="mid" value="${info.mid}" readonly />
+            </div>
+            <div class="nameBox">
+               <label for="mname">이름</label>
+               <input class="input" type="text" id="mname" value="${info.mname}" readonly />
+            </div>
+            <div class="addrBox">
+               <label for="maddr">주소</label>
+               <input class="input" type="text" id="maddr" value="${info.maddr}" readonly /><br>
+            </div>
+            <div class="brithBox">
+               <label for="mbirth">생년월일</label>
+               <input class="input" type="date" id="mbirth" value="${info.mbirth}" readonly /><br>
+            </div>
+            <div class="phoneBox">
+            <c:choose>
+               <c:when test="${info.mphone eq null}"> id : ${sessionScope.mid} _ 로그인완
+                  <label for="mphone">전화번호 : </label>
+                  <input class="input" type="text" id="mphone" value="정보가 없습니다." readonly />
+               </c:when>
+               <c:otherwise>
+                  <label for="mphone">전화번호</label>
+                  <input class="input" type="text" id="mphone" value="${info.mphone}" readonly />
+               </c:otherwise>
+            </c:choose>
+            </div>
+            <div class="emailBox">
+               <label for="memail">이메일주소</label>
+               <input class="input" type="text" id="memail" value="${info.memail}" readonly />
+            </div>
+            <div class="btnBox">
+            <div class="editbtnBox">
+               <button type="button" id="toInfo">회원정보수정</button>
+            </div>
+            <div class="autobtnBox">
+      			<button type="button" id="outauto">자동로그인 해제</button>
+      			아이디 : ${sessionScope.mid} || mgrade : ${sessionScope.mgrade} || mno : ${sessionScope.mno}
+      		</div>
+            </div>
+
+         </div>
+                
                 
  <!-- --------------------------------------------------- 하단 풋---------------------------------------------------------------- -->
 

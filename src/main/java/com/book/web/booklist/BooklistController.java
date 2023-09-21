@@ -97,7 +97,7 @@ public class BooklistController {
 	
 	
 	@GetMapping("/bookdetail")
-	public String bookdetail(@RequestParam("bkno") int bkno,Model model,HttpSession session) {
+	public String bookdetail(@RequestParam("bkno") int bkno,Model model,HttpSession session,@RequestParam Map<String,Object> map) {
 		
 		//책 상세페이지
 		Map<String, Object> bookdetail = booklistService.bookdetail(bkno);
@@ -115,53 +115,104 @@ public class BooklistController {
 	    String mid = (String) session.getAttribute("mid");
 	    List<Integer> zzimBooklist = zzimService.zzimBooklist(mid);
 	    model.addAttribute("zzimBooklist", zzimBooklist);
+	    
+	    //렌탈,구매 리스트 불러오기
+	    List<String> booktrade = booklistService.booktrade(bkno);
+	    model.addAttribute("booktrade", booktrade);
+	    
+        List<String> bookrental = booklistService.bookrental(bkno);
+	    model.addAttribute("bookrental", bookrental);
+	    
+	    //리뷰
+		map.put("bkno", bkno);
+		List<Map<String, Object>> reviewsList = booklistService.reviewsList(map);
+		model.addAttribute("reviewsList",reviewsList);
+		
+		
+	    /*--------------------------------------------------------승현-----------------------------------------------------------*/
+	    // 책대여여부		
+	    Map<String, Object> rentaldata = booklistService.rentaldata(bkno);
+		model.addAttribute("rentaldata", rentaldata);
+		System.out.println(rentaldata);
+		/*-----------------------------------------------------------------------------------------------------------------------*/
+	    
 		
 		return "bookdetail";
 	}
 	
+	//리뷰등록
+	@PostMapping("/addreview")
+	public String addReview(@RequestParam Map<String,Object>map, HttpSession session) {
+		
+		String mid = (String) session.getAttribute("mid");
+		map.put("mid", mid);
+		booklistService.addReview(map);
+		
+		return "redirect:/bookdetail?bkno="+map.get("bkno");
+	}
+	
+	//리뷰삭제
+	@ResponseBody
+	@PostMapping("/rdelR")
+	public String rdel(@RequestParam Map<String,Object> map , HttpSession session) {
+		JSONObject json = new JSONObject();
+		int result = booklistService.rdel(map);
+		json.put("result", result);
+		return json.toString();
+	}
+	
+	
 	//책등록 페이지 이동
-	@GetMapping("/booknotice")
-	public String booknotice() {
-		return "booknotice";
+	@GetMapping("/admin/booknotice")
+	public String booknotice(HttpSession session) {
+		if(session.getAttribute("mid") != null && (int)session.getAttribute("mgrade") == 2) {
+			return "/admin/booknotice";
+		} else {
+			return "redirect:/index";
+		}
 	}
 	
 	//책등록
-	@PostMapping("/bookWrite")
+	@PostMapping("/admin/bookWrite")
 	public String bookWrite(@RequestParam("upFile") MultipartFile upfile, @RequestParam Map<String, Object> map,HttpSession session) {
-		if (!upfile.isEmpty()) {
-			HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
-					.getRequest();
-			String path = request.getServletContext().getRealPath("/img/bookimg");
-
-			//이미지 저장 
-			//UUID uuid = UUID.randomUUID();
-			LocalDateTime ldt = LocalDateTime.now();
-			String format = ldt.format(DateTimeFormatter.ofPattern("YYYYMMddHHmmss"));
-			String realFileName = format + upfile.getOriginalFilename();
-
-			File newFileName = new File(path, realFileName);
-			try {
-			} catch (Exception e) {
-				e.printStackTrace();
+		if(session.getAttribute("mid") != null && (int)session.getAttribute("mgrade") == 2) {
+			if (!upfile.isEmpty()) {
+				HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
+						.getRequest();
+				String path = request.getServletContext().getRealPath("/img/bookimg");
+	
+				//이미지 저장 
+				//UUID uuid = UUID.randomUUID();
+				LocalDateTime ldt = LocalDateTime.now();
+				String format = ldt.format(DateTimeFormatter.ofPattern("YYYYMMddHHmmss"));
+				String realFileName = format + upfile.getOriginalFilename();
+	
+				File newFileName = new File(path, realFileName);
+				try {
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				try {
+					FileCopyUtils.copy(upfile.getBytes(), newFileName);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				map.put("upFile", realFileName);
 			}
-			try {
-				FileCopyUtils.copy(upfile.getBytes(), newFileName);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			map.put("upFile", realFileName);
+			
+			booklistService.bookWrite(map);
+	
+			//bkno 가져오기
+			int bkno = jdbcTemplate.queryForObject("SELECT LAST_INSERT_ID()", Integer.class);
+			String mid = (String) session.getAttribute("mid");
+			map.put("mid", mid);
+			map.put("bkno", bkno);
+			booklistService.bookWrite2(map);
+	
+			return "redirect:/admin/booknotice";
+		} else {
+			return "redirect:/index";
 		}
-		
-		booklistService.bookWrite(map);
-
-		//bkno 가져오기
-		int bkno = jdbcTemplate.queryForObject("SELECT LAST_INSERT_ID()", Integer.class);
-		String mid = (String) session.getAttribute("mid");
-		map.put("mid", mid);
-		map.put("bkno", bkno);
-		booklistService.bookWrite2(map);
-
-		return "redirect:/booknotice";
 	}
 	/*-----------------------------------------------------------------------------------------------------------------------*/
 	
@@ -263,27 +314,32 @@ public class BooklistController {
 		return "redirect:/booklist";
 	}
 	
-	@ResponseBody
 	@PostMapping("/coupon")
 	public String discount(HttpSession session,@RequestParam Map<String, Object> map,CartDTO cart) {
-		
 		String mid = (String)session.getAttribute("mid");
-		cart.setMid("mid");
-		List<Map<String, Object>> cartlist = booklistService.cart(cart);
-		System.out.println(cartlist);
-	
-	    
+		cart.setMid(mid);
 		map.put("mid", mid);
-	
-	
-	System.out.println(map);
-	JSONObject json = new JSONObject();
-	booklistService.update(map);
-	booklistService.update2(map);
+		System.out.println(map.get("cartno"));
 		
-	return json.toString(); 
 	
+		
+		
+		  List<Map<String, Object>> cartlist = booklistService.cart(cart);
+		  System.out.println(cartlist);
+		  for (int i = 0; i < cartlist.size(); i++) {
+		  booklistService.update(cartlist.get(i));
+		  
+		  }
+		 
+	
+	
+	
+
+		
+		  return "redirect:/purchase";
 	}
+
+}
 	
 	
 	
@@ -294,4 +350,4 @@ public class BooklistController {
 	
 	
 	
-}
+

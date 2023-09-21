@@ -111,6 +111,53 @@
 	</insert>
 	
 	
+	<select id="reviewsList" parameterType="Map" resultType="Map">
+    	SELECT r.reno, r.mid,m.mname, m.mgrade ,r.bkno, r.recomment, r.rescore , 
+           if(date_format(current_timestamp(),'%Y-%m-%d') = date_format(r.redate,'%Y-%m-%d'),date_format(r.redate,'%H:%i'),date_format(r.redate,'%m-%d')) AS redate,
+	       (
+		    SELECT COUNT(*)
+		    FROM reviews WHERE bkno = #{bkno} AND redel = 1 ) AS count
+	         FROM reviews r
+			 LEFT JOIN members m ON r.mid = m.mid
+	        WHERE r.bkno = #{bkno}  
+	        AND redel = 1
+    </select>
+    
+    
+	<select id="booktrade" parameterType="Integer">
+          SELECT mid, bkno 
+			 FROM 
+			 (SELECT mid , bkno, ROW_NUMBER() OVER (PARTITION BY mid ) AS rn
+			 FROM trade
+			 WHERE bkno = #{bkno}) AS subquery
+          WHERE rn = 1
+	</select>
+	
+	<select id="bookrental" parameterType="Integer">
+			 SELECT mid, bkno 
+			 FROM 
+			 (SELECT mid , bkno, ROW_NUMBER() OVER (PARTITION BY mid) AS rn
+			 FROM rental
+			 WHERE bkno = #{bkno}) AS subquery
+          WHERE rn = 1
+	</select>
+	
+     <insert id="addReview" parameterType="Map">
+		INSERT INTO reviews (mid, bkno, recomment, rescore)
+		VALUES (#{mid}, #{bkno}, #{recomment}, #{rescore})
+	</insert>
+	
+	<update id="rdel" parameterType="Map">
+	    UPDATE reviews 
+	    SET redel=0
+	    WHERE bkno=#{bkno} AND reno=#{reno}
+
+
+    </update>
+	
+	
+	
+	
  <!-- SM -->	
 	<insert id="detail2" parameterType="com.book.web.booklist.CartDTO">
     INSERT INTO cart(bkno,bkimg, bkscontent, price, total, amount, mid) VALUES(#{bkno},#{bkimg}, #{bkscontent}, #{price}, #{price}*#{amount}, #{amount}, #{mid})
@@ -182,32 +229,40 @@ WHERE c.mid = #{mid};
  DELETE FROM cart WHERE mid =#{mid} 
  </delete>
  
- <select id="coupon" parameterType="com.book.web.booklist.CartDTO"  resultType="Map">
+ 
+  <select id="coupon" parameterType="com.book.web.booklist.CartDTO"  resultType="Map">
 SELECT *
 FROM coupons
 WHERE mid=#{mid} AND cdel = 1
 </select>
  
- <update id="update" parameterType="Map">
+ 
+  <update id="update" parameterType="Map">
  UPDATE cart 
- set total = #{sumtotal}
- WHERE mid=#{mid}
+ set total =#{total}*0.9, price=#{price}*0.9
+ WHERE cartno=#{cartno}
+ </update>
+ 
+
+ 
+ <update id="delete4" parameterType="com.book.web.booklist.CartDTO">
+  UPDATE coupons
+  set cdel = 0
+  WHERE mid=#{mid}
+ 
  
  
  </update>
  
-  <update id="update2" parameterType="Map">
- UPDATE coupons 
- set cdel = 0
- WHERE mid=#{mid}
- </update>
-	
 	
 <!-- SH -->
-	<!-- <update id="rental" parameterType="Map">
-		INSERT INTO rental (rsdate, rddate, bkno, rdel, mid)
-		VALUES (#{rsdate}, #{rddate}, #{bkno}, 1, #{mid})
-	</update>	 -->
+
+
+<select id="rentaldata" resultType="Map" parameterType="Integer" >
+	SELECT *
+	FROM rental
+	WHERE bkno = #{bkno} and rno = (select MAX(rno) FROM rental WHERE bkno = #{bkno}) 
+</select>
 	
 	
 

@@ -397,7 +397,7 @@ public class MyPageController {
 			Map<String, Object> map = myPageService.idchk(id);
 			JSONObject json = new JSONObject();
 			json.put("count", map.get("count"));
-			json.put("mid", map.get("mid"));
+			json.put("mno", map.get("mno"));
 			return json.toString();
 		} else {
 			return "redirect:/login";
@@ -465,7 +465,7 @@ public class MyPageController {
 					}
 					map.put("email", email);
 				}
-				map.put("mname", session.getAttribute("mname"));
+				map.put("mno", session.getAttribute("mno"));
 				System.out.println(map);
 				myPageService.infoChange(map);
 				return "redirect:/mypage/info";
