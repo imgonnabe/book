@@ -277,7 +277,7 @@ $(function(){
 			  $.ajax({
 				  url: 'nedit',
 	                type: 'get',
-	                data: {nno: nno,page:page},
+	                data: {nno: nno,page:page, cate:cate},
 	                success: function(data){
 	                    location.href="./nedit?cate=" + cate + "&page=" + page + "&nno=" + nno;
 	                },
