@@ -300,7 +300,6 @@ public class AdminController {
 		}
 	}
 	
-	@ResponseBody
 	@GetMapping("/nedit")
 	public String nedit(@RequestParam(value = "nno", required = true, defaultValue = "0") int nno
 			, @RequestParam Map<String, Object> map, HttpSession session, Model model) {
