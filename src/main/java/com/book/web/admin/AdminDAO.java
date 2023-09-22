@@ -50,4 +50,11 @@ public interface AdminDAO {
 
 	void nwrite(Map<String, Object> map);
 
+	// ncate = 3 시 reply 주기 
+	
+	int find(Map<String, Object> map);
+
+	void reply(Map<String, Object> map);
+	// ncate = 3 시 reply 주기 
+
 }

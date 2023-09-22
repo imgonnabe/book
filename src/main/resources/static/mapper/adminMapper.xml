@@ -122,7 +122,7 @@
 			) as count
 		from books b join rental r
 		<where>
-		b.bkno = r.bkno
+		b.bkno = r.bkno and r.rsdate != '1111-11-11'
 			<if test="cate gt 0">and b.bkcate = #{cate}</if>
 			<choose>
 				<when test="searchN == 'title'">and b.bkname like concat('%', #{searchV},'%')</when>
@@ -138,7 +138,7 @@
         SELECT count(*)
         from books b join rental r
 		<where>
-		b.bkno = r.bkno
+		b.bkno = r.bkno and r.rsdate != '1111-11-11'
 			<if test="cate gt 0">and b.bkcate = #{cate}</if>
 			<choose>
 				<when test="searchN == 'title'">and b.bkname like concat('%', #{searchV},'%')</when>
@@ -174,7 +174,7 @@
 	</select>
 	
 	<select id="rentalAmount" parameterType="Map" resultType="Map">
-		select DATE_FORMAT(r.rsdate, '%y-%m-%d') AS rsdate, b.bkcate,
+		select r.rsdate, b.bkcate,
 			count(r.rno) AS count,
 			(select count(*) 
 				from rental r, books b
@@ -182,18 +182,24 @@
 					<if test="cate gt 0">and b.bkcate = #{cate}</if>
 				) as ccount
 		from rental r, books b
-		where r.bkno = b.bkno
+		<where>
+			r.bkno = b.bkno and r.rsdate != '1111-11-11'
 			<if test="cate gt 0">and b.bkcate = #{cate}</if>
+		</where>
 		group by r.rsdate, b.bkcate
 		LIMIT #{cri.pageStart}, #{cri.perPageNum}
 	</select>
 	
 	<select id="rentalAmountCnt" parameterType="Map" resultType="Integer">
-        SELECT count(*)
-		  FROM (select DATE_FORMAT(r.rsdate, '%y-%m-%d') AS rsdate, b.bkcate
-				        from rental r, books b
-						where r.bkno = b.bkno
-						group by rsdate, b.bkcate) AS sub
+        SELECT COUNT(sub.bkcate)
+			FROM (
+			    SELECT r.rsdate, b.bkcate, COUNT(*) AS count
+			    FROM rental r
+			    JOIN books b ON r.bkno = b.bkno
+			    WHERE r.rsdate != '1111-11-11'
+			    	<if test="cate gt 0">and b.bkcate = #{cate}</if>
+			    GROUP BY r.rsdate, b.bkcate
+			) AS sub
 		<where>
 			<if test="cate gt 0">and sub.bkcate = #{cate}</if>
 		</where>
@@ -253,5 +259,21 @@
 		insert into notice (ntitle, ncontent, mno, ncate)
 		values(#{title}, #{content}, (select mno from members where mid = #{mid}), #{cate})
 	</insert>
+	
+	<!-- ncate를 찾고 3일시 수정할때 nreply를 추가하기 -->
+	
+	<select id="find" parameterType="Map" resultType="Integer">
+		SELECT ncate
+		FROM noticeview
+		WHERE nno=#{nno}
+		
+	</select>
+	
+	<update id="reply" parameterType="Map">
+		UPDATE notice
+		SET nreply = nreply+1
+		WHERE nno=#{nno}
+	
+	</update>
 	
 </mapper>

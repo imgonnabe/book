@@ -464,10 +464,6 @@
 		$("#birth").attr("max", today);
 	});
 	
-	$(function(){
-		window.addEventListener('ssc_wheel', function(event) {
-			event.preventDefault();
-		}, {passive:false}); 
 		   //휴대폰 번호 인증
 		   var isphoneChecked = false; // ID 중복 확인 여부를 저장하는 변수
 		   $(document).on("click", "#phoneChk", function() {
@@ -514,7 +510,6 @@
 	           		}
 		       });
 		  });
-	});
 	
 	function strToInt(str) {
 		if(str.length > 11 || str.length < 10){
@@ -542,11 +537,6 @@
    		$(".successPhoneChk").css("color","green");
    		$("#phone").attr("readonly",true);
 	}
-	$(function(){
-		window.addEventListener('ssc_wheel', function(event) {
-			event.preventDefault();
-		}, {passive:false});
-	});
 	</script>
 </body>
 </html>

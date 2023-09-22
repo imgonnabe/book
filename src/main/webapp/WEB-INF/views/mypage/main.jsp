@@ -211,8 +211,8 @@ label {
                             </c:set>
 			          <c:forEach items="${rlist}" var="row">
 			            <c:if test="${row.rddate ne null}">
-			              <div class="row date-element" data-date="${formattedDate}" onclick="location.href='./rent'">
-			                <div class="menu-title font-alt col-sm-10">${row.bkname}이 연체되었습니다.<br> 
+			              <div class="row" onclick="location.href='./rent'">
+			                <div class="menu-title font-alt col-sm-10">'${row.bkname}'이 연체되었습니다.<br> 
 			                  반납일은 ${row.rddate}입니다.<hr></div>
 			              </div>
 			            </c:if>
@@ -221,7 +221,7 @@ label {
 			            <c:if test="${row.rsdate ne null && row.rsdate le formattedDate}">
 			              <div class="row date-element" data-date="${row.rsdate}" onclick="location.href='./rent'">
 			                <div class="menu-title font-alt col-sm-10">${row.rsdate}<br>
-			                  ${row.bkname}을 대여했습니다.<hr></div>
+			                  '${row.bkname}'을 대여했습니다.<hr></div>
 			              </div>
 			            </c:if>
 			          </c:forEach>
@@ -229,7 +229,7 @@ label {
 			            <c:if test="${row.rsdate ne null && row.rsdate gt formattedDate}">
 			              <div class="row date-element" data-date="${row.rsdate}" onclick="location.href='./rent'">
 			                <div class="menu-title font-alt col-sm-10">${row.rsdate}에
-			                  ${row.bkname}을 예약했습니다.<hr></div>
+			                  '${row.bkname}'을 예약했습니다.<hr></div>
 			              </div>
 			            </c:if>
 			          </c:forEach>
@@ -313,6 +313,7 @@ label {
 	<script type="text/javascript">
 		$(document).ready(function() {
 			$(".recommend").hide();
+			$(".scroll-up").show();
 
 			$(document).on("change", "#color_mode", function() {
 				colorModePreview(this);
@@ -328,8 +329,7 @@ label {
 				$(".alarm").show();
 			}
 		}
-	</script>
-	<script>
+		
 		// SSE 연결 및 알림 표시 로직
 		const eventSource = new EventSource('/notifications/main');
 		const eventSource2 = new EventSource('/mypage/main/sse');
@@ -344,9 +344,7 @@ label {
 			notificationElement.classList.add('menu-title');
 			notificationArea.appendChild(notificationElement);
 		};
-	</script>
 	
-	<script>
 	  // 날짜를 추출하여 비교하기 위한 함수
 	  function extractDate(dateString) {
 	    const parts = dateString.split('-');

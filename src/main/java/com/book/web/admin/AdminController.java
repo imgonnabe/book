@@ -223,16 +223,6 @@ public class AdminController {
 		}
 	}
 	
-	@GetMapping("/product")
-	public String product(Model model, HttpSession session) {
-		if(session.getAttribute("mid") != null && (int)session.getAttribute("mgrade") == 2) {
-			
-			return "/admin/product";
-		} else {
-			return "redirect:/index";
-		}
-	}
-	
 	@GetMapping("/notice")
 	public String notice(Model model, HttpSession session, @RequestParam Map<String, Object> map, Criteria cri,
 			@RequestParam(name="cate", required = false, defaultValue = "0") int cate,
@@ -311,10 +301,21 @@ public class AdminController {
 	
 	@PostMapping("/nedit")
 	public String nedit(@RequestParam Map<String, Object> map, HttpSession session) {
-		System.out.println(map);
 		if(session.getAttribute("mid") != null && (int)session.getAttribute("mgrade") == 2) {
+			
+			// ncate를 찾고 ncate가 3 일시 nreply를 추가하는 식 만들기 
+			
 			adminService.nedit(map);
+			int find = adminService.find(map);
+			if(find == 3) {
+			adminService.reply(map);
+			
+				return "redirect:/admin/notice?cate=" + map.get("cate") + "&page=" + map.get("page");
+			}else {
+			
+			
 			return "redirect:/admin/notice?cate=" + map.get("cate") + "&page=" + map.get("page");
+			}
 		} else {
 			return "redirect:/index";
 		}

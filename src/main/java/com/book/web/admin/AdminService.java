@@ -95,4 +95,16 @@ public class AdminService {
 		adminDAO.nwrite(map);
 	}
 
+	// ncate = 3 시 reply 주기 
+	public int find(Map<String, Object> map) {
+		
+		return adminDAO.find(map);
+	}
+
+	public void reply(Map<String, Object> map) {
+		adminDAO.reply(map);
+		
+	}
+
+	// ncate = 3 시 reply 주기 
 }

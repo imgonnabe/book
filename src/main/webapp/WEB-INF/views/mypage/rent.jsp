@@ -228,6 +228,7 @@
 			</div>
 			</c:otherwise>
 		</c:choose>
+		<div class="scroll-up"><a href="#totop"><i class="fa  fa-chevron-up"></i></a></div>
 	</div>
 	</main>
 	<!--  

@@ -54,7 +54,7 @@ public class MyPageController {
 	@ResponseBody
 	@GetMapping(value = "/main/sse", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
 	public SseEmitter myPageSSE(HttpSession session) {
-	    // 현재 세션의 사용자 ID를 가져오는 로직을 사용하여 사용자별 SSE 알림을 처리합니다.
+	    // 현재 세션의 사용자 ID를 가져오는 로직을 사용하여 사용자별 SSE 알림을 처리
 	    String mid = (String) session.getAttribute("mid");
 	    System.out.println("----------------------------------");
 	    System.out.println(mid);
@@ -105,8 +105,7 @@ public class MyPageController {
 	
 	@GetMapping("/buy")
 	public String buy(Model model, @RequestParam Map<String, Object> map, HttpSession session, Criteria cri,
-			@RequestParam(name="cate", required = false, defaultValue = "0") int cate,
-			@RequestParam(name="page", required = true, defaultValue = "1") int page) {
+			@RequestParam(name="cate", required = false, defaultValue = "0") int cate) {
 		System.out.println(map);
 		if(session.getAttribute("mid") != null) {
 			if(!map.containsKey("cate") || map.get("cate").equals(null) || map.get("cate").equals("")) {
@@ -134,8 +133,7 @@ public class MyPageController {
 	
 	@GetMapping("/rent")
 	public String rent(Model model, @RequestParam Map<String, Object> map, HttpSession session, Criteria cri,
-			@RequestParam(name="cate", required = false, defaultValue = "0") int cate,
-			@RequestParam(name="page", required = true, defaultValue = "1") int page) {
+			@RequestParam(name="cate", required = false, defaultValue = "0") int cate) {
 		System.out.println(map);
 		if(session.getAttribute("mid") != null) {
 			if(!map.containsKey("cate") || map.get("cate").equals(null) || map.get("cate").equals("")) {
@@ -176,8 +174,7 @@ public class MyPageController {
 	
 	@GetMapping("/board")
 	public String board(Model model, @RequestParam Map<String, Object> map, Criteria cri,
-			@RequestParam(name="cate", required = false, defaultValue = "0") int cate, HttpSession session,
-			@RequestParam(name="page", required = true, defaultValue = "1") int page) {
+			@RequestParam(name="cate", required = false, defaultValue = "0") int cate, HttpSession session) {
 		if(session.getAttribute("mid") != null) {
 			map.put("mid", session.getAttribute("mid"));
 			if(!map.containsKey("cate") || map.get("cate").equals(null) || map.get("cate").equals("")) {
@@ -262,8 +259,7 @@ public class MyPageController {
 	
 	@GetMapping("/comment")
 	public String comment(Model model, @RequestParam Map<String, Object> map, Criteria cri,
-			@RequestParam(name="cate", required = false, defaultValue = "0") int cate, HttpSession session,
-			@RequestParam(name="page", required = true, defaultValue = "1") int page) {
+			@RequestParam(name="cate", required = false, defaultValue = "0") int cate, HttpSession session) {
 		if(session.getAttribute("mid") != null) {
 			map.put("mid", session.getAttribute("mid"));
 			if(!map.containsKey("cate") || map.get("cate").equals(null) || map.get("cate").equals("")) {

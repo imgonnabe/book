@@ -173,7 +173,7 @@
 	</update>
 	
 	<select id="boardlist" parameterType="Map" resultType="Map">
-		select b.bno, b.btitle, b.bcontent, DATE_FORMAT(b.bdate, '%y-%m-%d %h:%m') AS bdate, b.bcate,
+		select b.bno, b.btitle, b.bcontent, DATE_FORMAT(b.bdate, '%Y-%m-%d') AS bdate, b.bcate,
 			(select count(*) from board b JOIN members m on b.mno = m.mno
 			<where>
 			m.mid = #{mid} and b.bdel = 1
@@ -229,7 +229,7 @@
 	</update>
 	
 	<select id="commentlist" parameterType="Map" resultType="Map">
-		select c.cno, c.comment, DATE_FORMAT(c.cdate, '%y-%m-%d %h:%m') AS cdate,
+		select c.cno, c.comment, DATE_FORMAT(c.cdate, '%Y-%m-%d') AS cdate,
 		 DATE_FORMAT(b.bdate, '%y-%m-%d %h:%m') AS bdate, b.bcate, b.btitle,
 			(select count(*) from comments c join members m on c.mno = m.mno 
 				<where>

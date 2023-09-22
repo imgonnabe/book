@@ -19,44 +19,45 @@
     Favicons
     =============================================
     -->
-    <link rel="apple-touch-icon" sizes="57x57" href="assets/images/favicons/apple-icon-57x57.png">
-    <link rel="apple-touch-icon" sizes="60x60" href="assets/images/favicons/apple-icon-60x60.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="assets/images/favicons/apple-icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="76x76" href="assets/images/favicons/apple-icon-76x76.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="assets/images/favicons/apple-icon-114x114.png">
-    <link rel="apple-touch-icon" sizes="120x120" href="assets/images/favicons/apple-icon-120x120.png">
-    <link rel="apple-touch-icon" sizes="144x144" href="assets/images/favicons/apple-icon-144x144.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="assets/images/favicons/apple-icon-152x152.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="assets/images/favicons/apple-icon-180x180.png">
-    <link rel="icon" type="image/png" sizes="192x192" href="assets/images/favicons/android-icon-192x192.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicons/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="96x96" href="assets/images/favicons/favicon-96x96.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicons/favicon-16x16.png">
-    <link rel="manifest" href="assets/images/favicons/manifest.json">
+    <link rel="apple-touch-icon" sizes="57x57" href="../assets/images/favicons/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="../assets/images/favicons/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="../assets/images/favicons/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="../assets/images/favicons/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="../assets/images/favicons/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="../assets/images/favicons/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="../assets/images/favicons/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="../assets/images/favicons/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="../assets/images/favicons/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="../assets/images/favicons/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../assets/images/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="../assets/images/favicons/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/favicons/favicon-16x16.png">
+    <link rel="manifest" href="../assets/images/favicons/manifest.json">
     <meta name="msapplication-TileColor" content="#ffffff">
-    <meta name="msapplication-TileImage" content="assets/images/favicons/ms-icon-144x144.png">
+    <meta name="msapplication-TileImage" content="../assets/images/favicons/ms-icon-144x144.png">
     <meta name="theme-color" content="#ffffff">
     <!--  
     Stylesheets
     =============================================
     -->
     <!-- Default stylesheets-->
-    <link href="assets/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../assets/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Template specific stylesheets-->
     <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed:400,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Volkhov:400i" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
-    <link href="assets/lib/animate.css/animate.css" rel="stylesheet">
-    <link href="assets/lib/components-font-awesome/css/font-awesome.min.css" rel="stylesheet">
-    <link href="assets/lib/et-line-font/et-line-font.css" rel="stylesheet">
-    <link href="assets/lib/flexslider/flexslider.css" rel="stylesheet">
-    <link href="assets/lib/owl.carousel/dist/assets/owl.carousel.min.css" rel="stylesheet">
-    <link href="assets/lib/owl.carousel/dist/assets/owl.theme.default.min.css" rel="stylesheet">
-    <link href="assets/lib/magnific-popup/dist/magnific-popup.css" rel="stylesheet">
-    <link href="assets/lib/simple-text-rotator/simpletextrotator.css" rel="stylesheet">
+    <link href="../assets/lib/animate.css/animate.css" rel="stylesheet">
+    <link href="../assets/lib/components-font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="../assets/lib/et-line-font/et-line-font.css" rel="stylesheet">
+    <link href="../assets/lib/flexslider/flexslider.css" rel="stylesheet">
+    <link href="../assets/lib/owl.carousel/dist/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="../assets/lib/owl.carousel/dist/assets/owl.theme.default.min.css" rel="stylesheet">
+    <link href="../assets/lib/magnific-popup/dist/magnific-popup.css" rel="stylesheet">
+    <link href="../assets/lib/simple-text-rotator/simpletextrotator.css" rel="stylesheet">
     <!-- Main stylesheet and color file-->
-    <link href="assets/css/style.css" rel="stylesheet">
-    <link id="color-scheme" href="assets/css/colors/default.css" rel="stylesheet">
+    <link href="../assets/css/style.css" rel="stylesheet">
+    <link id="color-scheme" href="../assets/css/colors/default.css" rel="stylesheet">
+    <script src="../js/jquery-3.7.0.min.js"></script>
     <script type="text/javascript">
     
  
@@ -66,7 +67,7 @@
   </head>
   <!-- --------------------------------------------------- 상단 ---------------------------------------------------------------- -->   
   <body data-spy="scroll" data-target=".onpage-navigation" data-offset="60">
-  <%@ include file="menu.jsp"%>
+  <%@ include file="../menu.jsp"%>
     <main>
       <div class="main">
         <hr class="divider-w">
@@ -77,35 +78,80 @@
           </div>
         </section>
        <hr class="divider-w">
-          <div class="container">
-               <div><h1>커뮤니티</h1></div>
-              <table>
-              	<c:forEach items="${board1 }" var="b">
-              	<tr onclick="location.href='./bdetail?board=${b.bcate}&bno=${b.bno}'">
-              		<td>${b.btitle }</td>
-              		<td>${b.bdate }</td>
-              		<td>${b.mname}</td>
-              		<td>${b.bread }</td>
-              		<td>${b.bcate }</td>
-              	</tr>
-              	</c:forEach>
-              </table>
-              <hr>
-              <div><h1>WEEKLY BEST</h1></div>
-             <table>
+          <div class="container" style="width: 100%">
+             <div class="col-sm-1 col-md-1 sidebar">
+             
+                <div class="widget">
+                <h4><b>커뮤니티</b></h4>
+                  <h3 class="widget-title"></h3>
+                  <ul class="icon-list">
+                    <li ><a href="../community/boardM">커뮤니티 홈</a></li>
+                    <li><a href="../community/">커뮤니티</a></li>
+                    <li><a href="../community/board?board=1">자유게시판</a></li>
+                    <li><a href="../community/board?board=2">독후감</a></li>
+                    <li><a href="../community/board?board=3">모임&스터디</a></li>
+                  </ul>
+                </div>
+                
+                     <div class="widget">
+                <h4><b>고객센터</b></h4>
+                  <h3 class="widget-title"></h3>
+                  <ul class="icon-list">
+                    <li ><a href="../community/noticeM">고객센터 홈</a></li>
+                    <li><a href="../community/notice?board=1">공지사항</a></li>
+                    <li><a href="../community/notice?board=2">Q&A</a></li>
+                    
+                  </ul>
+                </div>
+              </div>
+             
+             <div class="col-sm-8 col-sm-offset-2">
+              <h4 class="font-alt mt-40 mb-0">커뮤니티</h4>
+                <hr class="divider-w mt-10 mb-20">
+                <div class="row multi-columns-row mb-70">
+                  <div class="col-sm-6 col-md-6 col-lg-6">
+                    <div class="alt-features-item">
+                      <div class="features-icon"><span class="icon-lightbulb"></span></div>
+                      <h3 class="features-title font-alt">전체글</h3> 
+                      <table class="table table-dark table-hover table-striped">
+              			<c:forEach items="${board1 }" var="b">
+              				<tr onclick="location.href='./bdetail?board=${b.bcate}&bno=${b.bno}'">
+              					<td>${b.btitle }</td>
+              					<td>${b.bdate }</td>
+              					<td>${b.mname}</td>
+              					<td>${b.bread }</td>
+              					<td>${b.stitle }</td>
+              				</tr>
+              			</c:forEach>
+              			</table>
+                    </div>
+                  </div>
+                  <div class="col-sm-6 col-md-6 col-lg-6">
+                    <div class="alt-features-item">
+                      <div class="features-icon"><span class="icon-bike"></span></div>
+                      <h3 class="features-title font-alt">WEEKLY BEST</h3>
+                <table class="table table-dark table-hover table-striped">
               	<c:forEach items="${board2}" var="b">
-              	<tr onclick="location.href='./bdetail?board=${b.bcate}&bno=${b.bno}'">	
-              		<td>${b.btitle }</td>
-              		<td><fmt:formatDate pattern="yyyy-MM-dd" value="${b.bdate}"/></td>
-              		<td>${b.mname}</td>
-              		<td>${b.bread }</td>
-              		<td>${b.bcate }</td>
-              	</tr>
+              		<tr onclick="location.href='./bdetail?board=${b.bcate}&bno=${b.bno}'">	
+              			<td>${b.btitle }</td>
+              			<td><fmt:formatDate pattern="yyyy-MM-dd" value="${b.bdate}"/></td>
+              			<td>${b.mname}</td>
+              			<td>${b.bread }</td>
+              			<td>${b.bcate }</td>
+              		</tr>
               	</c:forEach>
-              </table> 
-              <hr>
-              <div><h1>공지사항</h1></div>
-               <table>
+              	</table> 
+                    </div>
+                  </div>
+                </div>
+                <h4 class="font-alt mt-40 mb-0">고객센터</h4>
+                <hr class="divider-w mt-10 mb-20">
+                <div class="row multi-columns-row mb-70">
+                  <div class="col-sm-6 col-md-6 col-lg-6">
+                    <div class="alt-features-item">
+                      <div class="alt-features-icon"><span class="icon-tools-2"></span></div>
+                      <a href="./notice?board=1"><h3 class="alt-features-title font-alt">공지사항</h3></a>
+				<table class="table table-dark table-hover table-striped">
               	<c:forEach items="${board3}" var="b">
               	<tr onclick="location.href='./ndetail?board=${b.ncate}&nno=${b.nno}'">	
               		<td>${b.ntitle }</td>
@@ -115,9 +161,14 @@
               		<td>${b.ncate }</td>
               	</tr>
               	</c:forEach>
-              </table> 
-              <div><h1>Q&A</h1></div>
-              <table>
+              	</table > 
+                    </div>
+                  </div>
+                  <div class="col-sm-6 col-md-6 col-lg-6">
+                    <div class="alt-features-item">
+                      <div class="alt-features-icon"><span class="icon-tools"></span></div>
+                      <a href="./notice?board=2"><h3 class="alt-features-title font-alt">Q&A</h3></a>
+				<table class="table table-dark table-hover table-striped">
               	<c:forEach items="${board4}" var="b">
               	<tr onclick="location.href='./ndetail?board=${b.ncate}&nno=${b.nno}'">	
               		<td>${b.ntitle }</td>
@@ -128,9 +179,12 @@
               	</tr>
               	</c:forEach>
               </table> 
+                    </div>
+                  </div>
+                </div>
           </div>
-       
-        
+      </div> 
+       </div>  
         <hr class="divider-w">
         
         <section class="module">
@@ -204,7 +258,7 @@
           <div class="container">
             <div class="row">
               <div class="col-sm-6">
-                <p class="copyright font-alt">&copy; 2017&nbsp;<a href="index.html">TitaN</a>, All Rights Reserved</p>
+                <p class="copyright font-alt">&copy; 2017&nbsp;<a href="../index.html">TitaN</a>, All Rights Reserved</p>
               </div>
               <div class="col-sm-6">
                 <div class="footer-social-links"><a href="#"><i class="fa fa-facebook"></i></a><a href="#"><i class="fa fa-twitter"></i></a><a href="#"><i class="fa fa-dribbble"></i></a><a href="#"><i class="fa fa-skype"></i></a>
