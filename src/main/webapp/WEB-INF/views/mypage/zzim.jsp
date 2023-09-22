@@ -116,6 +116,7 @@
 								<br><button class="delbtn btn" type="button" onclick="deleteValue()">삭제</button>
 							</div>
 						</section>
+						<section class="module-small">
 						<div class="col-sm-8 col-sm-offset-1">
 						<div class="row multi-columns-row">
 							<c:forEach items="${list }" var="row">
@@ -124,8 +125,8 @@
 										<div>
 											<input name="rowCheck" type="checkbox" value="${row.zno }">
 										</div>
-										<div style="height: 470px;" class="post-image">
-											<a href="../bookdetail?bkno=${row.bkno}"><img src="/img/bookimg/${row.bkimg }"/></a>
+										<div style="height: 350px;" class="post-image">
+											<a href="../bookdetail?bkno=${row.bkno}"><img style="height: 300px;" src="/img/bookimg/${row.bkimg }"/></a>
 										</div>
 										<div class="shop-item-title">
 											<a href="../bookdetail?bkno=${row.bkno}">${row.bkname}</a>
@@ -136,6 +137,7 @@
 							</c:forEach>
 						</div>
 						</div>
+						</section>
 					</c:otherwise>
 				</c:choose>
 			</div>

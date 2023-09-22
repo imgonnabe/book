@@ -20,6 +20,8 @@ import com.book.web.mypage.Paging;
 import com.book.web.mypage.Util;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+import retrofit2.http.GET;
+
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
@@ -184,14 +186,14 @@ public class AdminController {
 	        int tradeListCnt = adminService.tradelistCnt(map);
 	        
 	        // 페이징 객체
-	        Paging paging = new Paging();
+	        /*Paging paging = new Paging();
 	        paging.setCri(cri);
 	        paging.setTotalCount(tradeListCnt);    
-	        map.put("cri", cri);
+	        map.put("cri", cri);*/
 	        List<Map<String, Object>> list = adminService.tradelist(map);
 	        
 	        model.addAttribute("list", list);    
-	        model.addAttribute("paging", paging);
+	        //model.addAttribute("paging", paging);
 			return "/admin/sales";
 		} else {
 			return "redirect:/index";
@@ -209,14 +211,14 @@ public class AdminController {
 	        int rentalAmountCnt = adminService.rentalAmountCnt(map);
 	        
 	        // 페이징 객체
-	        Paging paging = new Paging();
+	        /*Paging paging = new Paging();
 	        paging.setCri(cri);
 	        paging.setTotalCount(rentalAmountCnt);    
-	        map.put("cri", cri);
+	        map.put("cri", cri);*/
 	        List<Map<String, Object>> list = adminService.rentalAmount(map);
 	        
 	        model.addAttribute("list", list);    
-	        model.addAttribute("paging", paging);
+	        //model.addAttribute("paging", paging);
 			return "/admin/rentalAmount";
 		} else {
 			return "redirect:/index";
@@ -283,6 +285,22 @@ public class AdminController {
 		}
 	}
 	
+	@ResponseBody
+	@PostMapping("/nfind")
+	public String nfind(@RequestParam Map<String, Object> map, HttpSession session) {
+		if(session.getAttribute("mid") != null && (int)session.getAttribute("mgrade") == 2) {
+			System.out.println(map);
+			int cate = adminService.find(map);
+			JSONObject json = new JSONObject();
+			System.out.println(cate);
+			json.put("cate", cate);
+			return json.toString();
+		} else {
+			return "redirect:/index";
+		}
+	}
+	
+	@ResponseBody
 	@GetMapping("/nedit")
 	public String nedit(@RequestParam(value = "nno", required = true, defaultValue = "0") int nno
 			, @RequestParam Map<String, Object> map, HttpSession session, Model model) {
@@ -290,8 +308,9 @@ public class AdminController {
 		if(session.getAttribute("mid") != null && (int)session.getAttribute("mgrade") == 2) {
 			map.put("mid", session.getAttribute("mid"));
 			Map<String, Object> detail = adminService.ndetail(nno);
+			int cate = adminService.find(map);
 			model.addAttribute("detail", detail);
-			model.addAttribute("cate", map.get("cate"));
+			model.addAttribute("cate", cate);
 			model.addAttribute("page", map.get("page"));
 			return "/admin/nedit";
 		} else {
@@ -302,7 +321,7 @@ public class AdminController {
 	@PostMapping("/nedit")
 	public String nedit(@RequestParam Map<String, Object> map, HttpSession session) {
 		if(session.getAttribute("mid") != null && (int)session.getAttribute("mgrade") == 2) {
-			
+			System.out.println(map);
 			// ncate를 찾고 ncate가 3 일시 nreply를 추가하는 식 만들기 
 			
 			adminService.nedit(map);
@@ -321,14 +340,21 @@ public class AdminController {
 		}
 	}
 	
-	@GetMapping("/ndelete")
+	@ResponseBody
+	@PostMapping("/ndelete")
 	public String delete(@RequestParam(value = "nno", required = true, defaultValue = "0") int nno
 			, @RequestParam Map<String, Object> map, HttpSession session) {
 		if(session.getAttribute("mid") != null && (int)session.getAttribute("mgrade") == 2) {
-			map.put("bno", nno);
+			int cate = adminService.find(map);
+			map.put("cate", cate);
+			map.put("nno", nno);
 			map.put("mid", session.getAttribute("mid"));
+			System.out.println("ndelete"+map);// ndelete{nno=10, page=1, cate=3, mid=aaaa}
+			JSONObject json = new JSONObject();
+			json.put("cate", map.get("cate"));
+			json.put("page", map.get("page"));
 			adminService.ndelete(map);
-			return "redirect:/admin/notice?cate=" + map.get("cate") + "&page=" + map.get("page");
+			return json.toString();
 		} else {
 			return "redirect:/index";
 		}

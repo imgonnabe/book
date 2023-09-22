@@ -178,7 +178,7 @@
 				$('#title').focus();
 				return false;
 			}
-			if(content === '<p><br></p>'){
+			if(content === '<p><br></p>' || content == ''){
 				alert('내용을 입력하세요.');
 				$('#content').focus();
 				return false;

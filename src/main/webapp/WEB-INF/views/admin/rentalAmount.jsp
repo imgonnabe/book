@@ -161,7 +161,7 @@
 					</div>
 				</div>
 			</div>
-			<ul class="paging">
+			<%-- <ul class="paging">
 				    <c:if test="${paging.prev}">
 				        <span><a href='<c:url value="/admin/rentalAmount?page=${paging.startPage-1}"/>'>이전</a></span>
 				    </c:if>
@@ -173,11 +173,12 @@
 				    <c:if test="${paging.next && paging.endPage>0}">
 				        <span><a href='<c:url value="/admin/rentalAmount?page=${paging.endPage+1}"/>'>다음</a></span>
 				    </c:if>
-				</ul>
+				</ul> --%>
 			</div>
 			</c:otherwise>
 		</c:choose>
 		</div>
+		<div class="scroll-up"><a href="#totop"><i class="fa  fa-chevron-up"></i></a></div>
 	</main>
 	<!--  
     JavaScripts
@@ -325,7 +326,7 @@
             legend: { position: 'top' } // 범례를 위쪽에 배치
         };
 
-        var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+        var chart = new google.visualization.ComboChart(document.getElementById('chart_div'));
         chart.draw(data, options);
     }
 </script>

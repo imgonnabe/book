@@ -250,27 +250,34 @@
     }
 $(function(){
 	
-	var defaultCate = getParameterByName('cate');
     var page = getParameterByName('page');
     if(page == null){
     	page = 1;
     }
-    $('#cate').val(defaultCate);
-	
    $(".nbtn").click(function(){
-	  var cate = $('#cate').val();
-	  if(cate == null){
-		  cate = 0;
-	  }
+	  var nno = $(this).data("nno");
+	  var cate = '';
+		  $.ajax({
+			  url: 'nfind',
+                type: 'post',
+                data: {nno: nno},
+                success: function(data){
+                    cate = data.cate;
+                },
+                error: function(error){
+                    alert('에러');
+                }
+		  });
+	  
 	  var selected = $(this).parent().siblings().children(".noticeChange").val();
-   	  var nno = $(this).data("nno");
+   	  
 	  if(selected == '0'){
 		  var con = confirm("게시물을 수정하시겠습니까?");
 		  if(con){
 			  $.ajax({
 				  url: 'nedit',
 	                type: 'get',
-	                data: {nno: nno,cate:cate,page:page},
+	                data: {nno: nno,page:page},
 	                success: function(data){
 	                    location.href="./nedit?cate=" + cate + "&page=" + page + "&nno=" + nno;
 	                },
@@ -284,10 +291,11 @@ $(function(){
 		  if(con2){
 			  $.ajax({
 				  url: 'ndelete',
-	                type: 'get',
-	                data: {nno:nno,cate:cate,page:page},
+	                type: 'post',
+	                dataType:'json',
+	                data: {nno:nno,page:page},
 	                success: function(data){
-	                    location.href="./ndelete?cate=" + cate + "&page=" + page + "&nno=" + nno;
+	                    location.href="./notice?cate=" + data.cate + "&page=" + data.page;
 	                },
 	                error: function(error){
 	                    alert('에러');
